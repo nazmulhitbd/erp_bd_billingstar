@@ -1,0 +1,48 @@
+/* Buttons for every page (addon/dialog/buttons.js adds the classes and the icons). Solid colours as in Bootstrap 5:
+   bsb-primary, bsb-success, bsb-danger, bsb-secondary, bsb-info, bsb-warning, bsb-light. The doubled class and
+   !important let this win over the older page styles (Bootstrap 3, WUI, sales.css) without editing them. */
+.bsb.bsb {
+  --bsb-bg: #0d6efd; --bsb-hover: #0b5ed7; --bsb-ink: #fff; --bsb-ring: rgba(13, 110, 253, .35);
+  display: inline-flex !important; align-items: center; justify-content: center; gap: 6px;
+  min-height: 34px; padding: 6px 13px !important; margin: 2px;
+  border: 1px solid var(--bsb-bg) !important; border-radius: 6px !important;
+  background: var(--bsb-bg) !important; background-image: none; color: var(--bsb-ink) !important;
+  font-family: inherit; font-size: 14px !important; font-weight: 500 !important; line-height: 1.2 !important;
+  text-decoration: none !important; text-shadow: none !important; box-shadow: none !important;
+  white-space: nowrap; vertical-align: middle; cursor: pointer;
+  transition: background-color .15s, border-color .15s, box-shadow .15s, transform .05s;
+}
+.bsb.bsb:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--bsb-hover) !important; border-color: var(--bsb-hover) !important; color: var(--bsb-ink) !important; }
+.bsb.bsb:active:not(:disabled) { transform: translateY(1px); }
+.bsb.bsb:focus-visible { outline: none; box-shadow: 0 0 0 .22rem var(--bsb-ring) !important; }
+.bsb.bsb:disabled, .bsb.bsb[aria-disabled="true"], .bsb.bsb.disabled { opacity: .55; cursor: not-allowed; }
+.bsb .bsb-ico { flex: 0 0 auto; width: 1.05em; height: 1.05em; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+/* The same icon for <input type="submit">, drawn as a background */
+.bsb.bsb.bsb-input-ico { padding-left: 32px !important; background-repeat: no-repeat !important; background-position: 11px 50% !important; background-size: 15px 15px !important; }
+
+.bsb.bsb-primary   { --bsb-bg: #0d6efd; --bsb-hover: #0b5ed7; --bsb-ink: #fff; --bsb-ring: rgba(13, 110, 253, .35); }
+.bsb.bsb-success   { --bsb-bg: #198754; --bsb-hover: #157347; --bsb-ink: #fff; --bsb-ring: rgba(25, 135, 84, .35); }
+.bsb.bsb-danger    { --bsb-bg: #dc3545; --bsb-hover: #bb2d3b; --bsb-ink: #fff; --bsb-ring: rgba(220, 53, 69, .35); }
+.bsb.bsb-secondary { --bsb-bg: #6c757d; --bsb-hover: #5c636a; --bsb-ink: #fff; --bsb-ring: rgba(108, 117, 125, .35); }
+.bsb.bsb-info      { --bsb-bg: #3fb6cb; --bsb-hover: #2fa3b8; --bsb-ink: #062a33; --bsb-ring: rgba(63, 182, 203, .4); }
+.bsb.bsb-warning   { --bsb-bg: #ffc107; --bsb-hover: #ffb300; --bsb-ink: #212529; --bsb-ring: rgba(255, 193, 7, .45); }
+.bsb.bsb-light     { --bsb-bg: #e9ecef; --bsb-hover: #dde1e5; --bsb-ink: #212529; --bsb-ring: rgba(108, 117, 125, .3); }
+/* Input buttons need the colour on the background-color only, so their icon stays */
+.bsb.bsb.bsb-input-ico { background-color: var(--bsb-bg) !important; }
+.bsb.bsb.bsb-input-ico:hover:not(:disabled) { background-color: var(--bsb-hover) !important; }
+
+/* Smaller inside table rows and for .btn-sm */
+.bsb.bsb.bsb-sm { min-height: 28px; padding: 3px 9px !important; font-size: 12.5px !important; gap: 5px; margin: 1px; }
+.bsb.bsb.bsb-sm.bsb-input-ico { padding-left: 26px !important; background-position: 8px 50% !important; background-size: 13px 13px !important; }
+/* Round arrow buttons stay round */
+.bsb.bsb.round { width: 34px; height: 34px; min-height: 34px; padding: 0 !important; border-radius: 50% !important; }
+/* A toggle that is on (Edit mode, the chosen filter tab) */
+.bsb.bsb.active, .bsb.bsb[aria-pressed="true"], [data-mode].bsb.primary { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .55), 0 0 0 2px var(--bsb-bg) !important; }
+/* Row actions in record tables keep their pill and gain the icon */
+.ui-act.bsb-row .bsb-ico { width: 12px; height: 12px; margin-right: 4px; vertical-align: -1px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+html .ui-act.bsb-row.bsb-input-ico.bsb-input-ico { padding-left: 24px !important; background-repeat: no-repeat !important; background-position: 8px 50% !important; background-size: 12px 12px !important; }
+/* Buttons in a row keep a small gap */
+.btn-group > .bsb.bsb { margin: 0 4px 4px 0; border-radius: 6px !important; }
+.bsb.bsb.bsb-init { transition: none !important; }
+@media print { .bsb .bsb-ico { display: none; } }
+@media (prefers-reduced-motion: reduce) { .bsb.bsb { transition: none; } }

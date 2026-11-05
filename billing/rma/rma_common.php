@@ -197,7 +197,7 @@ function rma_page_header($title, $bodyClass = '')
     echo '<title>' . rma_h($title) . '</title><link rel="stylesheet" href="rma.css?v=1"></head><body class="' . rma_h($bodyClass) . '">';
     echo '<div class="rma-wrap"><fieldset class="rma-box"><legend>' . rma_h($title) . '</legend><div class="rma-inner">';
     if ($flash) {
-        echo '<div class="rma-alert ' . ($flash['kind'] === 'success' ? 'ok' : 'err') . '">' . rma_h($flash['message']) . '</div>';
+        echo '<div class="rma-alert ' . ($flash['kind'] === 'success' ? 'ok' : 'err') . '" data-popup="' . ($flash['kind'] === 'success' ? 'success' : 'error') . '" role="status">' . rma_h($flash['message']) . '</div>';
     }
     if (!rma_schema_ready()) {
         echo '<div class="rma-alert err"><b>RMA tables are not installed.</b> Import <code>billing/sales/schema.sql</code> and then <code>billing/rma/schema.sql</code> into the BusBook database, then reload this page.</div>';

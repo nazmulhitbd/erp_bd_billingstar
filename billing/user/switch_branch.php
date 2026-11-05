@@ -4,4 +4,4 @@ require_once "../../addon/conf/connection.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     perm_set_branch((int) ($_POST['branch_id'] ?? 0));
 }
-header('Location: ../topmain.php');
+header('Location: ../' . perm_shell());

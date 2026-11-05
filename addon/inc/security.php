@@ -65,6 +65,63 @@ function bs_gate()
         http_response_code(403);
         exit('This form came from another site, so it was refused.');
     }
+    bs_dialog_start();
+}
+
+/**
+ * Every HTML page gets the shared popups and the form guide (addon/dialog): the files go in before the page's own scripts, so alert() and
+ * confirm() already have their new look when an older page calls them while it loads. Downloads, JSON and HTML fragments
+ * loaded into a page pass through untouched.
+ */
+function bs_dialog_start()
+{
+    static $started = false;
+    if ($started || PHP_SAPI === 'cli') {
+        return;
+    }
+    $started = true;
+    $root = str_replace('\\', '/', dirname(__DIR__, 2)) . '/';
+    $file = str_replace('\\', '/', (string) realpath((string) ($_SERVER['SCRIPT_FILENAME'] ?? '')));
+    if (!str_starts_with($file, $root)) {
+        return;
+    }
+    $up = str_repeat('../', substr_count(substr($file, strlen($root)), '/'));
+    $tags = '';
+    foreach (['dialog', 'guide', 'buttons', 'enter'] as $name) { // popups, the form guide that uses them, the button design, Enter to the next field
+        $v = (int) @filemtime($root . "addon/dialog/$name.js") + (int) @filemtime($root . "addon/dialog/$name.css");
+        $tags .= '<link rel="stylesheet" href="' . $up . "addon/dialog/$name.css?v=$v" . '"><script src="' . $up . "addon/dialog/$name.js?v=$v" . '"></script>';
+    }
+    ob_start(function ($html, $phase) use ($tags) {
+        static $done = false;
+        if ($done || $html === '') {
+            return $html;
+        }
+        foreach (headers_list() as $header) {
+            if (preg_match('/^content-disposition:|^content-type:\s*+(?!text\/html)/i', $header)) {
+                $done = true;
+                return $html;
+            }
+        }
+        // Wait for the start of the document when a page flushes early; a fragment never has these tags.
+        if (!preg_match('/<(?:!doctype|html|head|body)\b/i', $html)) {
+            if ($phase & PHP_OUTPUT_HANDLER_FINAL) {
+                $done = true;
+            }
+            return $html;
+        }
+        $done = true;
+        $at = null;
+        if (preg_match('/<head\b[^>]*>/i', $html, $m, PREG_OFFSET_CAPTURE)) {
+            $at = $m[0][1] + strlen($m[0][0]);
+        }
+        if (preg_match('/<script\b/i', $html, $s, PREG_OFFSET_CAPTURE) && ($at === null || $s[0][1] < $at)) {
+            $at = $s[0][1]; // a script that runs before <head> (older pages print one after saving)
+        }
+        if ($at === null && preg_match('/<(?:body|html)\b[^>]*>/i', $html, $m, PREG_OFFSET_CAPTURE)) {
+            $at = $m[0][1] + strlen($m[0][0]);
+        }
+        return $at === null ? $html : substr($html, 0, $at) . $tags . substr($html, $at);
+    });
 }
 
 function bs_https()

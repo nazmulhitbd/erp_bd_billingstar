@@ -1,0 +1,104 @@
+/* Billing Star popups (addon/dialog/dialog.js): questions, success, failure, warning, information and recommendation.
+   Every page gets this file from bs_dialog_start() in addon/inc/security.php. Class names start with bsd- so no page style
+   reaches them, and the font and sizes are set here because the older pages use many different ones. */
+.bsd-backdrop {
+  --bsd-blue: #2563eb; --bsd-blue-dark: #1d4ed8;
+  --bsd-green: #16a34a; --bsd-green-dark: #15803d;
+  --bsd-red: #dc2626; --bsd-red-dark: #b91c1c;
+  --bsd-amber: #f59e0b; --bsd-amber-dark: #d97706;
+  --bsd-violet: #7c3aed; --bsd-violet-dark: #6d28d9;
+  --bsd-gray: #64748b; --bsd-gray-dark: #475569;
+  --bsd-ink: #0f172a; --bsd-text: #475569;
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(15, 23, 42, .5);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  font: 15px/1.5 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: var(--bsd-ink);
+  animation: bsd-fade .16s ease-out;
+}
+.bsd-backdrop *, .bsd-backdrop *::before, .bsd-backdrop *::after { box-sizing: border-box; }
+.bsd-card {
+  position: relative; width: min(440px, 100%); max-height: calc(100vh - 32px); overflow: auto;
+  padding: 34px 30px 26px; border-radius: 18px; background: #fff; text-align: center;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, .28), 0 2px 6px rgba(15, 23, 42, .08);
+  animation: bsd-pop .22s cubic-bezier(.2, .9, .3, 1.25);
+  outline: none;
+}
+.bsd-closing { animation: bsd-fade-out .14s ease-in forwards; }
+.bsd-closing .bsd-card { animation: bsd-drop .14s ease-in forwards; }
+.bsd-shake { animation: bsd-shake .32s ease; }
+
+/* The round icon */
+.bsd-icon {
+  display: grid; place-items: center; width: 96px; height: 96px; margin: 0 auto 20px; border-radius: 50%;
+  background: var(--bsd-tone); color: #fff;
+  box-shadow: 0 0 0 8px var(--bsd-halo);
+  animation: bsd-icon .34s .06s cubic-bezier(.2, .9, .3, 1.4) both;
+}
+.bsd-icon svg { width: 52px; height: 52px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.bsd-icon svg .dot { fill: currentColor; stroke: none; }
+.bsd-icon svg .draw { stroke-dasharray: 40; stroke-dashoffset: 40; animation: bsd-draw .36s .22s ease-out forwards; }
+
+.bsd-title { margin: 0 0 8px; font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--bsd-ink); letter-spacing: -.01em; }
+.bsd-question { margin: 0 0 6px; font-size: 20px; font-weight: 500; line-height: 1.4; color: #1e293b; }
+.bsd-msg { margin: 0; font-size: 15px; color: var(--bsd-text); white-space: pre-line; overflow-wrap: anywhere; }
+.bsd-steps { counter-reset: bsd; margin: 18px 0 0; padding: 0; list-style: none; text-align: left; }
+.bsd-steps li { position: relative; counter-increment: bsd; padding: 9px 0 9px 42px; border-bottom: 1px dashed #e2e8f0; font-size: 14px; color: var(--bsd-text); }
+.bsd-steps li:last-child { border-bottom: 0; }
+.bsd-steps li::before { content: counter(bsd); position: absolute; left: 0; top: 7px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--bsd-halo); color: var(--bsd-tone-dark); font-weight: 700; font-size: 13px; }
+.bsd-steps li.bsd-done::before { content: "\2713"; background: #dcfce7; color: #15803d; }
+.bsd-steps li b { display: block; color: var(--bsd-ink); font-size: 14.5px; font-weight: 600; }
+.bsd-steps li span { display: block; font-size: 13px; }
+.bsd-remember { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--bsd-text); font-size: 13.5px; cursor: pointer; }
+.bsd-remember input { width: 16px; height: 16px; margin: 0; accent-color: var(--bsd-tone); }
+.bsd-note { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0 0; padding: 10px 12px; border-radius: 10px; background: #f8fafc; color: var(--bsd-text); font-size: 13.5px; text-align: left; }
+.bsd-note b { color: var(--bsd-ink); }
+
+/* Buttons: a question has two side by side, a message has one wide button */
+.bsd-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 26px; }
+.bsd-btn {
+  min-width: 112px; height: 44px; padding: 0 22px; border: 0; border-radius: 8px;
+  font: inherit; font-size: 15px; font-weight: 500; color: #fff; cursor: pointer;
+  transition: background-color .15s, box-shadow .15s, transform .05s;
+}
+.bsd-btn:active { transform: translateY(1px); }
+.bsd-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--bsd-ring, #93b4ff); }
+.bsd-cancel { background: var(--bsd-gray); }
+.bsd-cancel:hover { background: var(--bsd-gray-dark); }
+.bsd-ok { background: var(--bsd-tone); }
+.bsd-ok:hover { background: var(--bsd-tone-dark); }
+.bsd-single .bsd-ok { flex: 1 1 100%; height: 52px; border-radius: 10px; font-size: 17px; box-shadow: 0 6px 14px var(--bsd-halo); }
+
+/* Tones */
+.bsd-blue { --bsd-tone: var(--bsd-blue); --bsd-tone-dark: var(--bsd-blue-dark); --bsd-halo: rgba(37, 99, 235, .14); --bsd-ring: #93b4ff; }
+.bsd-green { --bsd-tone: var(--bsd-green); --bsd-tone-dark: var(--bsd-green-dark); --bsd-halo: rgba(22, 163, 74, .15); --bsd-ring: #86efac; }
+.bsd-red { --bsd-tone: var(--bsd-red); --bsd-tone-dark: var(--bsd-red-dark); --bsd-halo: rgba(220, 38, 38, .14); --bsd-ring: #fca5a5; }
+.bsd-amber { --bsd-tone: var(--bsd-amber); --bsd-tone-dark: var(--bsd-amber-dark); --bsd-halo: rgba(245, 158, 11, .18); --bsd-ring: #fcd34d; }
+.bsd-violet { --bsd-tone: var(--bsd-violet); --bsd-tone-dark: var(--bsd-violet-dark); --bsd-halo: rgba(124, 58, 237, .14); --bsd-ring: #c4b5fd; }
+/* Amber is too light for white text on the wide button */
+.bsd-amber .bsd-ok { color: #3b2400; }
+
+html.bsd-open, html.bsd-open body { overflow: hidden !important; }
+.bsd-hidden { display: none !important; }
+
+@keyframes bsd-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bsd-fade-out { to { opacity: 0; } }
+@keyframes bsd-pop { from { opacity: 0; transform: translateY(12px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes bsd-drop { to { opacity: 0; transform: translateY(8px) scale(.97); } }
+@keyframes bsd-icon { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes bsd-draw { to { stroke-dashoffset: 0; } }
+@keyframes bsd-shake { 0%, 100% { transform: none; } 25% { transform: translateX(-7px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+
+@media (max-width: 480px) {
+  .bsd-card { padding: 28px 20px 20px; border-radius: 16px; }
+  .bsd-icon { width: 80px; height: 80px; margin-bottom: 16px; }
+  .bsd-icon svg { width: 44px; height: 44px; }
+  .bsd-title { font-size: 20px; }
+  .bsd-question { font-size: 18px; }
+  .bsd-actions:not(.bsd-single) .bsd-btn { flex: 1 1 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bsd-backdrop, .bsd-card, .bsd-icon, .bsd-closing, .bsd-closing .bsd-card, .bsd-shake { animation: none !important; }
+  .bsd-icon svg .draw { animation: none; stroke-dashoffset: 0; }
+}
+@media print { .bsd-backdrop { display: none !important; } }

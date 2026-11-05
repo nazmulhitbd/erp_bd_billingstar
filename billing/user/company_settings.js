@@ -1,5 +1,11 @@
 /* Company & Login Settings: tabs, delete confirm, unsaved-changes warning and the live sign-in preview. */
 (function () {
+  /* A saved change of menu layout: reload the whole window, not just this frame, into the new layout. */
+  var relayout = document.body.getAttribute('data-relayout');
+  if (relayout) {
+    try { sessionStorage.removeItem('vsc_last_page'); } catch (e) {}
+    try { window.top.location.href = new URL(relayout, location.href).href; return; } catch (e) {}
+  }
   var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
   var preview = document.getElementById('cs-preview');
   var saveBar = document.getElementById('cs-save');

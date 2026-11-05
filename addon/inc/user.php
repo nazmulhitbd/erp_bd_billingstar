@@ -60,7 +60,7 @@ if ($login_allowed)
                         {
                             if ($info1[3]+$cfgidletime*60 < time()) // max idle time reached
                             {
-                                tfa_gate_shell($erp_user, 'billing/topmain.php'); // leaves for verify.php when a code is needed
+                                tfa_gate_shell($erp_user, 'billing/' . perm_shell()); // leaves for verify.php when a code is needed
                                 //=================Insert Log Unit======================
                                 $insert_log="insert into login_log (LOGIN_ID,log_date,login_time,ip_address,user_type) Values ('".$_POST['user_name']."','$today1',now(),'$_SERVER[REMOTE_ADDR]','0')";
                                 $res_insert_log=mysql_query_moon($insert_log);
@@ -84,7 +84,7 @@ if ($login_allowed)
                                 setcookie("user_id_admin",$info1[2],0,"/");
                                 setcookie("logid",$row_insert_max[0],0,"/");
                                 /* end new session cookie */
-                                header("Location: billing/topmain.php");exit;
+                                header('Location: billing/' . perm_shell());exit;
                             }
                             else
                             {
@@ -93,7 +93,7 @@ if ($login_allowed)
                         }
                         else
                         {
-                            tfa_gate_shell($erp_user, 'billing/topmain.php'); // leaves for verify.php when a code is needed
+                            tfa_gate_shell($erp_user, 'billing/' . perm_shell()); // leaves for verify.php when a code is needed
 
                             //=================Insert Log Unit======================
 
@@ -121,7 +121,7 @@ if ($login_allowed)
                             setcookie("ID_my_site_admin", $_POST['user_name'],0,"/");
                             setcookie("user_id_admin",$info1[2],0,"/");
                             setcookie("logid",$row_insert_max[0],0,"/");
-                            header("Location: billing/topmain.php");exit;
+                            header('Location: billing/' . perm_shell());exit;
                         }
                     }
                 }
@@ -134,9 +134,9 @@ if ($login_allowed)
             [$erp_user, $erp_error] = perm_ready() ? perm_portal_login($_POST['user_name'], $GLOBALS['raw_password'] ?? '') : [null, 'Incorrect user name or password.'];
             if ($erp_user && perm_login_block($erp_user) === '')
             {
-                tfa_gate_shell($erp_user, 'billing/topmain.php');
+                tfa_gate_shell($erp_user, 'billing/' . perm_shell());
                 perm_start_session($erp_user);
-                header("Location: billing/topmain.php");exit;
+                header('Location: billing/' . perm_shell());exit;
             }
 			?><script language="JavaScript" type="text/javascript">display_message(<?php echo json_encode($erp_error ?: 'This user is not active.'); ?>);</script><?php
         }

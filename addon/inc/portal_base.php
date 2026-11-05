@@ -138,7 +138,7 @@ function cp_take_flash()
 {
     $f = $_SESSION['cp_flash'] ?? null;
     unset($_SESSION['cp_flash']);
-    return $f ? '<div class="alert ' . ($f[0] === 'ok' ? 'ok' : 'err') . '">' . cp_h($f[1]) . '</div>' : '';
+    return $f ? '<div class="alert ' . ($f[0] === 'ok' ? 'ok' : 'err') . '" data-popup="' . ($f[0] === 'ok' ? 'success' : 'error') . '" role="status">' . cp_h($f[1]) . '</div>' : ''; // a popup (addon/dialog)
 }
 
 function cp_redirect($url, $kind = null, $message = '')

@@ -16,7 +16,7 @@ const CS_TEXT = ['company_name' => 120, 'company_address' => 255, 'company_phone
 
 $self = 'company_settings.php';
 $root = dirname(__DIR__, 2) . '/';
-$tabs = ['company' => ['Company & Brand', 'building'], 'login' => ['Sign-in Page', 'box-arrow-in-right'], 'notices' => ['Notices', 'megaphone'], 'portal' => ['Customer Portal', 'people'], 'accounts' => ['Accounts', 'calculator']];
+$tabs = ['company' => ['Company & Brand', 'building'], 'login' => ['Sign-in Page', 'box-arrow-in-right'], 'appearance' => ['Appearance', 'layout-sidebar'], 'notices' => ['Notices', 'megaphone'], 'portal' => ['Customer Portal', 'people'], 'accounts' => ['Accounts', 'calculator']];
 $portalReady = sales_tables_ready($conn, ['portal_settings', 'portal_notices']);
 if (!$portalReady) {
     unset($tabs['notices'], $tabs['portal']);
@@ -113,6 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($brand === '') {
             throw new RuntimeException('Enter the brand name.');
         }
+        $shell = (string) ($_POST['menu_style'] ?? basename(perm_shell(), '.php'));
+        if (!isset(PERM_SHELLS[$shell])) {
+            throw new RuntimeException('Pick a menu layout.');
+        }
+        $shellChanged = $shell . '.php' !== perm_shell();
         $accValues = [];
         foreach ($accFields as $key => [$label, $type, $extra]) {
             $value = trim((string) ($_POST[$key] ?? ''));
@@ -149,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($accValues as $key => $value) {
             cs_put($conn, 'acc_settings', $key, $value);
         }
-        sales_exec($conn, 'UPDATE client_theme SET brand_name=?, slogan=?, index_title=?, index_heading=?, main_title=?', 'sssss', [$brand, sales_post_string('slogan', 100), $brand, $brand, $brand])->close();
+        sales_exec($conn, 'UPDATE client_theme SET brand_name=?, slogan=?, index_title=?, index_heading=?, main_title=?, menu_style=?', 'ssssss', [$brand, sales_post_string('slogan', 100), $brand, $brand, $brand, $shell])->close();
         if ($portalReady) {
             cs_put($conn, 'portal_settings', 'portal_title', sales_post_string('portal_title', 120));
             cs_put($conn, 'portal_settings', 'welcome_text', sales_post_string('welcome_text', 500));
@@ -159,7 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($logoChanged && $oldLogo !== '' && str_starts_with($oldLogo, CS_LOGO_DIR) && is_file($root . $oldLogo)) {
             unlink($root . $oldLogo);
         }
-        sales_flash_redirect($back, 'success', 'Settings saved.');
+        // A new layout takes over the whole window, not just this frame (company_settings.js).
+        sales_flash_redirect($back . ($shellChanged ? '&relayout=1' : ''), 'success', $shellChanged ? 'Settings saved. Opening the ' . strtolower(PERM_SHELLS[$shell]) . ' layout…' : 'Settings saved.');
     } catch (RuntimeException $e) {
         try { $conn->rollback(); } catch (Throwable $ignored) {}
         sales_flash_redirect($back, 'error', $e->getMessage());
@@ -183,12 +189,12 @@ $today = date('Y-m-d');
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="company_settings.css?v=<?= (int) @filemtime(__DIR__ . '/company_settings.css') ?>">
 </head>
-<body>
+<body<?= isset($_GET['relayout']) ? ' data-relayout="../' . sales_h(perm_shell()) . '"' : '' ?>>
 <header class="cs-head">
-  <div><h1>Company &amp; Login Settings</h1><p>Your company details, sign-in page, notices, customer portal and accounts defaults, in one place.</p></div>
+  <div><h1>Company &amp; Login Settings</h1><p>Your company details, sign-in page, menu layout, notices, customer portal and accounts defaults, in one place.</p></div>
   <a class="cs-btn" href="../../index.php" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Open sign-in page</a>
 </header>
-<?php if ($flash): ?><div class="cs-flash <?= $flash['kind'] === 'success' ? 'ok' : 'err' ?>" role="status"><?= sales_h($flash['message']) ?></div><?php endif; ?>
+<?php if ($flash): ?><div class="cs-flash <?= $flash['kind'] === 'success' ? 'ok' : 'err' ?>" data-popup="<?= $flash['kind'] === 'success' ? 'success' : 'error' ?>" role="status"><?= sales_h($flash['message']) ?></div><?php endif; ?>
 <nav class="cs-tabs" role="tablist" aria-label="Settings">
 <?php foreach ($tabs as $key => [$label, $icon]): ?><button type="button" role="tab" id="tab-<?= $key ?>" data-tab="<?= $key ?>" aria-controls="panel-<?= $key ?>" aria-selected="<?= $tab === $key ? 'true' : 'false' ?>"><i class="bi bi-<?= $icon ?>"></i> <?= $label ?></button><?php endforeach; ?>
 </nav>
@@ -231,6 +237,21 @@ $today = date('Y-m-d');
     <label class="cs-check wide"><input type="checkbox" name="login_show_portals"<?= $b['show_portals'] ? ' checked' : '' ?>> Show the links to the customer and sales staff portals</label>
     <?php if ($portalReady): ?><label class="cs-check wide"><input type="checkbox" name="login_show_notices"<?= $b['show_notices'] ? ' checked' : '' ?>> Show today's notices on the sign-in page (anyone can read them there)</label><?php endif; ?>
   </div>
+</section>
+
+<section class="cs-panel" role="tabpanel" id="panel-appearance" aria-labelledby="tab-appearance"<?= $tab === 'appearance' ? '' : ' hidden' ?>>
+  <h2>Menu layout</h2>
+  <p class="cs-note">Everyone opens this layout after signing in. Both show the same menus, pages and permissions.</p>
+  <div class="cs-layouts" role="radiogroup" aria-label="Menu layout">
+<?php $currentShell = basename(perm_shell(), '.php'); foreach (['topmain' => ['Top menu', 'Menu categories across the top, pages in drop-down panels. Most room for wide reports.'], 'treemain' => ['Side menu', 'A dark sidebar with categories that open in place and fold down to icons. Feels like a desktop ERP.']] as $key => [$label, $about]): ?>
+    <label class="cs-layout-card">
+      <input type="radio" name="menu_style" value="<?= $key ?>"<?= $currentShell === $key ? ' checked' : '' ?>>
+      <span class="cs-layout-pic cs-pic-<?= $key ?>" aria-hidden="true"><i></i><b></b><em></em></span>
+      <span class="cs-layout-text"><b><?= sales_h($label) ?></b><small><?= sales_h($about) ?></small><code><?= $key ?>.php</code></span>
+    </label>
+<?php endforeach; ?>
+  </div>
+  <p class="cs-note">After saving, this window reloads into the chosen layout. The side menu remembers, per browser, whether it was folded to icons.</p>
 </section>
 
 <?php if ($portalReady): ?>

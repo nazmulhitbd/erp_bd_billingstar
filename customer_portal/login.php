@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && cp_ready()) {
         $tfa === '' ? cp_redirect('verify.php') : cp_redirect('login.php', 'err', $tfa);
     }
     if ($ok && perm_portal_open_shell('customer', $_SESSION['cp_account'])) {
-        cp_redirect('../billing/topmain.php');
+        cp_redirect('../billing/' . perm_shell());
     }
     $ok ? cp_redirect('index.php') : cp_redirect('login.php', 'err', $message);
 }

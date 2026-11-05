@@ -1,0 +1,5 @@
+/* Enter-to-next-field (addon/dialog/enter.js): the search-list entry chosen with the arrow keys. */
+.suggestions button.bsn-active { background: #e0ecff !important; color: #1d4ed8; box-shadow: inset 3px 0 0 #2563eb; }
+.bsg-keys { margin-left: 4px; color: #64748b; font-size: 12px; white-space: nowrap; }
+.bsg-keys kbd { padding: 1px 6px; border: 1px solid #cbd5e1; border-radius: 5px; background: #f8fafc; color: #334155; font: 600 11px/1.5 inherit; }
+@media (max-width: 900px) { .bsg-keys { display: none; } }

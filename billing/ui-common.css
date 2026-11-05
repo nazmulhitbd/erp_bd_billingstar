@@ -26,6 +26,49 @@ html.ui-common .ui-page, html.ui-common .rma-wrap { padding: 10px 14px; }
 html.ui-common fieldset.ui-block, html.ui-common fieldset.rma-box { min-width: 0; margin: 0; padding: 0 10px 10px; border: 1px solid #777; background: #fff; }
 html.ui-common fieldset.ui-block > legend, html.ui-common fieldset.rma-box > legend { width: auto; margin: 0; padding: 0 4px; border: 0; color: var(--ui-ink); font-size: 20px; font-weight: 700; line-height: 1.3; }
 html.ui-common .ui-block-inner, html.ui-common .rma-inner { padding: 14px 18px; border: 1px solid #ddd; background: #fff; }
+/* The block, current look (same family as the document screens, doc_layout.css): the page title as a header bar with an
+   icon, the page in a rounded white card, boxes inside it as soft cards. */
+html.ui-common .ui-page { padding: 14px 16px; background: #f4f6fa; }
+html.ui-common body:has(.ui-page) { background: #f4f6fa !important; }
+html.ui-common fieldset.ui-block { padding: 0 !important; border: 0 !important; background: transparent !important; }
+html.ui-common fieldset.ui-block > legend {
+  float: left; width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 12px; margin: 0 0 14px; padding: 14px 18px !important;
+  border: 1px solid #e2e8f0 !important; border-radius: 14px; background: linear-gradient(120deg, #ffffff 0%, #f3f7ff 60%, #eef2ff 100%);
+  color: #0f172a; font-size: 20px; font-weight: 700; letter-spacing: -.01em; line-height: 1.25;
+}
+html.ui-common fieldset.ui-block > legend::before {
+  content: ""; flex: 0 0 40px; width: 40px; height: 40px; border-radius: 12px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16v16H4zM4 9h16M9 9v11'/%3E%3C/svg%3E") center / 22px no-repeat, linear-gradient(135deg, #2563eb, #4f46e5);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, .25);
+}
+html.ui-common fieldset.ui-block > legend + * { clear: both; }
+html.ui-common fieldset.ui-block > .ui-block-inner { clear: both; padding: 18px 20px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .04); }
+/* Boxes inside a page */
+html.ui-common .ui-block-inner .panel, html.ui-common .ui-block-inner .box-body, html.ui-common .ui-block-inner fieldset.box:not(.ui-flat),
+html.ui-common .ui-block-inner .search_panel, html.ui-common .ui-block-inner .filter_background, html.ui-common .ui-block-inner .well {
+  border: 1px solid #e2e8f0 !important; border-radius: 12px !important; background: #fff; box-shadow: none !important;
+}
+html.ui-common .ui-block-inner .panel-heading { border-radius: 12px 12px 0 0; background: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important; font-weight: 600; }
+html.ui-common .ui-block-inner .search_panel, html.ui-common .ui-block-inner .filter_background, html.ui-common .ui-block-inner .list-search { padding: 12px 14px; background: #f8fafc !important; }
+html.ui-common .ui-block-inner .list-search { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border: 1px solid #e2e8f0; border-radius: 12px; margin: 0 0 12px; }
+html.ui-common .ui-block-inner .section { padding: 14px 0 0; }
+html.ui-common .ui-block-inner .section-title { display: flex; align-items: center; gap: 8px; color: #334155; }
+html.ui-common .ui-block-inner .section-title::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: #2563eb; }
+/* Fields: the same soft fill as the document screens */
+html.ui-common .ui-block-inner input[type="text"], html.ui-common .ui-block-inner input[type="number"], html.ui-common .ui-block-inner input[type="date"],
+html.ui-common .ui-block-inner input[type="search"], html.ui-common .ui-block-inner input[type="email"], html.ui-common .ui-block-inner input[type="tel"],
+html.ui-common .ui-block-inner input:not([type]), html.ui-common .ui-block-inner select, html.ui-common .ui-block-inner textarea, html.ui-common .ui-block-inner .form-control {
+  min-height: 36px; border-radius: 9px !important; background-color: #f8fafc;
+}
+html.ui-common .ui-block-inner input:focus, html.ui-common .ui-block-inner select:focus, html.ui-common .ui-block-inner textarea:focus { background-color: #fff; }
+html.ui-common .ui-block-inner table input, html.ui-common .ui-block-inner table select { min-height: 30px; background-color: #fff; }
+@media screen and (max-width: 640px) {
+  html.ui-common .ui-page { padding: 8px; }
+  html.ui-common fieldset.ui-block > legend { font-size: 17px; padding: 12px 14px !important; }
+  html.ui-common fieldset.ui-block > legend::before { flex-basis: 34px; width: 34px; height: 34px; background-size: 18px, auto; }
+  html.ui-common fieldset.ui-block > .ui-block-inner { padding: 12px; }
+}
+
 /* Each page's own outer frame gives way to the block. */
 html.ui-common .ui-block-inner .wrap, html.ui-common .ui-block-inner .dash { max-width: none; margin: 0; padding: 0; }
 html.ui-common body.Body { padding: 0; }
@@ -89,22 +132,7 @@ html.ui-common .FormButton:hover,
 html.ui-common input[type="submit"]:hover,
 html.ui-common input[type="button"]:hover,
 html.ui-common button:not(.close):not([class*="datepicker"]):hover { background: var(--ui-soft); border-color: #b8c4d4; color: var(--ui-ink); text-decoration: none; }
-/* Primary: the page's main action looks like every other button, as on Complain Received */
-html.ui-common .btn-primary,
-html.ui-common .btn.primary,
-html.ui-common input[type="submit"],
-html.ui-common .FormButton { background: #fff !important; border-color: #cfd8e3 !important; color: var(--ui-ink) !important; }
-html.ui-common .btn-primary:hover,
-html.ui-common .btn.primary:hover,
-html.ui-common input[type="submit"]:hover,
-html.ui-common .FormButton:hover { background: var(--ui-soft) !important; border-color: #b8c4d4 !important; color: var(--ui-ink) !important; }
-/* Danger: delete, remove, disable */
-html.ui-common .btn-danger,
-html.ui-common .btn.danger,
-html.ui-common #ButtonRemove { background: #fff !important; border-color: #f1b4b4 !important; color: #b91c1c !important; }
-html.ui-common .btn-danger:hover,
-html.ui-common .btn.danger:hover,
-html.ui-common #ButtonRemove:hover { background: #fef2f2 !important; }
+/* Colours and icons come from addon/dialog/buttons.css and buttons.js (blue Save, red Delete, grey Cancel…). */
 html.ui-common .btn-success { background: #16a34a; border-color: #16a34a; color: #fff; }
 html.ui-common .btn-link { border-color: transparent; background: none; color: var(--ui-brand); }
 /* Small: buttons inside record rows */
@@ -206,6 +234,55 @@ html.ui-common .list-pager .count { flex: 1; }
 html.ui-common .list-pager { padding: 8px 10px; border-color: #ccc; background: var(--ui-soft); color: var(--ui-muted); }
 html.ui-common .list-pager select { min-height: 28px; padding: 2px 6px; }
 html.ui-common .list-pager a, html.ui-common .list-pager span.off { border-color: #cfd8e3; background: #fff; color: var(--ui-ink); }
+
+/* ---------- Record tables, polished (topmenu.js polishTables marks them): the Customers by Store look on every list ---------- */
+html.ui-common table.ui-records { width: 100%; border-collapse: collapse !important; border-spacing: 0; background: #fff; font-size: 13px; margin: 0; }
+html.ui-common table.ui-records > thead > tr > th, html.ui-common table.ui-records > thead > tr > td,
+html.ui-common table.ui-records > tbody > tr:first-child > th, html.ui-common table.ui-records tr.WUIrsheader > td {
+  background: #f3f4f6 !important; color: #374151 !important; font-size: 12.5px; font-weight: 700; text-align: center; padding: 9px 8px !important; border: 1px solid #e3e6eb !important; white-space: nowrap; vertical-align: middle !important;
+}
+html.ui-common table.ui-records > tbody > tr > td { padding: 7px 8px !important; border: 1px solid #eceff3 !important; vertical-align: middle !important; color: #1f2937; }
+html.ui-common table.ui-records > tbody > tr:hover > td { background: #f5f8ff !important; }
+html.ui-common table.ui-records td.num, html.ui-common table.ui-records th.num { text-align: right !important; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.ui-common table.ui-records .ui-col-check { width: 36px; text-align: center !important; padding-left: 4px !important; padding-right: 4px !important; }
+html.ui-common table.ui-records .ui-col-nr { width: 48px; color: #6b7280; text-align: center !important; }
+html.ui-common table.ui-records a:not(.ui-act):not(.btn) { color: #1d6fd6; font-weight: 500; }
+@media screen { html.ui-common tr.ui-filtered { display: none !important; } }
+
+/* Status badges: Active, Approved, Paid… green; Pending, Draft, Due… amber; Void, Blocked, Inactive… red */
+html.ui-common .ui-pill { display: inline-block; padding: 2px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; line-height: 1.6; white-space: nowrap; }
+html.ui-common .ui-pill-good { background: #dcfce7; color: #15803d; }
+html.ui-common .ui-pill-wait { background: #fef3c7; color: #b45309; }
+html.ui-common .ui-pill-bad { background: #fee2e2; color: #b91c1c; }
+html.ui-common .ui-pill-plain { background: #eef1f5; color: #475569; }
+html.ui-common .ui-pill + .ui-pill, html.ui-common .label + .label { margin-left: 6px; }
+
+/* Row actions: Edit, View, Print… as small pills; Delete in red */
+html.ui-common table .ui-act, html.ui-common table a.ui-act, html.ui-common table button.ui-act, html.ui-common table input.ui-act {
+  display: inline-flex; align-items: center; min-height: 0 !important; height: auto; padding: 3px 10px !important; margin: 1px 2px;
+  border: 0 !important; border-radius: 6px !important; background: #eaf1ff !important; color: #1d4ed8 !important;
+  font-size: 12px !important; font-weight: 700; line-height: 1.5; text-decoration: none !important; white-space: nowrap; cursor: pointer;
+}
+html.ui-common table .ui-act:hover { background: #dbe7ff !important; }
+html.ui-common table .ui-act.ui-act-danger { background: #fdecec !important; color: #b91c1c !important; }
+html.ui-common table .ui-act.ui-act-danger:hover { background: #fbd5d5 !important; }
+
+/* Find in this list */
+html.ui-common .ui-tablebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin: 0 0 10px; padding: 10px 12px; background: #f8fafc; border: 1px solid #e5e9f0; border-radius: 10px; }
+html.ui-common .ui-find { position: relative; display: flex; align-items: center; flex: 0 1 340px; margin: 0; }
+html.ui-common .ui-find span { position: absolute; left: 11px; color: #94a3b8; font-size: 15px; transform: rotate(-45deg); pointer-events: none; }
+html.ui-common .ui-find input { width: 100%; min-height: 34px !important; padding-left: 32px !important; }
+html.ui-common .ui-count { color: #64748b; font-size: 12.5px; font-weight: 600; }
+
+/* Forms laid out in a table: labels and fields line up, required fields are marked */
+html.ui-common .ui-form-table td.ui-label-cell { padding: 7px 12px 7px 0 !important; color: #475569; font-size: 12.5px; font-weight: 600; white-space: nowrap; vertical-align: middle; }
+html.ui-common .ui-form-table td.ui-required::after { content: " \2731"; color: #dc2626; font-size: 9px; vertical-align: top; }
+html.ui-common .ui-form-table td.ui-field-cell { padding: 5px 14px 5px 0 !important; vertical-align: middle; }
+html.ui-common .ui-form-table td.ui-field-cell > input:not([type="checkbox"]):not([type="radio"]), html.ui-common .ui-form-table td.ui-field-cell > select, html.ui-common .ui-form-table td.ui-field-cell > textarea {
+  width: 100% !important; max-width: 520px; min-height: 36px; padding: 6px 10px;
+}
+html.ui-common .field > input, html.ui-common .field > select { min-height: 36px; }
+html.ui-common ::placeholder { color: #9aa6b8; }
 
 /* ---------- Responsive: these follow the frame's width, so they work on every page ---------- */
 html.ui-common img, html.ui-common video, html.ui-common iframe, html.ui-common input, html.ui-common select, html.ui-common textarea { max-width: 100%; }

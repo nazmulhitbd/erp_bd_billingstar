@@ -1,0 +1,117 @@
+/* Side menu layout for treemain.php. Loaded after topmenu.css, which still styles the shared parts (page finder results,
+   notifications, user menu, breadcrumb, page frame); this file turns the menu into a dark sidebar. */
+:root {
+  --side-w: 256px;
+  --side-w-min: 76px;
+  --side-bg: #0b1a3a;
+  --side-bg-2: #0f2149;
+  --side-ink: #c7d2e6;
+  --side-muted: #7f8db0;
+  --side-line: rgba(255, 255, 255, .08);
+  --side-hover: rgba(255, 255, 255, .06);
+  --top-h: 64px;
+}
+body.shell-side { background: var(--bg); }
+.side-layout { display: flex; min-height: 100vh; align-items: stretch; }
+.side-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.side-main #content { flex: 1 1 auto; }
+
+/* ---------- Sidebar ---------- */
+.shell-side .side-nav {
+  position: sticky; top: 0; z-index: 1040; flex: 0 0 var(--side-w); width: var(--side-w); height: 100vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--side-bg); color: var(--side-ink); border: 0; box-shadow: none;
+  transition: width .18s ease, flex-basis .18s ease, transform .2s ease;
+}
+.side-brand { display: flex; align-items: center; gap: 12px; height: var(--top-h); flex: 0 0 var(--top-h); padding: 0 18px; border-bottom: 1px solid var(--side-line); }
+.side-brand .brand-mark { width: 36px; height: 36px; flex-basis: 36px; border-radius: 9px; }
+.side-brand .brand-name { color: #fff; font-size: 16px; font-weight: 600; }
+.shell-side .nav-list { flex: 1 1 auto; display: block; overflow-y: auto; overflow-x: hidden; padding: 12px 10px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent; }
+.shell-side .nav-cat { position: relative; margin-bottom: 2px; }
+.shell-side .nav-top {
+  width: 100%; height: 44px; gap: 12px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent;
+  color: var(--side-ink); font-size: 14.5px; font-weight: 400; text-decoration: none; text-align: left; white-space: nowrap;
+}
+.shell-side .nav-top > span { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; }
+.shell-side .nav-top > .bi:first-child { flex: 0 0 22px; font-size: 18px; color: var(--side-ink); text-align: center; }
+.shell-side .nav-top .caret { margin-left: auto; font-size: 11px; color: var(--side-muted); }
+.shell-side .nav-top:hover, .shell-side .nav-cat.open > .nav-top { color: #fff; background: var(--side-hover); }
+.shell-side .nav-top:hover > .bi:first-child, .shell-side .nav-cat.open > .nav-top > .bi:first-child { color: #fff; }
+/* The page in view: a plain entry turns into the blue pill, a category with pages keeps white text. */
+.shell-side .nav-cat.current > a.nav-top { color: #fff; background: var(--brand); box-shadow: 0 6px 16px rgba(37, 99, 235, .35); }
+.shell-side .nav-cat.current > a.nav-top > .bi:first-child { color: #fff; }
+.shell-side .nav-cat.current > button.nav-top, .shell-side .nav-cat.current > button.nav-top > .bi:first-child { color: #fff; font-weight: 600; }
+.shell-side .nav-top:focus-visible, .shell-side .nav-panel a:focus-visible { outline: 2px solid #93b4ff; outline-offset: -2px; }
+
+/* Pages of a category open under it, never as a drop-down. */
+.shell-side .nav-panel { position: static; display: none; max-width: none; padding: 4px 0 8px 34px; background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+.shell-side .nav-cat.open > .nav-panel { display: block; }
+.shell-side .nav-cat.has-panel:not(.open) > .nav-panel { display: none !important; }
+.shell-side .nav-group h6 { margin: 8px 0 4px; padding: 0 10px; border: 0; color: var(--side-muted); font-size: 10.5px; letter-spacing: .07em; }
+.shell-side .nav-group ul { margin: 0 0 4px; }
+.shell-side .nav-group a { position: relative; padding: 8px 10px; color: var(--side-ink); font-size: 13.5px; border-radius: 7px; }
+.shell-side .nav-group a:hover { color: #fff; background: var(--side-hover); }
+.shell-side .nav-group a.current { color: #fff; background: rgba(37, 99, 235, .28); font-weight: 600; }
+.shell-side .nav-group a.current::before { content: ""; position: absolute; left: -12px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: #60a5fa; }
+
+.side-collapse {
+  display: flex; align-items: center; gap: 12px; flex: 0 0 auto; height: 52px; margin: 0; padding: 0 22px;
+  border: 0; border-top: 1px solid var(--side-line); background: transparent; color: var(--side-ink); font-size: 14px; text-align: left;
+}
+.side-collapse:hover { color: #fff; background: var(--side-hover); }
+.side-collapse .bi { font-size: 16px; transition: transform .18s; }
+
+/* Collapsed: icons only. Opening a category widens the menu again (topmenu.js). */
+@media (min-width: 992px) {
+  .nav-collapsed .shell-side .side-nav { flex-basis: var(--side-w-min); width: var(--side-w-min); }
+  .nav-collapsed .shell-side .side-brand { justify-content: center; padding: 0; }
+  .nav-collapsed .shell-side .side-brand .brand-name,
+  .nav-collapsed .shell-side .nav-top > span,
+  .nav-collapsed .shell-side .nav-top .caret,
+  .nav-collapsed .shell-side .nav-panel,
+  .nav-collapsed .shell-side .side-collapse span { display: none !important; }
+  .nav-collapsed .shell-side .nav-top { justify-content: center; padding: 0; }
+  .nav-collapsed .shell-side .side-collapse { justify-content: center; padding: 0; }
+  .nav-collapsed .shell-side .side-collapse .bi { transform: rotate(180deg); }
+}
+
+/* ---------- Top bar ---------- */
+.shell-side .side-top { position: sticky; top: 0; z-index: 1030; height: var(--top-h); gap: 18px; padding: 0 24px; background: #fff; border-bottom: 1px solid var(--line); box-shadow: none; }
+.shell-side .nav-toggle { display: inline-grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 9px; background: transparent; color: var(--ink); font-size: 22px; }
+.shell-side .nav-toggle:hover { background: var(--hover); }
+.shell-side .menu-search { flex: 0 1 520px; }
+.shell-side .menu-search .form-control { height: 42px; padding-right: 44px; border-radius: 10px; background: #fff; }
+.shell-side .menu-search kbd { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); padding: 2px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--muted); font-size: 11px; font-family: inherit; box-shadow: none; pointer-events: none; }
+.shell-side #menu-results { top: 48px; }
+.shell-side .header-tools { gap: 16px; }
+.shell-side .bell-btn { border: 0; background: transparent; font-size: 19px; }
+.shell-side .user-chip { gap: 10px; padding: 4px 8px 4px 4px; border: 0; border-radius: 12px; background: transparent; }
+.shell-side .user-chip .avatar { width: 38px; height: 38px; flex-basis: 38px; font-size: 13px; font-weight: 600; }
+.shell-side .user-who { flex-direction: column; align-items: flex-start; line-height: 1.2; text-align: left; }
+.shell-side .user-who b { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.shell-side .user-who small { font-size: 12px; color: var(--muted); }
+.company-box { flex-direction: column; justify-content: center; min-width: 0; max-width: 220px; height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; line-height: 1.25; }
+.company-box b { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.company-box small, .company-box select { font-size: 12px; color: var(--muted); }
+.company-box .branch-switch { display: block; }
+.company-box select { max-width: 190px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.shell-side .crumb-bar { padding: 14px 24px 10px; }
+.shell-side #content { padding: 0 16px 16px; }
+.shell-side #frm_main { border-radius: 12px; }
+.shell-side .clock { font-size: 12px; }
+
+/* ---------- Small screens: the sidebar slides in over the page ---------- */
+@media (max-width: 991.98px) {
+  .shell-side .side-nav { position: fixed; left: 0; top: 0; bottom: 0; display: flex; max-height: none; transform: translateX(-100%); }
+  .shell-side .side-nav.open { transform: none; box-shadow: 0 0 40px rgba(0, 0, 0, .35); }
+  .side-backdrop { position: fixed; inset: 0; z-index: 1035; background: rgba(15, 23, 42, .45); }
+  .side-collapse { display: none; }
+  .shell-side .side-top { flex-wrap: nowrap; padding: 0 12px; gap: 10px; }
+  .shell-side .menu-search { order: 0; flex: 1 1 auto; }
+  .shell-side .menu-search kbd { display: none; }
+  .shell-side .crumb-bar { padding: 12px 14px 8px; }
+  .shell-side #content { padding: 0 8px 8px; }
+}
+@media (min-width: 992px) {
+  .side-backdrop { display: none !important; }
+}

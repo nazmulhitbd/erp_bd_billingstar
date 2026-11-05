@@ -462,7 +462,7 @@ function inv_doc_page(mysqli $db, array $cfg)
         'products' => inv_products($db), 'parties' => inv_doc_parties($db, $meta['party']), 'stores' => inv_stores($db), 'stores_to' => inv_stores($db, true),
         'defaultStore' => inv_setting($db, 'default_store', ''), 'items' => $lines,
     ]) . ';';
-    echo '</main></div><script src="../sales/sales.js"></script>' . ($js ? '<script>' . $js . '</script><script src="../inventory/inv_doc.js"></script>' : '') . '</body></html>';
+    echo '</main></div><script src="../sales/sales.js"></script>' . ($js ? '<script>' . $js . '</script><script src="../inventory/inv_doc.js"></script><script src="../doc_ui.js?v=' . (int) @filemtime(dirname(__DIR__) . '/doc_ui.js') . '"></script>' : '') . '</body></html>';
 }
 
 function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, $prev, $next)
@@ -471,12 +471,34 @@ function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, 
     $val = fn($k, $d = '') => sales_h($h[$k] ?? $d);
     $has = fn($f) => in_array($f, $cfg['lines'], true);
     $btn = fn($b) => in_array($b, $cfg['buttons'], true);
-    echo '<form method="post" id="docform" autocomplete="off">' . sales_csrf_field() . '<input type="hidden" name="doc_id" value="' . (int) ($doc['doc_id'] ?? 0) . '"><input type="hidden" name="lines_json" id="lines_json"><input type="hidden" name="party_id" id="party_id" value="' . $val('party_id') . '">';
+    $card = fn($step, $title, $text) => '<header class="sd-head"><span class="sd-num"><span>' . $step . '</span></span><div><h3>' . sales_h($title) . '</h3><p>' . sales_h($text) . '</p></div></header>';
+    $party = $meta['party'] === 'supplier' ? 'Supplier' : ($meta['party'] === 'customer' ? 'Customer' : '');
+    // Layout: doc_layout.css (header bar, cards in the main column, summary column); doc_ui.js fills the summary.
+    echo '<form method="post" id="docform" class="si si-inv" autocomplete="off">' . sales_csrf_field() . '<input type="hidden" name="doc_id" value="' . (int) ($doc['doc_id'] ?? 0) . '"><input type="hidden" name="lines_json" id="lines_json"><input type="hidden" name="party_id" id="party_id" value="' . $val('party_id') . '">';
+
+    // Header bar: what this is, its number and state, and moving between records.
+    $state = !$doc ? ['New', 'new'] : ($doc['status'] === 'cancelled' ? ['Cancelled', 'void'] : ($doc['approval_status'] === 'approved' ? ['Approved', 'ok'] : ['Pending approval', 'wait']));
+    $link = fn($id) => $id ? 'href="' . $self . '?id=' . (int) $id['doc_id'] . '"' : 'aria-disabled="true" style="opacity:.4"';
+    echo '<header class="si-hero"><div class="si-hero-main"><span class="si-hero-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="' . ($meta['party'] === 'supplier' ? 'M3 4h2l2.4 11h11L21 8H6.2M9 19h.01M17 19h.01' : 'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3') . '"/></svg></span><div>'
+        . '<h2>' . sales_h($meta['title']) . '</h2><p class="si-meta"><b>' . sales_h($doc['doc_no'] ?? inv_peek_no($db, $meta['code'])) . '</b><span class="si-status si-' . $state[1] . '">' . $state[0] . '</span>'
+        . '<span>' . sales_h(inv_branch_name($db, $doc['branch_id'] ?? inv_current_branch($db))) . '</span>'
+        . ($doc ? '<span>' . sales_h(date('d M Y', strtotime($doc['doc_date']))) . '</span>' : '')
+        . (($cfg['lock_reason'] ?? '') !== '' ? '<span class="si-lock">' . sales_h($cfg['lock_reason']) . '</span>' : '')
+        . ($readOnly && $doc && $doc['status'] === 'active' && $doc['approval_status'] !== 'approved' ? '<span>Saved documents of this type cannot be edited</span>' : '')
+        . (!empty($doc['sales_invoice_id']) ? '<span><a target="_blank" href="../sales/sales_invoice/sales_invoice.php?print=' . (int) $doc['sales_invoice_id'] . '">Sales invoice</a></span>' : '')
+        . '</p></div></div><div class="si-hero-tools"><div class="sd-group" role="group" aria-label="Record">'
+        . '<a class="btn" href="' . $self . '">New</a><a class="btn" href="' . $self . '?view=list">List View</a>'
+        . '<a class="btn round" title="Previous" ' . $link($prev) . '>&#9664;</a><a class="btn round" title="Next" ' . $link($next) . '>&#9654;</a></div></div></header>';
+
+    echo '<div class="si-layout"><div class="si-main">';
+
+    // 1. Party and document details.
+    echo '<section class="sd-card" data-step="1">' . $card(1, $party !== '' ? $party . ' and details' : 'Details', $party !== '' ? 'Type the ' . strtolower($party) . ' name and pick from the list; check the date and reference.' : 'Check the date and reference.');
     echo '<div class="hgrid">';
     echo '<div class="field"><label for="ref_no">Ref No</label><input id="ref_no" name="ref_no" maxlength="80" value="' . $val('ref_no') . '"></div>';
-    echo '<div class="field s2"><label for="doc_date">' . sales_h($cfg['date_label']) . '</label><input id="doc_date" type="date" name="doc_date" value="' . $val('doc_date', date('Y-m-d')) . '" required></div>';
+    echo '<div class="field"><label for="doc_date">' . sales_h($cfg['date_label']) . '</label><input id="doc_date" type="date" name="doc_date" value="' . $val('doc_date', date('Y-m-d')) . '" required></div>';
     foreach ($cfg['header'] as [$name, $label, $kind]) {
-        $span = in_array($name, ['address', 'narration', 'payment_term'], true) ? ' s6' : ($name === 'party_name' ? ' s4' : '');
+        $span = in_array($name, ['address', 'narration', 'payment_term'], true) ? ' s6' : ($name === 'party_name' ? ' s6' : '');
         echo '<div class="field' . $span . '"><label for="' . $name . '">' . sales_h($label) . '</label>';
         if ($kind === 'mobile') {
             echo '<div class="inline"><input id="mobile" name="mobile" maxlength="40" placeholder="Mobile Number" value="' . $val('mobile') . '"><button type="button" class="btn small" id="mobile-search">Search</button></div>';
@@ -509,37 +531,21 @@ function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, 
     if ($btn('payment_term')) {
         echo '<div class="field s12" id="payment-term-box"' . (($h['payment_term'] ?? '') === '' ? ' hidden' : '') . '><label for="payment_term">Payment Term</label><textarea id="payment_term" name="payment_term" maxlength="2000">' . $val('payment_term') . '</textarea></div>';
     }
-    echo '</div>';
+    echo '</div></section>';
 
-    // Item entry row.
-    echo '<section class="section product-form"><div class="hgrid">';
-    echo '<div class="field"><label for="e_group">Product Group</label><input id="e_group"></div><div class="field"><label for="e_brand">Brand</label><input id="e_brand"></div>';
-    echo '<div class="field s4"><label for="e_model">Model No/Caption</label><div class="relative"><input id="e_model" placeholder="Search model, code or name"><div class="suggestions" id="product-suggestions" hidden></div></div></div>';
+    // 3. Product entry: the fields used every time, then the Add button.
+    echo '<section class="sd-card entry product-form" data-step="3">' . $card(3, 'Add products', 'Search the model' . ($has('store') ? ', pick the store' : '') . ', enter the quantity' . ($cfg['amounts'] ? ' and price' : '') . ', then press Add. Repeat for every product.');
+    echo '<div class="hgrid">';
+    echo '<div class="field s6"><label for="e_model">Model No/Caption</label><div class="relative"><input id="e_model" placeholder="Search model, code or name"><div class="suggestions" id="product-suggestions" hidden></div></div></div>';
     if ($has('store')) {
-        echo '<div class="field s2"><label for="e_store">' . ($has('store_to') ? 'Store From' : 'Store') . '</label><select id="e_store"></select></div>';
+        echo '<div class="field"><label for="e_store">' . ($has('store_to') ? 'Store From' : 'Store') . '</label><select id="e_store"></select></div>';
     }
     if ($has('store_to')) {
-        echo '<div class="field s2"><label for="e_store_to">Store To</label><select id="e_store_to"></select></div>';
+        echo '<div class="field"><label for="e_store_to">Store To</label><select id="e_store_to"></select></div>';
     }
-    echo '<div class="field s6"><label for="e_desc">Description</label><input id="e_desc"></div>';
-    if ($has('warranty')) {
-        echo '<div class="field s2"><label for="e_warranty">Warranty</label><input id="e_warranty"></div>';
-    }
-    if ($has('narration')) {
-        echo '<div class="field s2"><label for="e_narr">' . sales_h($cfg['narration_label']) . '</label><input id="e_narr"></div>';
-    }
-    echo '<div class="field s2"><label for="e_unit">Unit</label><input id="e_unit" value="Pcs"></div>';
-    echo '</div>';
-    if ($has('serials')) {
-        echo '<div class="radios"><label><input type="radio" name="sq" value="none" checked> Sequence Not Available</label><label><input type="radio" name="sq" value="range"> Sequence Available</label><label><input type="radio" name="sq" value="list"> Bulk Qty</label>'
-            . ($has('auto_serial') ? '<label><input type="radio" name="sq" value="auto"> A.G Serial</label>' : '')
-            . '<label><input class="check" type="checkbox" id="serial_clear" checked> Serial Clear</label><label><input class="check" type="checkbox" id="digit_check"> Digit Check</label><input id="digit_len" type="number" min="1" max="60" style="width:60px;height:26px" title="Serial length">'
-            . '<label>Serial Common <input id="s_common" style="width:120px;height:26px"></label><label>From <input id="s_from" style="width:110px;height:26px"></label><label>To <input id="s_to" style="width:110px;height:26px"></label></div>';
-    }
-    echo '<div class="hgrid">';
     echo '<div class="field s2"><label for="e_qty">Quantity</label><input id="e_qty" type="number" min="0" step="0.001"></div>';
     if ($has('free')) {
-        echo '<div class="field s2"><label for="e_free">Free Quantity</label><input id="e_free" type="number" min="0" step="0.001" value="0"></div>';
+        echo '<div class="field s2"><label for="e_free">Free Qty</label><input id="e_free" type="number" min="0" step="0.001" value="0"></div>';
     }
     if ($has('prev_price')) {
         echo '<div class="field s2"><label for="e_prev">Previous Cost</label><input id="e_prev" type="number" step="0.01" readonly></div>';
@@ -551,82 +557,84 @@ function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, 
         echo '<div class="field s2"><label for="e_disc">Discount</label><input id="e_disc" type="number" min="0" step="0.01" value="0"></div>';
     }
     if ($has('serials')) {
-        echo '<div class="field s4"><label for="e_serial">Serial/IMEI No. <span class="muted">(one per line or comma)</span></label><textarea id="e_serial" style="height:32px"></textarea></div>';
+        echo '<div class="field s4"><label for="e_serial">Serial/IMEI No. <span class="muted">(one per line or comma)</span></label><textarea id="e_serial"></textarea></div>';
     }
-    echo '<div class="field s2"><label>&nbsp;</label><span><span class="qty-info" id="qty-available"></span> <span class="muted" id="cost-info"></span></span></div>';
-    echo '</div></section>';
-
-    // Buttons.
-    $link = fn($id) => $id ? 'href="' . $self . '?id=' . (int) $id['doc_id'] . '"' : 'aria-disabled="true" style="opacity:.4"';
-    echo '<div class="toolbar" style="margin:10px 0">';
-    echo '<a class="btn" href="' . $self . '">New</a><a class="btn" href="' . $self . '?view=list">List View</a>';
-    echo '<button type="button" class="btn" id="add-line"' . ($readOnly ? ' disabled' : '') . '>Add</button>';
+    echo '<div class="field s2 sd-add"><label>&nbsp;</label><button type="button" class="btn primary" id="add-line"' . ($readOnly ? ' disabled' : '') . '>Add</button></div>';
     if ($btn('add_all')) {
-        echo '<button type="button" class="btn" id="add-all"' . ($readOnly ? ' disabled' : '') . '>Add All</button>';
+        echo '<div class="field s2 sd-add"><label>&nbsp;</label><button type="button" class="btn" id="add-all"' . ($readOnly ? ' disabled' : '') . '>Add All</button></div>';
     }
-    echo '<a class="btn" title="Previous" ' . $link($prev) . '>&#9664;</a><a class="btn" title="Next" ' . $link($next) . '>&#9654;</a>';
-    echo '<button class="btn primary" name="action" value="save"' . ($readOnly ? ' disabled' : '') . '>' . ($doc ? 'Edit' : 'Save') . '</button>';
+    echo '</div>';
+    echo '<div class="sd-chips" aria-live="polite"><span class="qty-info" id="qty-available"></span><span class="muted" id="cost-info"></span></div>';
+    echo '<details class="sd-more"><summary>Product details' . ($has('serials') ? ' and serial options' : '') . ' <small>(filled from the product; change only if needed)</small></summary><div class="hgrid sd-details">';
+    echo '<div class="field"><label for="e_group">Product Group</label><input id="e_group"></div><div class="field"><label for="e_brand">Brand</label><input id="e_brand"></div>';
+    echo '<div class="field s6"><label for="e_desc">Description</label><input id="e_desc"></div>';
+    if ($has('warranty')) {
+        echo '<div class="field"><label for="e_warranty">Warranty</label><input id="e_warranty"></div>';
+    }
+    if ($has('narration')) {
+        echo '<div class="field"><label for="e_narr">' . sales_h($cfg['narration_label']) . '</label><input id="e_narr"></div>';
+    }
+    echo '<div class="field"><label for="e_unit">Unit</label><input id="e_unit" value="Pcs"></div>';
+    echo '</div>';
+    if ($has('serials')) {
+        echo '<div class="radios sd-serial"><label><input type="radio" name="sq" value="none" checked> Sequence Not Available</label><label><input type="radio" name="sq" value="range"> Sequence Available</label><label><input type="radio" name="sq" value="list"> Bulk Qty</label>'
+            . ($has('auto_serial') ? '<label><input type="radio" name="sq" value="auto"> A.G Serial</label>' : '')
+            . '<label><input class="check" type="checkbox" id="serial_clear" checked> Serial Clear</label><label><input class="check" type="checkbox" id="digit_check"> Digit Check</label><input id="digit_len" type="number" min="1" max="60" style="width:70px" title="Serial length">'
+            . '<label>Serial Common <input id="s_common" class="sm"></label><label>From <input id="s_from" class="sm"></label><label>To <input id="s_to" class="sm"></label></div>';
+    }
+    echo '</details></section>';
+
+    // Items: the list and the buttons that work on it.
+    echo '<section class="sd-card"><header class="sd-head sd-head-bar"><div><h3>Items <span class="si-count" id="si_count_head"></span></h3><p>' . ($doc ? 'Saved lines of ' . sales_h($doc['doc_no']) . '.' : 'Products you add appear here.') . '</p></div><div class="sd-tools">';
+    $change = '';
     if ($btn('edit_price_inline') && $cfg['amounts']) {
-        echo '<button type="button" class="btn" id="edit-price"' . ($readOnly ? ' disabled' : '') . ' title="Change unit prices and discounts in the grid, then click ' . ($doc ? 'Edit' : 'Save') . '">Edit Price</button>';
+        $change .= '<button type="button" class="btn" id="edit-price"' . ($readOnly ? ' disabled' : '') . ' title="Change unit prices and discounts in the grid, then click ' . ($doc ? 'Edit' : 'Save') . '">Edit Price</button>';
     }
     if ($btn('edit_details')) {
-        echo '<button class="btn" name="action" value="edit_details" formnovalidate' . ($doc && $doc['status'] === 'active' ? '' : ' disabled') . ' title="Save the header fields only (customer, address, narration...)">Edit Details</button>';
-    }
-    if ($cfg['additional']) {
-        echo '<button type="button" class="btn" onclick="const b=document.getElementById(\'additional-info\');b.hidden=!b.hidden">Additional Info</button>';
-    }
-    if ($btn('serial_view')) {
-        echo '<button type="button" class="btn" id="serial-view">Serial View</button>';
-    }
-    if ($btn('show_cost')) {
-        echo '<button type="button" class="btn" id="show-cost">Show Cost</button>';
-    }
-    if ($btn('show_price')) {
-        echo '<button type="button" class="btn" id="show-price">Show Price</button>';
-    }
-    if ($cfg['totals']) {
-        echo '<button type="button" class="btn" onclick="(document.getElementById(\'t_extra\')||document.getElementById(\'t_discount\'))?.focus()">' . sales_h($cfg['totals_label']) . '</button>';
-    }
-    if ($btn('extra_charges') && in_array('extra', $cfg['totals'], true)) {
-        echo '<button type="button" class="btn" onclick="const e=document.getElementById(\'t_extra\');e.focus();e.select()">Additional Extra Charges</button>';
-    }
-    if ($btn('payment_term')) {
-        echo '<button type="button" class="btn" onclick="const b=document.getElementById(\'payment-term-box\');b.hidden=false;document.getElementById(\'payment_term\').focus()">Payment Term</button>';
-    }
-    if ($doc) {
-        echo '<a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '">Preview</a><a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '&auto=1">' . sales_h($cfg['print_label']) . '</a>';
-        echo '<a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '&custom=1">' . sales_h($cfg['custom_label']) . '</a>';
-        if ($btn('barcode_product')) {
-            echo '<a class="btn" target="_blank" href="' . $self . '?barcode=' . (int) $doc['doc_id'] . '&mode=product">Barcode</a>';
-        }
-        if ($btn('barcode')) {
-            echo '<a class="btn" target="_blank" href="' . $self . '?barcode=' . (int) $doc['doc_id'] . '">Barcode Serial</a>';
-        }
-        if ($btn('edit_price') && $doc['status'] === 'active') {
-            echo '<a class="btn" href="../amedment/purchase_price_amendment.php?source_no=' . urlencode($doc['doc_no']) . '" title="Change the cost of this saved purchase">Edit Price</a>';
-        }
-        if (!$readOnly && $cfg['editable']) {
-            echo '<button class="btn danger" name="action" value="cancel" formnovalidate onclick="return confirm(\'Cancel ' . sales_h($doc['doc_no']) . '?\')">Cancel Document</button>';
-        }
+        $change .= '<button class="btn" name="action" value="edit_details" formnovalidate' . ($doc && $doc['status'] === 'active' ? '' : ' disabled') . ' title="Save the header fields only (customer, address, narration...)">Edit Details</button>';
     }
     if ($btn('import')) {
-        echo '<label class="btn" style="cursor:pointer"' . ($readOnly ? ' hidden' : '') . '>Import<input type="file" id="import-file" accept=".csv,text/csv" hidden></label>';
+        $change .= '<label class="btn" style="cursor:pointer"' . ($readOnly ? ' hidden' : '') . ' title="CSV columns: product code or model, quantity' . ($cfg['amounts'] ? ', unit price' : '') . ($has('serials') ? ', serials separated by |' : '') . '">Import<input type="file" id="import-file" accept=".csv,text/csv" hidden></label>';
+    }
+    if ($change !== '') {
+        echo '<div class="sd-group" role="group" aria-label="Change">' . $change . '</div>';
+    }
+    if ($doc) {
+        echo '<div class="sd-group" role="group" aria-label="Print"><a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '">Preview</a><a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '&auto=1">' . sales_h($cfg['print_label']) . '</a>'
+            . '<a class="btn" target="_blank" href="' . $self . '?print=' . (int) $doc['doc_id'] . '&custom=1">' . sales_h($cfg['custom_label']) . '</a>'
+            . ($btn('barcode_product') ? '<a class="btn" target="_blank" href="' . $self . '?barcode=' . (int) $doc['doc_id'] . '&mode=product">Barcode</a>' : '')
+            . ($btn('barcode') ? '<a class="btn" target="_blank" href="' . $self . '?barcode=' . (int) $doc['doc_id'] . '">Barcode Serial</a>' : '')
+            . ($btn('edit_price') && $doc['status'] === 'active' ? '<a class="btn" href="../amedment/purchase_price_amendment.php?source_no=' . urlencode($doc['doc_no']) . '" title="Change the cost of this saved purchase">Edit Price</a>' : '') . '</div>';
+    }
+    $more = '';
+    if ($cfg['additional']) {
+        $more .= '<button type="button" class="btn" onclick="const b=document.getElementById(\'additional-info\');b.hidden=!b.hidden">Additional Info</button>';
+    }
+    if ($btn('serial_view')) {
+        $more .= '<button type="button" class="btn" id="serial-view">Serial View</button>';
+    }
+    if ($btn('show_cost')) {
+        $more .= '<button type="button" class="btn" id="show-cost">Show Cost</button>';
+    }
+    if ($btn('show_price')) {
+        $more .= '<button type="button" class="btn" id="show-price">Show Price</button>';
+    }
+    if ($cfg['totals']) {
+        $more .= '<button type="button" class="btn" onclick="(document.getElementById(\'t_extra\')||document.getElementById(\'t_discount\'))?.focus()">' . sales_h($cfg['totals_label']) . '</button>';
+    }
+    if ($btn('extra_charges') && in_array('extra', $cfg['totals'], true)) {
+        $more .= '<button type="button" class="btn" onclick="const e=document.getElementById(\'t_extra\');e.focus();e.select()">Additional Extra Charges</button>';
+    }
+    if ($btn('payment_term')) {
+        $more .= '<button type="button" class="btn" onclick="const b=document.getElementById(\'payment-term-box\');b.hidden=false;document.getElementById(\'payment_term\').focus()">Payment Term</button>';
     }
     foreach ($cfg['jump'] as [$target, $label]) {
-        echo '<button type="button" class="btn" onclick="document.getElementById(\'' . sales_h($target) . '\')?.scrollIntoView({behavior:\'smooth\'})"' . ($doc ? '' : ' disabled title="Save first"') . '>' . sales_h($label) . '</button>';
+        $more .= '<button type="button" class="btn" onclick="document.getElementById(\'' . sales_h($target) . '\')?.scrollIntoView({behavior:\'smooth\'})"' . ($doc ? '' : ' disabled title="Save first"') . '>' . sales_h($label) . '</button>';
     }
-    echo '<a class="btn" href="javascript:history.back()">Close</a></div>';
-    if ($doc) {
-        $status = $doc['status'] === 'cancelled' ? 'Cancelled' : ($doc['approval_status'] === 'approved' ? 'Approved' : 'Pending approval');
-        if (($cfg['lock_reason'] ?? '') !== '') {
-            $status .= '</b> · ' . sales_h($cfg['lock_reason']) . '<b>';
-        }
-        echo '<p class="footnote">' . sales_h($doc['doc_no']) . ' · ' . sales_h(inv_branch_name($db, $doc['branch_id'])) . ' · <b>' . $status . '</b>' . ($readOnly && $doc['status'] === 'active' && $doc['approval_status'] !== 'approved' ? ' · Saved documents of this type cannot be edited.' : '') . (!empty($doc['sales_invoice_id']) ? ' · Sales invoice <a target="_blank" href="../sales/sales_invoice/sales_invoice.php?print=' . (int) $doc['sales_invoice_id'] . '">open</a>' : '') . '</p>';
+    if ($more !== '') {
+        echo '<div class="sd-group" role="group" aria-label="More">' . $more . '</div>';
     }
-    if (in_array('import', $cfg['buttons'], true)) {
-        echo '<p class="footnote">Import reads a CSV with columns: product code or model, quantity' . ($cfg['amounts'] ? ', unit price' : '') . ($has('serials') ? ', serials separated by |' : '') . '.</p>';
-    }
-
+    echo '</div></header>';
     if ($cfg['additional']) {
         $info = json_decode((string) ($h['additional_info'] ?? ''), true) ?: [];
         echo '<section class="section" id="additional-info"' . ($info ? '' : ' hidden') . '><div class="section-title">Additional Info</div><div class="hgrid">';
@@ -635,18 +643,30 @@ function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, 
         }
         echo '</div></section>';
     }
+    echo '<div class="table-scroll grid-box"><table><thead><tr id="grid-head"></tr></thead><tbody id="grid-body"></tbody></table></div>';
+    echo '</section>';
+    echo '</div>';
 
-    // Grid and totals.
-    echo '<div class="table-scroll"><table><thead><tr id="grid-head"></tr></thead><tbody id="grid-body"></tbody></table></div>';
-    echo '<div class="totals-box"><table id="totals"></table></div>';
+    // Summary column: the amount, payment, Save.
+    echo '<aside class="si-side"><section class="si-sum" aria-label="Summary"><div class="si-sum-top"><span data-label="' . ($has('prev_price') ? 'New amount' : 'Net payable') . '">' . ($has('prev_price') ? 'New amount' : 'Net payable') . '</span>'
+        . '<b><small>&#2547;</small> <span id="si_net">0.00</span></b><p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p></div>'
+        . '<table class="stotals" id="totals"></table></section>';
     if ($cfg['cash']) {
-        echo '<div class="list-search" style="margin-top:8px">'
-            . ($cfg['payment_date'] ? '<label for="required_date" style="align-self:center">Payment Date</label><input class="input" id="required_date" name="required_date" type="date" value="' . $val('required_date') . '" style="max-width:160px"' . ($readOnly ? ' readonly' : '')
-                    . '><button type="button" class="btn" onclick="const d=document.getElementById(\'required_date\');d.showPicker?d.showPicker():d.focus()"' . ($readOnly ? ' disabled' : '') . '>Payment Date</button>' : '')
-            . '<label for="t_cash" style="align-self:center">' . sales_h($cfg['cash_label']) . '</label><input class="input" id="t_cash" name="cash_received" type="number" min="0" step="0.01" value="' . $val('cash_received', '0') . '" style="max-width:160px"' . ($readOnly ? ' readonly' : '') . '>'
-            . (isset($cfg['cash_extra']) ? ($cfg['cash_extra'])($doc) : '')
-            . ($cfg['cash_change'] ? '<span class="qty-info" style="align-self:center">Change Amount: <span id="change-amount">0.00</span></span>' : '') . '</div>';
+        echo '<section class="sd-card si-pay" data-step="4">' . $card(4, 'Payment', 'Enter the amount ' . ($meta['party'] === 'supplier' ? 'paid' : 'received') . ' now, if any.') . '<div class="hgrid si-paygrid">';
+        if ($cfg['payment_date']) {
+            echo '<div class="field"><label for="required_date">Payment Date</label><input id="required_date" name="required_date" type="date" value="' . $val('required_date') . '"' . ($readOnly ? ' readonly' : '') . '></div>'
+                . '<div class="field sd-end"><label>&nbsp;</label><button type="button" class="btn" onclick="const d=document.getElementById(\'required_date\');d.showPicker?d.showPicker():d.focus()"' . ($readOnly ? ' disabled' : '') . '>Payment Date</button></div>';
+        }
+        echo '<div class="field"><label for="t_cash">' . sales_h($cfg['cash_label']) . '</label><input id="t_cash" name="cash_received" type="number" min="0" step="0.01" value="' . $val('cash_received', '0') . '"' . ($readOnly ? ' readonly' : '') . '></div>';
+        echo (isset($cfg['cash_extra']) ? '<div class="field s12 si-cash-extra">' . ($cfg['cash_extra'])($doc) . '</div>' : '');
+        echo '</div>' . ($cfg['cash_change'] ? '<p class="si-change">Change Amount: <b id="change-amount">0.00</b></p>' : '') . '</section>';
     }
+    echo '<div class="si-actions" data-step="5"><button class="btn primary si-save" id="save-btn" name="action" value="save"' . ($readOnly ? ' disabled' : '') . '>' . ($doc ? 'Edit' : 'Save') . '</button><div class="si-actions-row"><a class="btn" href="javascript:history.back()">Close</a>';
+    if ($doc && !$readOnly && $cfg['editable']) {
+        echo '<button class="btn danger" name="action" value="cancel" formnovalidate onclick="return confirm(\'Cancel ' . sales_h($doc['doc_no']) . '?\')">Cancel Document</button>';
+    }
+    echo '</div><p class="si-hint">' . ($doc ? 'Edit saves your changes to ' . sales_h($doc['doc_no']) . '.' : 'Save first; Print and Preview open after saving.') . '</p></div></aside></div>';
+
     foreach (['extra' => 'extra_charges', 'discount' => 'discount_amount', 'vat' => 'vat_amount'] as $k => $col) {
         if (in_array($k, $cfg['totals'], true)) {
             echo '<input type="hidden" name="' . $col . '" id="h_' . $k . '" value="' . $val($col, '0') . '">';

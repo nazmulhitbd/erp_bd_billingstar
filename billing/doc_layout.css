@@ -1,0 +1,255 @@
+/*
+ * Document layout shared by the entry screens: Sales Invoice, Sales Order, and the inventory documents (Purchase, Purchase
+ * Order, Requisition, Challan, Challan Return, Sales Bill From Challan, Stock Transfer, Quotation, Stock Amendment).
+ * A header bar, numbered cards in a main column and a summary column with the payable amount, payment and Save.
+ * Loaded by sdoc_page_start (sales/sales_doc.php) and inv_page_start (inventory/inv_common.php); doc_ui.js fills the summary.
+ */
+/* ---------- Step layout (Sales Invoice): numbered cards that follow the form guide (addon/dialog/guide.js) ---------- */
+.sd-top{display:grid;grid-template-columns:minmax(0,2fr) minmax(300px,1fr);gap:14px;align-items:start}
+.sd-card{background:#fff;border:1px solid #dfe5ee;border-radius:12px;padding:16px 18px;margin:0 0 14px;box-shadow:0 1px 2px #0f172a0a;transition:border-color .2s,box-shadow .2s}
+.sd-card.entry{background:#fbfcfe;border:1px solid #dfe5ee;border-radius:12px;padding:16px 18px;margin:0 0 14px}
+.sd-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.sd-head h3{margin:1px 0 2px;font-size:15.5px;font-weight:700;color:#0f172a}
+.sd-head p{margin:0;font-size:12.5px;color:#64748b}
+.sd-num{flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+.sd-head-bar{flex-wrap:wrap;justify-content:space-between;align-items:center}
+.sd-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 14px;margin:0}
+.sgrid.sd-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 14px;margin:0}
+.sgrid.sd-grid.one{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sgrid.sd-grid.one .sd-f:not(.half){grid-column:1/-1}
+.sd-f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.sd-f.s2{grid-column:span 2}.sd-f.s3{grid-column:span 3}
+.sd-f>label{font-size:12px;font-weight:600;color:#475569;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sd-card input:not([type=checkbox]):not([type=radio]):not([type=file]),.sd-card select,.sd-card textarea{
+  width:100%;min-width:0;height:38px;padding:7px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#0f172a;font:inherit;font-size:13.5px;
+  transition:border-color .15s,box-shadow .15s}
+.sd-card textarea{height:38px;min-height:38px;resize:vertical;line-height:1.35}
+.sd-card input:focus,.sd-card select:focus,.sd-card textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px #2563eb26}
+.sd-card input:disabled,.sd-card select:disabled,.sd-card textarea:disabled{background:#f1f5f9;color:#475569;border-color:#e2e8f0}
+.sd-card input::placeholder,.sd-card textarea::placeholder{color:#94a3b8}
+.sd-card .inline{display:flex;gap:6px;align-items:stretch}.sd-card .inline .btn{height:38px;white-space:nowrap}
+.sd-card .btn{border-radius:8px;border-color:#cbd5e1;background:#fff;color:#1e293b;font-size:13px;padding:0 12px;height:34px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.sd-card .btn:hover:not(:disabled){background:#f1f5f9;border-color:#94a3b8}
+.sd-card .btn:disabled,.sd-card .btn[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.sd-card .btn.primary{background:#2563eb;border-color:#2563eb;color:#fff}.sd-card .btn.primary:hover:not(:disabled){background:#1d4ed8}
+.sd-card .btn.round{width:34px;height:34px;padding:0;border-radius:50%;background:#1e3a8a;border-color:#1e3a8a;color:#fff}
+/* Product line: the fields used every time in one row, the product's own details folded away */
+.sd-line{grid-template-columns:repeat(12,minmax(0,1fr));align-items:end}
+.sd-line .sd-f{grid-column:span 1}.sd-line .sd-f.s2{grid-column:span 2}.sd-line .sd-f.s3{grid-column:span 3}
+.sd-add .btn{width:100%;height:38px;font-weight:600}
+.sd-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sd-chips>span{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:14px;background:#eef2f7;color:#475569;font-size:12px}
+.sd-chips b{color:#0f172a;font-weight:700}.sd-chips b:empty::after{content:"–";color:#94a3b8;font-weight:400}
+.sd-chips .sd-adv{background:#fef3c7;color:#92400e}
+.sd-chips #i_cost:empty{display:none}
+.sd-more{margin-top:12px;border-top:1px dashed #dbe2ec;padding-top:10px}
+.sd-more summary{cursor:pointer;font-size:13px;font-weight:600;color:#334155}.sd-more summary small{font-weight:400;color:#64748b}
+.sd-details{margin-top:10px;grid-template-columns:repeat(6,minmax(0,1fr))}
+.sd-serial{margin:12px 0 0;gap:10px 16px;font-size:13px}.sd-serial .sm{width:120px!important;height:34px!important}
+/* Items toolbar: three groups instead of one long row */
+.sd-tools{display:flex;flex-wrap:wrap;gap:8px}
+.sd-group{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:4px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc}
+.sd-group .btn{height:30px;padding:0 10px;font-size:12.5px;border-color:transparent;background:transparent}
+.sd-group .btn:hover:not(:disabled){background:#fff;border-color:#cbd5e1}
+.sd-group .btn.primary{background:#2563eb;color:#fff}
+.sd-group .btn.round{width:30px;height:30px;background:#1e3a8a;color:#fff}
+.sd-card .grid-box{margin-top:12px;border-radius:8px;min-height:180px}
+.sd-card .grid-box th{background:#f1f5f9;color:#334155;font-size:12px}
+/* Payment and totals */
+.sd-card .sbottom{margin-top:0;grid-template-columns:minmax(0,1fr) 340px}
+.sd-paygrid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:end}
+.sd-end .btn{height:38px;width:100%}
+.sd-check{flex-direction:row;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#334155;grid-column:1/-1}
+.sd-card .points{margin-top:12px;padding:8px 10px;border-radius:8px;background:#f8fafc;font-weight:500}
+.sd-card .stotals{border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+.sd-card .stotals th,.sd-card .stotals td{padding:8px 10px;border-color:#e2e8f0}
+.sd-card .stotals td input{height:32px!important;border-radius:6px}
+/* Save bar: always in reach at the bottom of the frame */
+.sd-actions{position:sticky;bottom:0;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 6px;padding:12px 16px;background:#ffffffee;border:1px solid #dfe5ee;border-radius:12px;box-shadow:0 -6px 18px #0f172a12;backdrop-filter:blur(4px)}
+.sd-actions .btn{height:40px;border-radius:8px;padding:0 18px;display:inline-flex;align-items:center}
+.sd-actions .sd-save{order:3;margin-left:auto;min-width:140px;justify-content:center;font-size:15px;font-weight:600}
+.sd-actions .btn.primary{background:#2563eb;border-color:#2563eb;color:#fff}.sd-actions .btn.primary:hover:not(:disabled){background:#1d4ed8}
+.sd-actions .btn.danger{order:2;background:#fff}
+.sd-actions .sd-hint{order:1;color:#64748b;font-size:12px}
+.sd-actions kbd{padding:1px 5px;border:1px solid #cbd5e1;border-radius:4px;background:#f8fafc;font-size:11px}
+@media(max-width:1300px){.sd-line{grid-template-columns:repeat(6,minmax(0,1fr))}.sd-details{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sd-top{grid-template-columns:1fr;gap:0}.sgrid.sd-grid.one{grid-template-columns:repeat(4,minmax(0,1fr))}.sgrid.sd-grid.one .sd-f:not(.half){grid-column:span 2}}
+@media(max-width:1000px){.sd-top{grid-template-columns:1fr}.sd-card .sbottom{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .sgrid.sd-grid,.sd-grid,.sd-details,.sd-paygrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sd-line{grid-template-columns:repeat(2,minmax(0,1fr))}.sd-line .sd-f,.sd-line .sd-f.s2,.sd-line .sd-f.s3{grid-column:span 1}.sd-line .sd-f.s3,.sd-line .sd-f.s2,.sd-add{grid-column:1/-1}
+  .sd-f.s2,.sd-f.s3{grid-column:1/-1}
+  .sd-card{padding:14px 12px}.sd-actions .sd-hint{display:none}
+}
+/* The common page look (billing/ui-common.css) is added to this page too: keep the step cards and the two blue main buttons. */
+.sd-card.entry.entry{padding:16px 18px;background:#fbfcfe;border:1px solid #dfe5ee;border-radius:12px;margin:0 0 14px}
+html .sd-card .btn.primary.primary,html .sd-actions .btn.primary.primary{background:#2563eb!important;border-color:#2563eb!important;color:#fff!important}
+html .sd-card .btn.primary.primary:hover,html .sd-actions .btn.primary.primary:hover{background:#1d4ed8!important}
+html .sd-card .grid-box table td,html .sd-card .grid-box table th{white-space:nowrap}
+
+
+/* ======================= Sales Invoice: header, main column and summary column (sales_invoice.php) =======================
+   The fields follow the width of their card (container queries), not the window, so the layout fits the top menu, the
+   side menu, a tablet or a phone. */
+form.si{--si-ink:#0f172a;--si-muted:#64748b;--si-line:#e2e8f0;--si-soft:#f8fafc;--si-brand:#2563eb;--si-navy:#0f1d40}
+.si-hero{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:0 0 14px;padding:16px 18px;border:1px solid var(--si-line);border-radius:14px;background:linear-gradient(120deg,#ffffff 0%,#f3f7ff 60%,#eef2ff 100%)}
+.si-hero-main{display:flex;align-items:center;gap:14px;min-width:0}
+.si-hero-icon{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#4f46e5);box-shadow:0 8px 18px #2563eb40}
+.si-hero-icon svg{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.si-hero h2{margin:0;font-size:21px;font-weight:700;color:var(--si-ink);letter-spacing:-.01em}
+.si-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:4px 0 0;color:var(--si-muted);font-size:13px}
+.si-meta b{color:var(--si-ink);font-size:14px;font-variant-numeric:tabular-nums}
+.si-meta>span:not(.si-status)::before{content:"\00b7";margin-right:10px;color:#cbd5e1}
+.si-status{padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.si-new{background:#e0ecff;color:#1d4ed8}.si-ok{background:#dcfce7;color:#15803d}.si-wait{background:#fef3c7;color:#b45309}.si-void{background:#fee2e2;color:#b91c1c}
+.si-lock{color:#b45309}
+.si-hero-tools .sd-group{background:#fff}
+
+.si-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,360px);gap:16px;align-items:start}
+.si-main,.si-side{min-width:0}
+.si-main>.sd-card,.si-side>.sd-card,.si-side>section{container-type:inline-size}
+
+/* Inputs: soft fill, white with a ring when in use */
+form.si .sd-card input:not([type=checkbox]):not([type=radio]):not([type=file]),form.si .sd-card select,form.si .sd-card textarea{height:40px;border-radius:10px;background:var(--si-soft)}
+form.si .sd-card textarea{height:40px;min-height:40px}
+form.si .sd-card input:focus,form.si .sd-card select:focus,form.si .sd-card textarea:focus{background:#fff}
+form.si .sd-card input[readonly]{background:#eef2f7}
+form.si .sd-card{border-radius:14px;padding:18px 20px}
+form.si .sd-card .inline .btn{height:40px}
+
+/* Card grids by card width */
+form.si .sgrid.sd-grid,form.si .sd-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+form.si .sgrid.sd-grid.si-details{grid-template-columns:repeat(5,minmax(0,1fr))}
+form.si .si-details .sd-f:nth-child(1),form.si .si-details .sd-f:nth-child(4){grid-column:span 1}
+form.si .si-details .sd-f:nth-child(5){grid-column:span 1}
+form.si .sd-line{grid-template-columns:repeat(12,minmax(0,1fr))}
+@container (max-width:900px){
+  /* Customer: mobile and name half a row each, then three fields a row */
+  form.si [data-step="1"] .sgrid.sd-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  form.si [data-step="1"] .sd-f{grid-column:span 2}
+  form.si [data-step="1"] .sd-f:nth-child(1),form.si [data-step="1"] .sd-f:nth-child(2){grid-column:span 3}
+  form.si [data-step="1"] .sd-f:nth-child(6){grid-column:span 4}
+  form.si .sgrid.sd-grid.si-details{grid-template-columns:repeat(2,minmax(0,1fr))}
+  form.si .sd-line{grid-template-columns:repeat(6,minmax(0,1fr))}
+  form.si .sd-details{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@container (max-width:640px){
+  form.si .sgrid.sd-grid,form.si .sd-grid,form.si .sd-details{grid-template-columns:repeat(2,minmax(0,1fr))}
+  form.si .sd-f.s2,form.si .sd-f.s3{grid-column:1/-1}
+  form.si .sd-line{grid-template-columns:repeat(2,minmax(0,1fr))}
+  form.si .sd-line .sd-f,form.si .sd-line .sd-f.s2{grid-column:span 1}
+  form.si .sd-line .sd-f.s3,form.si .sd-line .sd-add,form.si .sd-line .sd-f:has(#e_serial){grid-column:1/-1}
+  form.si .sd-head p{display:none}
+}
+@container (max-width:380px){
+  form.si .sgrid.sd-grid,form.si .sd-grid,form.si .sd-details,form.si .sgrid.sd-grid.si-details{grid-template-columns:minmax(0,1fr)}
+  form.si .sd-f.half{grid-column:1/-1}
+}
+
+/* Items: an empty list that says what to do */
+form.si #grid-body td.empty{padding:34px 12px!important;color:var(--si-muted);font-size:13.5px;background:repeating-linear-gradient(135deg,#fafbfd 0 10px,#f5f7fb 10px 20px)!important}
+form.si #grid-body td.empty::before{content:"";display:block;width:42px;height:42px;margin:0 auto 10px;border-radius:12px;background:#e0ecff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4h2l2.4 11h11L21 8H6.2'/%3E%3Ccircle cx='9' cy='19' r='1.3'/%3E%3Ccircle cx='17' cy='19' r='1.3'/%3E%3C/svg%3E") center/22px no-repeat}
+form.si #grid-body td.empty::after{content:"Search a model above, enter quantity and price, then press Add.";display:block;margin-top:4px;font-size:12.5px;color:#94a3b8}
+form.si .grid-box{min-height:0;max-height:520px;border:1px solid var(--si-line)!important;border-radius:12px;overflow:auto}
+form.si .grid-box thead th{position:sticky;top:0;background:#f1f5f9;z-index:1}
+form.si #grid-body tr:hover td{background:#f5f8ff}
+form.si #grid-body tr.selected-row td{background:#fff7d6!important}
+form.si .si-count{color:var(--si-muted);font-weight:600;font-size:13px}
+
+/* Summary: the payable amount first, then the totals */
+.si-sum{margin:0 0 14px;border-radius:16px;overflow:hidden;border:1px solid #1e2c55;background:#fff;box-shadow:0 10px 24px #0f1d401f}
+.si-sum-top{padding:18px 20px 16px;color:#cbd5f5;background:radial-gradient(120% 140% at 100% 0%,#3b5bdb 0%,#1e3a8a 45%,#0f1d40 100%)}
+.si-sum-top>span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#a5b4fc}
+.si-sum-top b{display:block;margin:4px 0 2px;color:#fff;font-size:34px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.15;overflow-wrap:anywhere}
+.si-sum-top b small{font-size:20px;font-weight:600;color:#c7d2fe}
+.si-sum-top p{margin:0;font-size:12.5px;color:#c7d2fe}
+.si-sum .stotals{width:100%;border:0!important;border-radius:0!important;font-size:13px}
+.si-sum .stotals th,.si-sum .stotals td{padding:9px 16px!important;border:0!important;border-bottom:1px solid #eef1f6!important;background:#fff!important;font-weight:500;color:#334155}
+.si-sum .stotals th{font-size:12.5px;white-space:nowrap}
+.si-sum .stotals td{text-align:right;font-variant-numeric:tabular-nums;color:var(--si-ink);font-weight:600}
+.si-sum .stotals tr:first-child td,.si-sum .stotals tr:first-child th{background:#fff!important;font-weight:600}
+.si-sum .stotals #r_net th,.si-sum .stotals #r_net td{background:#eef4ff!important;color:#1d4ed8!important;font-size:14px;font-weight:700}
+.si-sum .stotals td input{height:34px!important;max-width:150px;margin-left:auto;display:block;border-radius:8px!important;text-align:right;background:#f8fafc}
+.si-sum .stotals tr:last-child th,.si-sum .stotals tr:last-child td{border-bottom:0!important}
+
+/* Payment in the side column: one or two fields a row */
+form.si .si-pay{margin-bottom:14px}
+form.si .si-paygrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+form.si .si-paygrid .sd-end{align-self:end}
+form.si .si-pay .points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;font-size:12px}
+@container (max-width:260px){form.si .si-paygrid{grid-template-columns:minmax(0,1fr)!important}}
+
+/* Save */
+.si-actions{display:flex;flex-direction:column;gap:10px;padding:16px;border:1px solid var(--si-line);border-radius:14px;background:#fff}
+html form.si .si-actions .btn.primary.primary.si-save{width:100%;height:50px;font-size:16px!important;font-weight:700!important;border-radius:12px!important;background:linear-gradient(135deg,#2563eb,#4f46e5)!important;border:0!important;box-shadow:0 10px 20px #2563eb40!important}
+html form.si .si-actions .btn.primary.primary.si-save:hover{filter:brightness(1.06)}
+.si-actions-row{display:flex;flex-wrap:wrap;gap:8px}
+.si-actions-row>*{flex:1 1 0;justify-content:center}
+.si-hint{margin:0;color:var(--si-muted);font-size:12px;text-align:center}
+
+/* Narrow frame: one column, the summary after the items */
+@media (max-width:1060px){
+  .si-layout{grid-template-columns:minmax(0,1fr)}
+  .si-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px}
+  .si-side .si-actions{grid-column:1/-1}
+}
+@media (max-width:720px){
+  .si-side{display:block}
+  .si-hero{padding:14px}
+  .si-hero-tools{width:100%}
+  .si-sum-top b{font-size:30px}
+  /* Items become cards: name and amount on top, the rest as label / value pairs */
+  form.si .grid-box{max-height:none;border:0!important;overflow:visible}
+  form.si .grid-box table,form.si .grid-box tbody{display:block;width:100%!important;min-width:0!important}
+  form.si .grid-box thead{display:none}
+  form.si #grid-body tr{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px 12px;margin:0 0 10px;padding:12px 14px;border:1px solid var(--si-line);border-radius:12px;background:#fff;box-shadow:0 1px 2px #0f172a0d}
+  form.si #grid-body td{grid-column:span 3;display:flex;justify-content:space-between;gap:8px;padding:3px 0!important;border:0!important;background:none!important;white-space:normal!important;text-align:right!important;font-size:13px}
+  form.si #grid-body td::before{content:attr(data-label);color:var(--si-muted);font-size:12px;font-weight:600;text-align:left}
+  form.si #grid-body td.si-col-model-no-caption{grid-column:1/-1;order:-2;justify-content:flex-start;font-size:14.5px;font-weight:700;color:var(--si-ink)}
+  form.si #grid-body td.si-col-model-no-caption::before,form.si #grid-body td.si-col-sl::before{display:none}
+  form.si #grid-body td.si-col-amount{grid-column:1/-1;order:-1;font-size:15px;font-weight:700;color:#1d4ed8;border-bottom:1px dashed var(--si-line)!important;padding-bottom:6px!important}
+  /* Description (may hold a "2 serial(s)" note) gets its own line, text from the left */
+  form.si #grid-body td.si-col-description{grid-column:1/-1;display:block;text-align:left!important;color:#475569}
+  form.si #grid-body td.si-col-description::before{display:block;margin-bottom:1px}
+  form.si #grid-body td.si-col-description br{display:none}
+  form.si #grid-body td.si-col-description .muted{margin-left:6px;padding:0 6px;border-radius:6px;background:#eef2f7;font-size:11.5px}
+  form.si #grid-body td.si-col-sl,form.si #grid-body td.si-col-product-id,form.si #grid-body td.si-col-narration:empty,form.si #grid-body td.si-col-unit-name{display:none}
+  form.si #grid-body td.si-col-select,form.si #grid-body td.si-col-edit,form.si #grid-body td.si-col-delete{grid-column:span 2;order:10;justify-content:center;margin-top:6px;padding-top:8px!important;border-top:1px solid var(--si-line)!important}
+  form.si #grid-body td .bsb{width:100%;margin:0}
+  form.si #grid-body td.si-col-select{grid-column:1/span 2} /* the three actions start their own row */
+  form.si #grid-body td.si-col-select::before,form.si #grid-body td.si-col-edit::before,form.si #grid-body td.si-col-delete::before{display:none}
+  form.si #grid-body td.empty{grid-column:1/-1;display:block;text-align:center!important}
+  form.si #grid-body td.empty::before{display:block;content:""}
+}
+
+/* ======================= Inventory documents (inventory/inv_doc_engine.php): the 12-column field grid in the cards ======================= */
+form.si .hgrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px 14px;align-items:end;margin:0}
+form.si .hgrid .field{grid-column:span 3;display:flex;flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:5px;min-width:0;margin:0}
+form.si .hgrid .field.s2{grid-column:span 2}form.si .hgrid .field.s4{grid-column:span 4}form.si .hgrid .field.s6{grid-column:span 6}form.si .hgrid .field.s12{grid-column:1/-1}
+form.si .hgrid .field>label{min-width:0;margin:0;font-size:12px;font-weight:600;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+form.si .hgrid .field>:not(label){flex:none;width:100%}
+form.si .hgrid .field textarea{min-height:40px;height:40px}
+form.si .hgrid .field.s12 textarea{height:72px}
+form.si .sd-add .btn{width:100%;height:40px;font-weight:600}
+form.si .sd-chips:empty,form.si .sd-chips>span:empty{display:none}
+form.si .sd-chips .qty-info{background:#fef2f2;color:#b91c1c}
+form.si .sd-details.hgrid{margin-top:10px}
+@container (max-width:900px){
+  form.si .hgrid .field,form.si .hgrid .field.s2{grid-column:span 4}
+  form.si .hgrid .field.s4,form.si .hgrid .field.s6{grid-column:span 8}
+}
+@container (max-width:640px){
+  form.si .hgrid .field,form.si .hgrid .field.s2{grid-column:span 6}
+  form.si .hgrid .field.s4,form.si .hgrid .field.s6,form.si .hgrid .field.s12{grid-column:1/-1}
+}
+@container (max-width:380px){form.si .hgrid .field,form.si .hgrid .field.s2{grid-column:1/-1}}
+/* Payment card of an inventory document */
+form.si .hgrid.si-paygrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+form.si .hgrid.si-paygrid .field,form.si .hgrid.si-paygrid .field.s2{grid-column:span 1}
+form.si .hgrid.si-paygrid .field.s12{grid-column:1/-1}
+form.si .si-change{margin:12px 0 0;padding:8px 12px;border-radius:10px;background:#f8fafc;color:#475569;font-size:13px}
+form.si .si-change b{color:#0f172a;font-variant-numeric:tabular-nums}
+/* The page frame's own title would repeat the header bar */
+html.ui-common fieldset.ui-block:has(form.si)>legend,html.ui-common fieldset.box:has(form.si)>legend{display:none}
+html.ui-common fieldset.ui-block:has(form.si){border:0!important;padding:0!important}
+html.ui-common fieldset.ui-block:has(form.si)>.ui-block-inner{padding:0!important;border:0!important;background:transparent!important}

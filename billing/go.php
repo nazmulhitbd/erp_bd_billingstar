@@ -10,6 +10,10 @@ if (isset($_GET['t'])) {
     $target = $target !== '' && is_file(dirname(__DIR__) . '/' . $path) ? '../' . $target : '';
 } else {
     $target = perm_link_target(preg_replace('/[^a-f0-9]/', '', (string) ($_GET['k'] ?? '')));
+    // A menu page opened on one of its tabs, such as Company & Login Settings › Appearance.
+    if ($target !== '' && preg_match('/^[a-z]{1,20}$/', (string) ($_GET['tab'] ?? ''))) {
+        $target .= (str_contains($target, '?') ? '&' : '?') . 'tab=' . $_GET['tab'];
+    }
 }
 header('Location: ' . ($target !== '' ? $target : 'user/no_access.php'));
 exit;

@@ -30,8 +30,13 @@
   document.addEventListener('click', e => { if (e.target.closest('[data-close]') || e.target.id === 'rma-modal') modal.close(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.close(); });
 
-  const confirmBox = (message, onYes) => modal.open('Confirm Message', '<p>' + esc(message) + '</p>', [{ label: 'Yes', onClick: onYes }, { label: 'No' }]);
-  const alertBox = message => modal.open('Message', '<p>' + esc(message) + '</p>', [{ label: 'OK' }]);
+  // Questions and messages use the shared popups (addon/dialog) when the page has them; this modal stays for Serial View.
+  const confirmBox = (message, onYes) => window.BSDialog
+    ? window.BSDialog.confirm(message).then(yes => { if (yes) onYes(); })
+    : modal.open('Confirm Message', '<p>' + esc(message) + '</p>', [{ label: 'Yes', onClick: onYes }, { label: 'No' }]);
+  const alertBox = message => window.BSDialog
+    ? window.BSDialog.alert(message)
+    : modal.open('Message', '<p>' + esc(message) + '</p>', [{ label: 'OK' }]);
 
   /* ---------------------------------------------------------------- lookups */
   let dropdown = null;

@@ -1,5 +1,6 @@
-/* Behaviour for the top menu in topmain.php: category panels (click, hover, keyboard), mobile menu, user menu,
-   breadcrumb, current-page highlight, reopening the last page after a reload, and the page finder. */
+/* Behaviour for both admin layouts: topmain.php (top menu: category panels that open on click, hover and keyboard) and
+   treemain.php (body.shell-side: a sidebar whose categories open under themselves, collapse to icons and slide in on
+   phones). Shared: user menu, breadcrumb, current-page highlight, reopening the last page after a reload, the page finder. */
 (function () {
   var nav = document.getElementById('navigation');
   var crumb = document.getElementById('breadcrumb');
@@ -7,14 +8,36 @@
   var navToggle = document.querySelector('.nav-toggle');
   var userMenu = document.querySelector('.user-menu');
   var desktop = window.matchMedia('(min-width: 992px) and (hover: hover)');
+  var wide = window.matchMedia('(min-width: 992px)');
+  var side = document.body.classList.contains('shell-side');
+  var backdrop = document.querySelector('.side-backdrop');
   var LAST_PAGE = 'vsc_last_page';
 
   function store(key, value) { try { sessionStorage.setItem(key, value); } catch (e) {} }
   function read(key) { try { return sessionStorage.getItem(key); } catch (e) { return null; } }
 
+  /* ---------- Sidebar: collapse to icons (kept per browser), drawer on phones ---------- */
+  var root = document.documentElement;
+  function setCollapsed(on) {
+    root.classList.toggle('nav-collapsed', on);
+    try { localStorage.setItem('shell_side_collapsed', on ? '1' : '0'); } catch (e) {}
+    setTimeout(function () { if (typeof calcHeight === 'function') calcHeight(); }, 220);
+  }
+  function setDrawer(open) {
+    nav.classList.toggle('open', open);
+    if (backdrop) backdrop.hidden = !open;
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  if (side) {
+    var collapseBtn = document.querySelector('.side-collapse');
+    if (collapseBtn) collapseBtn.addEventListener('click', function () { setCollapsed(!root.classList.contains('nav-collapsed')); });
+    if (backdrop) backdrop.addEventListener('click', function () { setDrawer(false); });
+  }
+
   /* ---------- Category panels ---------- */
   function placePanel(cat) {
     var panel = cat.querySelector('.nav-panel');
+    if (side) return; // the sidebar opens a category in place
     if (!panel || !desktop.matches) { if (panel) panel.style.left = ''; return; }
     var navBox = nav.getBoundingClientRect();
     var btnBox = cat.querySelector('.nav-top').getBoundingClientRect();
@@ -35,6 +58,7 @@
 
   nav.querySelectorAll('.nav-cat.has-panel').forEach(function (cat) {
     var timer;
+    if (side) return; // no hover panels in the sidebar
     cat.addEventListener('mouseenter', function () {
       if (!desktop.matches) return;
       clearTimeout(timer);
@@ -52,9 +76,10 @@
     if (btn) {
       var cat = btn.parentElement;
       var opening = !cat.classList.contains('open');
+      if (side && root.classList.contains('nav-collapsed') && wide.matches) { setCollapsed(false); opening = true; } // icons only: widen first
       closeAll(cat);
       setOpen(cat, opening);
-      if (opening && !desktop.matches) cat.scrollIntoView({ block: 'nearest' });
+      if (opening && (side || !desktop.matches)) cat.scrollIntoView({ block: 'nearest' });
       return;
     }
     var link = e.target.closest('a[target="frm_main"]');
@@ -67,6 +92,7 @@
   nav.addEventListener('keydown', function (e) {
     var tops = Array.prototype.slice.call(nav.querySelectorAll('.nav-top'));
     var i = tops.indexOf(document.activeElement);
+    if (side) return; // the sidebar is a plain list: Tab moves through it
     if (i !== -1 && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
       e.preventDefault();
       var next = tops[(i + (e.key === 'ArrowRight' ? 1 : -1) + tops.length) % tops.length];
@@ -90,14 +116,16 @@
   });
 
   document.addEventListener('click', function (e) {
-    if (!nav.contains(e.target)) closeAll();
+    if (!side && !nav.contains(e.target)) closeAll();
     if (userMenu && !userMenu.contains(e.target)) userMenu.classList.remove('open');
   });
   /* Clicks inside the page frame do not reach this document; the window losing focus means one happened. */
-  window.addEventListener('blur', function () { closeAll(); if (userMenu) userMenu.classList.remove('open'); });
+  window.addEventListener('blur', function () { if (!side) closeAll(); if (userMenu) userMenu.classList.remove('open'); });
   window.addEventListener('resize', function () { var c = nav.querySelector('.nav-cat.open'); if (c) placePanel(c); });
 
   navToggle.addEventListener('click', function () {
+    if (side && wide.matches) { setCollapsed(!root.classList.contains('nav-collapsed')); return; }
+    if (side) { setDrawer(!nav.classList.contains('open')); return; }
     var open = nav.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
@@ -121,7 +149,7 @@
   var currentPath = '';
   function linkFor(href) {
     var found = null;
-    nav.querySelectorAll('a[target="frm_main"]').forEach(function (a) { if (!found && a.getAttribute('href') === href) found = a; });
+    nav.querySelectorAll('a[target="frm_main"]:not(.brand)').forEach(function (a) { if (!found && a.getAttribute('href') === href) found = a; }); // the sidebar's logo is not a menu entry
     return found;
   }
   function markCurrent(link) {
@@ -130,6 +158,7 @@
     if (link.closest('.nav-panel')) link.classList.add('current');
     var cat = link.closest('.nav-cat');
     if (cat) cat.classList.add('current');
+    if (side && cat && cat.classList.contains('has-panel') && !cat.classList.contains('open')) { closeAll(cat); setOpen(cat, true); } // show where the page lives
     setCrumb(link.getAttribute('data-path') || link.textContent.trim());
   }
   /* The one page title / path above the frame: "Category › Group" muted, page name bold. */
@@ -155,9 +184,13 @@
     if (!inMenu) setCrumb(link.getAttribute('data-path') || link.textContent.trim());
     store(LAST_PAGE, href);
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); // CSS :focus-within would keep the panel open
-    closeAll();
-    nav.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
+    if (side) {
+      setDrawer(false);
+    } else {
+      closeAll();
+      nav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
   }
   document.querySelector('.brand').addEventListener('click', function () { opened(this); });
 
@@ -272,6 +305,104 @@
       }
     });
   }
+  /* ---------- Record tables and table forms: one look on every page (ui-common.css, "Record tables, polished") ---------- */
+  var STATUS = {
+    good: /^(active|approved|posted|paid|completed?|delivered|converted|received|verified|cleared|settled|enabled|in stock|done|billed|open for sale)$/i,
+    wait: /^(pending|draft|open|partial(ly paid)?|waiting|due|hold|on hold|in progress|processing|unverified|pending approval|not billed)$/i,
+    bad: /^(inactive|void|voided|cancel+ed|rejected|blocked|closed|expired|dishono(u)?red|disabled|overdue|unpaid|out of stock|returned|locked)$/i
+  };
+  var ACTION = /^(edit( profile| details| price)?|view|details?|delete|remove|print|preview|open|approve|reject|receipt|ledger|select|show|download|cancel|restore|reset|reply)$/i;
+  var NUMERIC_HEAD = /amount|qty|quantity|price|total|balance|due|owes|owed|limit|rate|value|cost|stock|discount|vat|ait|tax|paid|debit|credit|charge|salary|payable|receivable|commission|target|point/i;
+  var NOT_NUMERIC_HEAD = /mobile|phone|code|^no\b|no\.?$|id$|nid|bin|serial|imei|year|date|time|nr|sl|#|account no|invoice|ref/i;
+  function cellText(td) { return (td.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function polishTables(doc) {
+    if (/[?&](print|receipt|challan|export|auto)=/.test(doc.defaultView.location.search) || doc.body.classList.contains('rma-print')) return;
+    doc.querySelectorAll('table').forEach(function (table) {
+      if (table.classList.contains('ui-records') || table.closest('.stotals, .totals, .Navigator, .no-ui, .bsd-backdrop, .dash, .sd-line')) return;
+      var head = table.querySelector('thead tr, tr.WUIrsheader') || (table.rows[0] && table.rows[0].querySelector('th') ? table.rows[0] : null);
+      if (!head || head.cells.length < 3) {
+        if (table.classList.contains('ui-form-table')) polishFormTable(table);
+        return;
+      }
+      var body = Array.prototype.filter.call(table.rows, function (r) { return r !== head && !r.closest('thead') && !r.classList.contains('WUIrsheader') && r.cells.length >= head.cells.length - 1; });
+      if (!body.length) return;
+      table.classList.add('ui-records');
+      var heads = Array.prototype.map.call(head.cells, cellText);
+      heads.forEach(function (h, c) {
+        var col = body.map(function (r) { return r.cells[c]; }).filter(Boolean);
+        var cell = head.cells[c];
+        // A column of tick boxes, or the row number
+        if (col.length && col.every(function (td) { return td.querySelector('input[type=checkbox]') && cellText(td) === ''; })) { cell.classList.add('ui-col-check'); col.forEach(function (td) { td.classList.add('ui-col-check'); }); return; }
+        if (/^(nr|sl|#|no\.?|serial no\.?|s\.?l\.?)$/i.test(h)) { cell.classList.add('ui-col-nr'); col.forEach(function (td) { td.classList.add('ui-col-nr'); }); return; }
+        // Amounts and quantities line up on the right
+        var texts = col.map(cellText).filter(function (t) { return t !== ''; });
+        var numbers = texts.filter(function (t) { return /^[-(]?[৳$]?\s?[\d,]+(\.\d+)?\)?%?$/.test(t); });
+        if (texts.length && numbers.length / texts.length >= 0.8 && !NOT_NUMERIC_HEAD.test(h) && (NUMERIC_HEAD.test(h) || numbers.some(function (t) { return /[.,]/.test(t); }))) {
+          cell.classList.add('num'); col.forEach(function (td) { td.classList.add('num'); });
+        }
+        var statusCol = /status|state|approval|stage/i.test(h);
+        col.forEach(function (td) {
+          // Words such as Active or Pending become badges
+          if (!td.children.length) {
+            var t = cellText(td);
+            if (t && t.length <= 24) {
+              var tone = STATUS.good.test(t) || statusCol && /^yes$/i.test(t) ? 'good' : STATUS.wait.test(t) ? 'wait' : STATUS.bad.test(t) || statusCol && /^no$/i.test(t) ? 'bad' : statusCol ? 'plain' : '';
+              if (tone) { var pill = doc.createElement('span'); pill.className = 'ui-pill ui-pill-' + tone; pill.textContent = t; td.textContent = ''; td.appendChild(pill); }
+            }
+          }
+          // Edit, View, Delete… become small action buttons
+          td.querySelectorAll('a, button, input[type=submit], input[type=button]').forEach(function (a) {
+            var label = (a.value || a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (ACTION.test(label) && !a.closest('.btn-group')) {
+              a.classList.add('ui-act');
+              if (/^(delete|remove|reject|cancel)$/i.test(label)) a.classList.add('ui-act-danger');
+            }
+          });
+        });
+      });
+      addFilter(doc, table, body);
+    });
+    doc.querySelectorAll('table.ui-form-table').forEach(function (t) { if (!t.classList.contains('ui-form-done')) polishFormTable(t); });
+    try { if (doc.defaultView.BSButtons) doc.defaultView.BSButtons.refresh(); } catch (e) {} // row actions just marked: their icons (addon/dialog/buttons.js)
+  }
+  /* "Find in this list" above a long list that has no search of its own and no pager. */
+  function addFilter(doc, table, rows) {
+    if (rows.length < 10 || doc.querySelector('.list-pager, tr.list-off, .search-bar, .list-search, .rma-filter, .ui-tablebar') || doc.querySelector('form[method=get] input[type=search], form[method=get] input[type=text]')) return;
+    var bar = doc.createElement('div');
+    bar.className = 'ui-tablebar';
+    bar.innerHTML = '<label class="ui-find"><span aria-hidden="true">&#9906;</span><input type="search" placeholder="Find in this list…" aria-label="Find in this list"></label><span class="ui-count"></span>';
+    var input = bar.querySelector('input'), count = bar.querySelector('.ui-count');
+    var show = function (n) { count.textContent = n === rows.length ? rows.length + ' records' : n + ' of ' + rows.length + ' records'; };
+    show(rows.length);
+    input.addEventListener('input', function () {
+      var words = input.value.toLowerCase().split(/\s+/).filter(Boolean), n = 0;
+      rows.forEach(function (r) {
+        var hit = words.every(function (w) { return r.textContent.toLowerCase().indexOf(w) !== -1; });
+        r.classList.toggle('ui-filtered', !hit);
+        if (hit) n++;
+      });
+      show(n);
+      if (typeof calcHeight === 'function') calcHeight();
+    });
+    var anchor = table.closest('.table-scroll, .ui-table-scroll, .box-body, .table-responsive') || table;
+    anchor.parentNode.insertBefore(bar, anchor);
+  }
+  /* An older form laid out in a table: label cells and field cells line up; required fields get a mark. */
+  function polishFormTable(table) {
+    table.classList.add('ui-form-done');
+    Array.prototype.forEach.call(table.rows, function (row) {
+      Array.prototype.forEach.call(row.cells, function (td) {
+        var fields = td.querySelectorAll('input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]), select, textarea');
+        if (fields.length === 1 && !td.querySelector('button, input[type=submit], input[type=button]')) td.classList.add('ui-field-cell');
+        else if (!fields.length && cellText(td) && cellText(td).length < 40 && !td.querySelector('button, input, a')) {
+          td.classList.add('ui-label-cell');
+          var next = td.nextElementSibling;
+          if (next && next.querySelector('[required]')) td.classList.add('ui-required');
+        }
+      });
+    });
+  }
+
   function dressPage(doc) {
     if (!doc || !doc.documentElement || doc.documentElement.classList.contains('ui-common')) return;
     var head = doc.head || doc.getElementsByTagName('head')[0];
@@ -284,6 +415,7 @@
     doc.documentElement.classList.add('ui-common');
     wrapPage(doc);
     fitTables(doc);
+    polishTables(doc);
     var pager = document.querySelector('meta[name="list-pager-js"]');
     if (pager && doc.body) {
       var script = doc.createElement('script');
@@ -347,7 +479,7 @@
   /* ---------- Page finder ---------- */
   var input = document.getElementById('menu-search');
   var results = document.getElementById('menu-results');
-  var pages = Array.prototype.map.call(nav.querySelectorAll('a[target="frm_main"]'), function (a) {
+  var pages = Array.prototype.map.call(nav.querySelectorAll('a[target="frm_main"]:not(.brand)'), function (a) {
     var path = (a.getAttribute('data-path') || a.textContent).split(' › ');
     return { link: a, label: path[path.length - 1], where: path.slice(0, -1).join(' › '), text: path.join(' ').toLowerCase() };
   });
@@ -395,7 +527,7 @@
   document.addEventListener('click', function (e) { if (!e.target.closest('.menu-search')) hideResults(); });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeAll(); hideResults(); if (userMenu) userMenu.classList.remove('open'); }
+    if (e.key === 'Escape') { if (side) { setDrawer(false); } else { closeAll(); } hideResults(); if (userMenu) userMenu.classList.remove('open'); }
     if (e.key === '/' && document.activeElement !== input && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
       e.preventDefault();
       input.focus();

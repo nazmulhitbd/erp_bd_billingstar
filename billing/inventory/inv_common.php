@@ -443,7 +443,7 @@ function inv_page_start(mysqli $db, $title, $active = '')
 {
     $branch = inv_ready($db) ? inv_current_branch($db) : 0;
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">';
-    echo '<title>' . sales_h($title) . '</title><link rel="stylesheet" href="../sales/sales.css"><link rel="stylesheet" href="../inventory/inv.css"></head><body><div class="wrap"><nav class="acc-nav">';
+    echo '<title>' . sales_h($title) . '</title><link rel="stylesheet" href="../sales/sales.css"><link rel="stylesheet" href="../inventory/inv.css"><link rel="stylesheet" href="../doc_layout.css?v=' . (int) @filemtime(dirname(__DIR__) . '/doc_layout.css') . '"></head><body><div class="wrap"><nav class="acc-nav">';
     foreach (inv_menu() as $section => $links) {
         echo '<span><b>' . sales_h($section) . ':</b>';
         foreach ($links as $key => [$href, $label]) {

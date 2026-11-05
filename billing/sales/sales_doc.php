@@ -29,7 +29,7 @@ function sdoc_page_start(mysqli $db, $title, $active)
     ];
     $branch = inv_ready($db) ? inv_current_branch($db) : 0;
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . sales_h($title) . '</title>'
-        . '<link rel="stylesheet" href="../sales.css"><link rel="stylesheet" href="../../inventory/inv.css"><link rel="stylesheet" href="../sales_doc.css"></head><body><div class="wrap"><nav class="sales-nav">';
+        . '<link rel="stylesheet" href="../sales.css"><link rel="stylesheet" href="../../inventory/inv.css"><link rel="stylesheet" href="../sales_doc.css?v=' . (int) @filemtime(__DIR__ . '/sales_doc.css') . '"><link rel="stylesheet" href="../../doc_layout.css?v=' . (int) @filemtime(dirname(__DIR__) . '/doc_layout.css') . '"></head><body><div class="wrap"><nav class="sales-nav">';
     foreach ($links as $key => [$href, $label]) {
         echo '<a href="' . sales_h($href) . '"' . ($key === $active ? ' class="active"' : '') . '>' . sales_h($label) . '</a>';
     }
@@ -56,6 +56,9 @@ function sdoc_page_end($config = null)
     echo '</fieldset></main></div><script src="../sales.js"></script>';
     if ($config !== null) {
         echo '<script>window.SDOC=' . sales_js($config) . ';</script><script src="../sales_doc.js"></script>';
+        if (!empty($config['ui'])) { // a screen's own layout script, after the shared one
+            echo '<script src="' . sales_h($config['ui']) . '?v=' . (int) @filemtime(dirname((string) ($_SERVER['SCRIPT_FILENAME'] ?? '')) . '/' . $config['ui']) . '"></script>';
+        }
     }
     echo '</body></html>';
 }

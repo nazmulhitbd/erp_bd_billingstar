@@ -316,7 +316,8 @@ function sales_flash_html($flash)
         return '';
     }
     $kind = ($flash['kind'] ?? '') === 'success' ? 'success' : 'error';
-    return '<div class="alert ' . $kind . '">' . sales_h($flash['message'] ?? '') . '</div>';
+    // data-popup: addon/dialog/dialog.js opens it as a Success / Failed popup; without scripts it stays this banner.
+    return '<div class="alert ' . $kind . '" data-popup="' . $kind . '" role="status">' . sales_h($flash['message'] ?? '') . '</div>';
 }
 
 function sales_schema_missing_html($file)

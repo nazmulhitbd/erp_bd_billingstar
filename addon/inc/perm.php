@@ -28,7 +28,21 @@ const PERM_PROFILES = [
 const PERM_LEVELS = ['SuperAdmin', 'Admin', 'Supervisor', 'Operator'];
 
 /** Pages of the shell itself: open to every signed-in user. */
-const PERM_ALWAYS = ['topmain.php', 'logout.php', 'go.php', 'user/switch_branch.php', 'user/no_access.php', 'user/notifications.php'];
+const PERM_ALWAYS = ['topmain.php', 'treemain.php', 'logout.php', 'go.php', 'user/switch_branch.php', 'user/no_access.php', 'user/notifications.php'];
+
+/** The two admin layouts (client_theme.menu_style), chosen in Settings > Company & Login Settings > Appearance. */
+const PERM_SHELLS = ['topmain' => 'Top menu', 'treemain' => 'Side menu'];
+
+/** The layout every sign-in opens, as a file in billing/: topmain.php (the default) or treemain.php. */
+function perm_shell()
+{
+    static $shell = null;
+    if ($shell === null) {
+        $style = (string) (perm_q('SELECT menu_style FROM client_theme WHERE client_theme_id=1')[0]['menu_style'] ?? '');
+        $shell = (isset(PERM_SHELLS[$style]) ? $style : 'topmain') . '.php';
+    }
+    return $shell;
+}
 
 /** Folders with no helper scripts: a page here must be a form of its own. The old user pages can change any password or role. */
 const PERM_NO_HELPERS = ['user/'];
@@ -1004,7 +1018,7 @@ function perm_page_links_start($script)
 {
     static $started = false;
     $key = perm_page_key();
-    if ($started || $key === '' || $script === 'billing/topmain.php' || $script === 'billing/go.php' || $script === 'billing/user/dump_mysql.php') {
+    if ($started || $key === '' || $script === 'billing/topmain.php' || $script === 'billing/treemain.php' || $script === 'billing/go.php' || $script === 'billing/user/dump_mysql.php') {
         return;
     }
     $started = true;

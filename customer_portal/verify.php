@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $_SESSION['cp_account'] = (int) $result['account_id'];
     $_SESSION['cp_seen'] = time();
-    cp_redirect(perm_portal_open_shell('customer', $_SESSION['cp_account']) ? '../billing/topmain.php' : 'index.php');
+    cp_redirect(perm_portal_open_shell('customer', $_SESSION['cp_account']) ? '../billing/' . perm_shell() : 'index.php');
 }
 cp_page_start('Verify sign-in', '', true);
 echo '<p class="muted">' . cp_h(tfa_sent_text($t)) . '</p>' . tfa_portal_form(cp_csrf_field());

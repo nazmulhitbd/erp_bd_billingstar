@@ -678,80 +678,104 @@ $nav = fn($r) => $r ? 'href="' . $self . '?id=' . (int) $r['invoice_id'] . '"' :
 $stores = inv_stores($conn);
 $defaultStore = inv_setting($conn, 'default_store', '');
 ?>
-<form method="post" id="docform" autocomplete="off">
+<form method="post" id="docform" class="si" autocomplete="off">
 <?= sales_csrf_field() ?><input type="hidden" name="action" id="action" value="save"><input type="hidden" name="invoice_id" value="<?= $id ?>"><input type="hidden" name="customer_id" id="customer_id" value="<?= $val('customer_id') ?>">
 <input type="hidden" name="items_json" id="items_json"><input type="hidden" name="schedules_json" id="schedules_json"><input type="hidden" name="exchanges_json" id="exchanges_json">
-<div class="sgrid">
-  <label for="ref_no">Ref No</label><div class="inline"><input id="ref_no" name="ref_no" maxlength="80" value="<?= $val('ref_no') ?>"><button type="button" class="btn small" data-find="ref">Search</button></div>
-  <label for="sales_date">Sales Date</label><input id="sales_date" type="date" name="sales_date" value="<?= $val('sales_date') ?>" required>
-  <label for="mobile">Mobile No</label><div class="inline"><input id="mobile" name="mobile" maxlength="40" value="<?= $val('mobile') ?>" placeholder="Mobile Number"><button type="button" class="btn small" id="mobile-search">Search</button></div>
-  <label for="bill_type">Bill Type</label><select id="bill_type" name="bill_type"><?php foreach (['Credit', 'Cash'] as $o): ?><option<?= ($h['bill_type'] ?? '') === $o ? ' selected' : '' ?>><?= $o ?></option><?php endforeach; ?></select>
-  <label for="doc_no">Invoice No</label><div class="inline"><input id="doc_no" value="<?= sales_h($inv['invoice_no'] ?? sales_peek_number($conn, 'SI', 'sales_invoice_sequences')) ?>"><button type="button" class="btn small" data-find="search">Search</button></div>
-</div>
-<div class="sgrid two">
-  <label for="customer_group">Customer Group</label><input id="customer_group" name="customer_group" maxlength="120" value="<?= $val('customer_group') ?>">
-  <label for="customer_name">Customer Name</label><div class="inline"><div class="relative" style="flex:1"><input id="customer_name" name="customer_name" maxlength="190" value="<?= $val('customer_name') ?>" placeholder="Customer Name"><div class="suggestions" id="customer-suggestions" hidden></div></div><button type="button" class="btn small" id="save-customer" title="Save this customer">Customer</button></div>
-  <label for="attention">Attention</label><input id="attention" name="attention" maxlength="190" value="<?= $val('attention') ?>" placeholder="Attention">
-  <label for="sales_person">Sales Person</label><input id="sales_person" name="sales_person" maxlength="140" value="<?= $val('sales_person') ?>" placeholder="Sales Person" list="dl-sr"><datalist id="dl-sr"><?php foreach (sdoc_sr_names($conn) as $n): ?><option value="<?= sales_h($n) ?>"><?php endforeach; ?></datalist>
-  <label for="address">Address</label><input id="address" name="address" maxlength="2000" value="<?= $val('address') ?>" placeholder="Address">
-  <label for="delivery_point">Delivery Point</label><div class="inline"><input id="delivery_point" name="delivery_point" maxlength="255" value="<?= $val('delivery_point') ?>"><button class="btn small primary" id="save-btn" type="submit">Save</button></div>
-</div>
-<div class="sgrid three">
-  <label for="narration">Narration</label><input id="narration" name="narration" maxlength="2000" value="<?= $val('narration') ?>">
-  <label for="bin">BIN</label><input id="bin" name="bin" maxlength="60" value="<?= $val('bin') ?>">
-  <label for="nid">NID</label><input id="nid" name="nid" maxlength="60" value="<?= $val('nid') ?>">
-</div>
+<header class="si-hero">
+  <div class="si-hero-main">
+    <span class="si-hero-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3"/></svg></span>
+    <div>
+      <h2>Sales Invoice</h2>
+      <?php $siStatus = !$inv ? ['New', 'new'] : ($inv['status'] === 'void' ? ['Void', 'void'] : ((($inv['approval_status'] ?? '') === 'approved') ? ['Approved', 'ok'] : ['Pending approval', 'wait'])); ?>
+      <p class="si-meta"><b><?= sales_h($inv['invoice_no'] ?? sales_peek_number($conn, 'SI', 'sales_invoice_sequences')) ?></b>
+        <span class="si-status si-<?= $siStatus[1] ?>"><?= $siStatus[0] ?></span>
+        <span><?= sales_h(inv_branch_name($conn, $inv['branch_id'] ?? inv_current_branch($conn))) ?></span>
+        <?php if ($inv): ?><span><?= sales_h(date('d M Y', strtotime($inv['sales_date']))) ?></span><?= $inv['stock_doc_id'] ?? null ? '<span>Stock out posted</span>' : '' ?><?php endif; ?>
+        <?= $lock ? '<span class="si-lock">' . sales_h($lock) . '</span>' : '' ?>
+        <?= $fromQuotation ? '<span>From quotation ' . sales_h($fromQuotation['doc_no']) . '</span>' : '' ?></p>
+    </div>
+  </div>
+  <div class="si-hero-tools">
+    <div class="sd-group" role="group" aria-label="Record"><a class="btn" href="<?= $self ?>">New</a><a class="btn" href="<?= $self ?>?view=list">List View</a>
+        <a class="btn round" title="Previous" <?= $nav($prevId) ?>>&#9664;</a><button type="button" class="btn round" id="hold" title="Hold this unsaved invoice, or bring back the held one">&#10074;&#10074;</button><a class="btn round" title="Next" <?= $nav($nextId) ?>>&#9654;</a></div>
+  </div>
+</header>
 
-<section class="entry">
-<div class="sgrid four">
-  <label for="e_group">Product Group</label><input id="e_group">
-  <label for="e_brand">Brand</label><input id="e_brand">
-  <label for="e_model">Model No/Caption</label><div class="relative"><input id="e_model" placeholder="Search model, code or name"><div class="suggestions" id="product-suggestions" hidden></div></div>
-  <label for="e_store">Store</label><select id="e_store"><option value="">Pick store</option><?php foreach ($stores as $s): ?><option<?= $s === $defaultStore ? ' selected' : '' ?>><?= sales_h($s) ?></option><?php endforeach; ?></select>
-  <label for="e_desc">Description</label><input id="e_desc">
-  <label for="e_narr">Product Narration</label><input id="e_narr">
-  <label for="e_warranty">Warranty</label><input id="e_warranty">
-  <label for="e_unit">Unit Name</label><input id="e_unit" value="Pcs">
-</div>
-<div class="radios">
-  <label><input type="radio" name="sq" value="none" checked> Sequence Not Available</label><label><input type="radio" name="sq" value="range"> Sequence Available</label><label><input type="radio" name="sq" value="list"> Bulk Qty</label>
-  <label><input class="check" type="checkbox" id="serial_clear" checked> Serial Clear</label><label><input class="check" type="checkbox" id="serial_storage"> Serial Storage</label>
-  <label>Serial Common <input id="s_common" class="sm"></label><label>From <input id="s_from" class="sm"></label><label>To <input id="s_to" class="sm"></label>
-</div>
-<div class="radios qtyrow">
-  <label>Quantity <input id="e_qty" type="number" min="0" step="0.001" class="sm"></label><label>Free Quantity <input id="e_free" type="number" min="0" step="0.001" value="0" class="sm"></label>
-  <label>Discount <input id="e_disc" type="number" min="0" step="0.01" value="0" class="sm"></label><label>Unit Price <input id="e_price" type="number" min="0" step="0.01" class="sm"></label>
-  <label>Serial/IMEI No. <textarea id="e_serial" rows="1" class="sm" title="One per line or separated by commas"></textarea></label>
-  <span class="info">Last Price: <b id="i_last">0.00</b> Qty Available: <b id="i_qty">0.00</b> Last Serial: <b id="i_serial"></b></span>
-  <span class="advance">Advance Sales: <b id="i_advance"></b></span>
-  <span class="info">Dealer A: <b id="i_dealer"></b> Sales Price: <b id="i_sprice"></b> <span id="i_cost"></span></span>
-</div>
+<div class="si-layout">
+<div class="si-main">
+<section class="sd-card" data-step="1">
+  <header class="sd-head"><span class="sd-num"><span>1</span></span><div><h3>Customer</h3><p>Search by mobile number, or type the name and pick from the list. A saved customer fills the rest.</p></div></header>
+  <div class="sgrid sd-grid">
+    <div class="sd-f"><label for="mobile">Mobile No</label><div class="inline"><input id="mobile" name="mobile" maxlength="40" inputmode="tel" value="<?= $val('mobile') ?>" placeholder="Mobile Number"><button type="button" class="btn small" id="mobile-search">Search</button></div></div>
+    <div class="sd-f s2"><label for="customer_name">Customer Name</label><div class="inline"><div class="relative" style="flex:1"><input id="customer_name" name="customer_name" maxlength="190" value="<?= $val('customer_name') ?>" placeholder="Customer Name"><div class="suggestions" id="customer-suggestions" hidden></div></div><button type="button" class="btn small" id="save-customer" title="Save this customer">Save customer</button></div></div>
+    <div class="sd-f"><label for="customer_group">Customer Group</label><input id="customer_group" name="customer_group" maxlength="120" value="<?= $val('customer_group') ?>"></div>
+    <div class="sd-f"><label for="attention">Attention</label><input id="attention" name="attention" maxlength="190" value="<?= $val('attention') ?>" placeholder="Attention"></div>
+    <div class="sd-f"><label for="sales_person">Sales Person</label><input id="sales_person" name="sales_person" maxlength="140" value="<?= $val('sales_person') ?>" placeholder="Sales Person" list="dl-sr"><datalist id="dl-sr"><?php foreach (sdoc_sr_names($conn) as $n): ?><option value="<?= sales_h($n) ?>"><?php endforeach; ?></datalist></div>
+    <div class="sd-f s2"><label for="address">Address</label><input id="address" name="address" maxlength="2000" value="<?= $val('address') ?>" placeholder="Address"></div>
+    <div class="sd-f"><label for="delivery_point">Delivery Point</label><input id="delivery_point" name="delivery_point" maxlength="255" value="<?= $val('delivery_point') ?>"></div>
+    <div class="sd-f"><label for="bin">BIN</label><input id="bin" name="bin" maxlength="60" value="<?= $val('bin') ?>"></div>
+    <div class="sd-f"><label for="nid">NID</label><input id="nid" name="nid" maxlength="60" value="<?= $val('nid') ?>"></div>
+  </div>
+</section>
+<section class="sd-card" data-step="2">
+  <header class="sd-head"><span class="sd-num"><span>2</span></span><div><h3>Invoice details</h3><p>The number fills itself. Check the date and the bill type.</p></div></header>
+  <div class="sgrid sd-grid si-details">
+    <div class="sd-f"><label for="doc_no">Invoice No</label><div class="inline"><input id="doc_no" value="<?= sales_h($inv['invoice_no'] ?? sales_peek_number($conn, 'SI', 'sales_invoice_sequences')) ?>"><button type="button" class="btn small" data-find="search">Find</button></div></div>
+    <div class="sd-f half"><label for="sales_date">Sales Date</label><input id="sales_date" type="date" name="sales_date" value="<?= $val('sales_date') ?>" required></div>
+    <div class="sd-f half"><label for="bill_type">Bill Type</label><select id="bill_type" name="bill_type"><?php foreach (['Credit', 'Cash'] as $o): ?><option<?= ($h['bill_type'] ?? '') === $o ? ' selected' : '' ?>><?= $o ?></option><?php endforeach; ?></select></div>
+    <div class="sd-f"><label for="ref_no">Ref No</label><div class="inline"><input id="ref_no" name="ref_no" maxlength="80" value="<?= $val('ref_no') ?>"><button type="button" class="btn small" data-find="ref">Find</button></div></div>
+    <div class="sd-f"><label for="narration">Narration</label><input id="narration" name="narration" maxlength="2000" value="<?= $val('narration') ?>"></div>
+  </div>
 </section>
 
-<div class="toolbar sbar">
-  <a class="btn" href="<?= $self ?>">New</a><a class="btn" href="<?= $self ?>?view=list">List View</a><button type="button" class="btn" id="add-line">Add</button>
-  <button type="button" class="btn" data-mode="edit"<?= $inv ? '' : ' disabled' ?>>Edit</button><button type="button" class="btn" data-mode="price"<?= $inv ? '' : ' disabled' ?>>Edit Price</button><button type="button" class="btn" data-mode="details"<?= $inv ? '' : ' disabled' ?>>Edit Details</button>
-  <button type="button" class="btn" data-focus="t_discount">VAT &amp; Discount</button>
-  <a class="btn round" title="Previous" <?= $nav($prevId) ?>>&#9664;</a><button type="button" class="btn round" id="hold" title="Hold this unsaved invoice, or bring back the held one">&#10074;&#10074;</button><a class="btn round" title="Next" <?= $nav($nextId) ?>>&#9654;</a>
-  <button type="button" class="btn" id="serial-view">Serial View</button>
-  <?php if ($inv): ?><a class="btn" target="_blank" href="<?= $self ?>?print=<?= $id ?>">Preview</a><a class="btn" target="_blank" href="<?= $self ?>?print=<?= $id ?>&auto=1">Print</a>
-  <a class="btn" target="_blank" href="<?= $self ?>?challan=<?= $id ?>">Challan Preview</a><a class="btn" target="_blank" href="<?= $self ?>?challan=<?= $id ?>&auto=1">Challan Print</a><?php else: ?>
-  <button type="button" class="btn" disabled>Preview</button><button type="button" class="btn" disabled>Print</button><button type="button" class="btn" disabled>Challan Preview</button><button type="button" class="btn" disabled>Challan Print</button><?php endif; ?>
-  <button type="button" class="btn" data-toggle="custom-preview"<?= $inv ? '' : ' disabled' ?>>Custom Preview</button><button type="button" class="btn" id="show-cost">Show Cost</button><button type="button" class="btn" id="show-price">Show Price</button>
-  <button type="button" class="btn" data-toggle="additional-info">Additional Info</button><label class="btn">Import<input type="file" id="import-file" accept=".csv,text/csv" hidden></label>
-  <?php if ($inv): ?><a class="btn" target="_blank" href="<?= $self ?>?receipt=<?= $id ?>">Receipt</a><?php else: ?><button type="button" class="btn" disabled>Receipt</button><?php endif; ?>
-  <button type="button" class="btn" data-toggle="exchange">Exchange</button>
-</div>
-<div class="toolbar sbar wide">
-  <button type="button" class="btn" id="direct-print"<?= $inv ? '' : ' disabled' ?>>Direct Print</button><button type="button" class="btn" data-toggle="attached"<?= $inv ? '' : ' disabled' ?>>Attached</button>
-  <button type="button" class="btn" data-toggle="schedule">Schedule</button><a class="btn" href="javascript:history.back()">Close</a>
-</div>
-<?php if ($fromQuotation): ?><p class="footnote">Filled from quotation <?= sales_h($fromQuotation['doc_no']) ?>. Add serials and check stores and prices, then Save.</p><?php endif; ?>
-<?php if ($inv): ?>
-<p class="footnote"><?= sales_h($inv['invoice_no']) ?> · <?= sales_h(inv_branch_name($conn, $inv['branch_id'] ?? 0)) ?> · <b><?= $inv['status'] === 'void' ? 'Void' : (($inv['approval_status'] ?? '') === 'approved' ? 'Approved' : 'Pending approval') ?></b>
-<?= $inv['stock_doc_id'] ?? null ? ' · Stock out posted' : (sales_stock_on($conn) ? '' : ' · Sales stock is off') ?><?= $lock ? ' · ' . sales_h($lock) : '' ?></p>
-<?php endif; ?>
+<section class="sd-card entry" data-step="3">
+  <header class="sd-head"><span class="sd-num"><span>3</span></span><div><h3>Add products</h3><p>Search the model, pick the store, enter quantity and price, then press Add. Repeat for every product.</p></div></header>
+  <div class="sd-grid sd-line">
+    <div class="sd-f s3"><label for="e_model">Model No/Caption</label><div class="relative"><input id="e_model" placeholder="Search model, code or name"><div class="suggestions" id="product-suggestions" hidden></div></div></div>
+    <div class="sd-f s2"><label for="e_store">Store</label><select id="e_store"><option value="">Pick store</option><?php foreach ($stores as $s): ?><option<?= $s === $defaultStore ? ' selected' : '' ?>><?= sales_h($s) ?></option><?php endforeach; ?></select></div>
+    <div class="sd-f"><label for="e_qty">Quantity</label><input id="e_qty" type="number" min="0" step="0.001"></div>
+    <div class="sd-f"><label for="e_price">Unit Price</label><input id="e_price" type="number" min="0" step="0.01"></div>
+    <div class="sd-f"><label for="e_disc">Discount</label><input id="e_disc" type="number" min="0" step="0.01" value="0"></div>
+    <div class="sd-f"><label for="e_free">Free Qty</label><input id="e_free" type="number" min="0" step="0.001" value="0"></div>
+    <div class="sd-f s2"><label for="e_serial">Serial / IMEI No.</label><textarea id="e_serial" rows="1" title="One per line or separated by commas"></textarea></div>
+    <div class="sd-f sd-add"><button type="button" class="btn primary" id="add-line">Add</button></div>
+  </div>
+  <div class="sd-chips" aria-live="polite">
+    <span>In stock <b id="i_qty">0.00</b></span><span>Last price <b id="i_last">0.00</b></span><span>Last serial <b id="i_serial"></b></span>
+    <span>Sales price <b id="i_sprice"></b></span><span>Dealer A <b id="i_dealer"></b></span><span class="sd-adv">Advance sales <b id="i_advance"></b></span><span id="i_cost"></span>
+  </div>
+  <details class="sd-more">
+    <summary>Product details and serial options <small>(filled from the product; change only if needed)</small></summary>
+    <div class="sd-grid sd-details">
+      <div class="sd-f"><label for="e_group">Product Group</label><input id="e_group"></div>
+      <div class="sd-f"><label for="e_brand">Brand</label><input id="e_brand"></div>
+      <div class="sd-f s2"><label for="e_desc">Description</label><input id="e_desc"></div>
+      <div class="sd-f s2"><label for="e_narr">Product Narration</label><input id="e_narr"></div>
+      <div class="sd-f"><label for="e_warranty">Warranty</label><input id="e_warranty"></div>
+      <div class="sd-f"><label for="e_unit">Unit Name</label><input id="e_unit" value="Pcs"></div>
+    </div>
+    <div class="radios sd-serial">
+      <label><input type="radio" name="sq" value="none" checked> Sequence Not Available</label><label><input type="radio" name="sq" value="range"> Sequence Available</label><label><input type="radio" name="sq" value="list"> Bulk Qty</label>
+      <label><input class="check" type="checkbox" id="serial_clear" checked> Serial Clear</label><label><input class="check" type="checkbox" id="serial_storage"> Serial Storage</label>
+      <label>Serial Common <input id="s_common" class="sm"></label><label>From <input id="s_from" class="sm"></label><label>To <input id="s_to" class="sm"></label>
+    </div>
+  </details>
+</section>
 
+<section class="sd-card">
+  <header class="sd-head sd-head-bar"><div><h3>Items <span class="si-count" id="si_count_head"></span></h3><?php if ($inv): ?><p><?= sales_h($inv['invoice_no']) ?> · <?= sales_h(inv_branch_name($conn, $inv['branch_id'] ?? 0)) ?> · <b><?= $inv['status'] === 'void' ? 'Void' : (($inv['approval_status'] ?? '') === 'approved' ? 'Approved' : 'Pending approval') ?></b><?= $inv['stock_doc_id'] ?? null ? ' · Stock out posted' : (sales_stock_on($conn) ? '' : ' · Sales stock is off') ?><?= $lock ? ' · ' . sales_h($lock) : '' ?></p><?php elseif ($fromQuotation): ?><p>Filled from quotation <?= sales_h($fromQuotation['doc_no']) ?>. Add serials and check stores and prices, then Save.</p><?php else: ?><p>New invoice. Products you add appear here.</p><?php endif; ?></div>
+    <div class="sd-tools">
+      <div class="sd-group" role="group" aria-label="Change"><button type="button" class="btn" data-mode="edit"<?= $inv ? '' : ' disabled' ?>>Edit</button><button type="button" class="btn" data-mode="price"<?= $inv ? '' : ' disabled' ?>>Edit Price</button><button type="button" class="btn" data-mode="details"<?= $inv ? '' : ' disabled' ?>>Edit Details</button></div>
+      <div class="sd-group" role="group" aria-label="Print"><?php if ($inv): ?><a class="btn" target="_blank" href="<?= $self ?>?print=<?= $id ?>">Preview</a><a class="btn" target="_blank" href="<?= $self ?>?print=<?= $id ?>&auto=1">Print</a>
+        <a class="btn" target="_blank" href="<?= $self ?>?challan=<?= $id ?>">Challan Preview</a><a class="btn" target="_blank" href="<?= $self ?>?challan=<?= $id ?>&auto=1">Challan Print</a><?php else: ?>
+        <button type="button" class="btn" disabled>Preview</button><button type="button" class="btn" disabled>Print</button><button type="button" class="btn" disabled>Challan Preview</button><button type="button" class="btn" disabled>Challan Print</button><?php endif; ?>
+        <button type="button" class="btn" data-toggle="custom-preview"<?= $inv ? '' : ' disabled' ?>>Custom Preview</button><button type="button" class="btn" id="direct-print"<?= $inv ? '' : ' disabled' ?>>Direct Print</button>
+        <?php if ($inv): ?><a class="btn" target="_blank" href="<?= $self ?>?receipt=<?= $id ?>">Receipt</a><?php else: ?><button type="button" class="btn" disabled>Receipt</button><?php endif; ?></div>
+      <div class="sd-group" role="group" aria-label="More"><button type="button" class="btn" data-focus="t_discount">VAT &amp; Discount</button><button type="button" class="btn" id="serial-view">Serial View</button><button type="button" class="btn" id="show-cost">Show Cost</button><button type="button" class="btn" id="show-price">Show Price</button>
+        <button type="button" class="btn" data-toggle="additional-info">Additional Info</button><label class="btn">Import<input type="file" id="import-file" accept=".csv,text/csv" hidden></label><button type="button" class="btn" data-toggle="exchange">Exchange</button>
+        <button type="button" class="btn" data-toggle="attached"<?= $inv ? '' : ' disabled' ?>>Attached</button><button type="button" class="btn" data-toggle="schedule">Schedule</button></div>
+    </div>
+  </header>
 <details class="section" id="custom-preview" hidden open><summary>Custom Preview Hide</summary><div class="toolbar"><?php foreach (SI_TEMPLATES as $n => [$label, $title]): ?><a class="btn" target="_blank" title="<?= sales_h($title) ?>" href="<?= $self ?>?print=<?= $id ?>&tpl=<?= $n ?>"><?= $label ?></a><?php endforeach; ?></div></details>
 <?= sdoc_additional_html($h['additional_info'] ?? '') ?>
 <section class="section" id="exchange" hidden><div class="section-title">Product Exchange <span class="muted">(items the customer hands back; their value lowers the bill)</span></div>
@@ -759,32 +783,53 @@ $defaultStore = inv_setting($conn, 'default_store', '');
 <table><thead><tr><th>Description</th><th>Serial</th><th class="num">Qty</th><th class="num">Amount</th><th></th></tr></thead><tbody id="x_body"></tbody></table></section>
 <section class="section" id="schedule" hidden><div class="section-title">Payment Schedule</div><table><thead><tr><th>Due Date</th><th>Note</th><th class="num">Amount</th><th></th></tr></thead><tbody id="s_body"></tbody></table>
 <?php if ($inv): ?><button type="button" class="btn" id="save-schedule" style="margin-top:6px">Save Schedule</button><?php endif; ?></section>
-
-<div class="table-scroll grid-box"><table><thead><tr id="grid-head"></tr></thead><tbody id="grid-body"></tbody></table></div>
-
-<div class="sbottom">
-<div class="sleft">
-  <div class="radios"><label>Payment Day/Days <input id="pay_days" type="number" min="0" placeholder="Day" class="sm"></label><input id="pay_date" type="date" class="input" style="max-width:160px"><button type="button" class="btn" id="date-add">Date Add</button>
-    <label>Cash Amount <input id="t_cash" name="cash_received" type="number" min="0" step="0.01" value="<?= $inv ? '' : $val('cash_received', '0') ?>" class="sm"></label>
-    <select name="payment_method" class="input" style="max-width:130px"><?php foreach (SDOC_METHODS as $k => $l): ?><option value="<?= $k ?>"><?= $l ?></option><?php endforeach; ?></select>
-    <button type="button" class="btn" id="cash-receipt"<?= $inv && $inv['status'] === 'posted' && (float) $inv['balance_amount'] > 0 ? '' : ' disabled' ?>>Cash Receipt</button></div>
-  <label class="radios"><input class="check" type="checkbox" name="create_installation" value="1"<?= !empty($h['create_installation']) ? ' checked' : '' ?>> Create Installation</label>
-  <div class="radios"><label>Member No <input id="member_no" name="member_no" maxlength="40" value="<?= sales_h($repost['member_no'] ?? ($member['member_no'] ?? '')) ?>" style="width:200px"></label><button type="button" class="btn" id="member-add">Add</button>
-    <label>Point Adjust <input id="point_adjust" name="point_adjust" type="number" min="0" step="0.01" value="<?= sales_h($repost['point_adjust'] ?? ($inv['points_redeemed'] ?? '0')) ?>" class="sm"></label><button type="button" class="btn" id="point-add">Add</button></div>
-  <div class="points"><span>Previous Point: <b id="p_prev"></b></span><span>Invoice Point: <b id="p_earn"></b></span><span>Invoice Adjust: <b id="p_adj"></b></span><span>Net Point: <b id="p_net"></b></span><span>Current Point: <b id="p_cur"></b></span><span id="p_name" class="muted"></span></div>
-  <?php if ($inv && $d['payments']): ?><table class="mini"><thead><tr><th>Received</th><th>Method</th><th>Reference</th><th class="num">Amount</th><th></th></tr></thead><tbody><?php foreach ($d['payments'] as $p): ?><tr><td><?= inv_fmt_date($p['paid_at']) ?></td><td><?= sales_h(SDOC_METHODS[$p['payment_method']] ?? $p['payment_method']) ?></td><td><?= sales_h($p['reference']) ?></td><td class="num"><?= sales_money($p['amount']) ?></td><td><a target="_blank" href="<?= $self ?>?receipt=<?= $id ?>&payment=<?= (int) $p['payment_id'] ?>">Receipt</a></td></tr><?php endforeach; ?></tbody></table><?php endif; ?>
+  <div class="table-scroll grid-box"><table><thead><tr id="grid-head"></tr></thead><tbody id="grid-body"></tbody></table></div>
+</section>
 </div>
-<table class="stotals" id="totals"></table>
+
+<aside class="si-side">
+  <section class="si-sum" aria-label="Summary">
+    <div class="si-sum-top">
+      <span>Net payable</span>
+      <b><small>&#2547;</small> <span id="si_net">0.00</span></b>
+      <p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p>
+    </div>
+    <table class="stotals" id="totals"></table>
+  </section>
+  <section class="sd-card si-pay" data-step="4">
+    <header class="sd-head"><span class="sd-num"><span>4</span></span><div><h3>Payment</h3><p>Cash received now. For credit, add a payment day or a schedule.</p></div></header>
+  <div class="sd-pay">
+    <div class="sd-grid sd-paygrid si-paygrid">
+      <div class="sd-f"><label for="t_cash">Cash Amount</label><input id="t_cash" name="cash_received" type="number" min="0" step="0.01" value="<?= $inv ? '' : $val('cash_received', '0') ?>"></div>
+      <div class="sd-f"><label for="pay_method">Paid by</label><select id="pay_method" name="payment_method"><?php foreach (SDOC_METHODS as $k => $l): ?><option value="<?= $k ?>"><?= $l ?></option><?php endforeach; ?></select></div>
+      <div class="sd-f sd-end"><button type="button" class="btn" id="cash-receipt"<?= $inv && $inv['status'] === 'posted' && (float) $inv['balance_amount'] > 0 ? '' : ' disabled' ?>>Cash Receipt</button></div>
+      <div class="sd-f"><label for="pay_days">Payment Day/Days</label><input id="pay_days" type="number" min="0" placeholder="e.g. 30"></div>
+      <div class="sd-f"><label for="pay_date">Due date</label><input id="pay_date" type="date"></div>
+      <div class="sd-f sd-end"><button type="button" class="btn" id="date-add">Date Add</button></div>
+      <div class="sd-f"><label for="member_no">Member No</label><div class="inline"><input id="member_no" name="member_no" maxlength="40" value="<?= sales_h($repost['member_no'] ?? ($member['member_no'] ?? '')) ?>"><button type="button" class="btn small" id="member-add">Add</button></div></div>
+      <div class="sd-f"><label for="point_adjust">Point Adjust</label><div class="inline"><input id="point_adjust" name="point_adjust" type="number" min="0" step="0.01" value="<?= sales_h($repost['point_adjust'] ?? ($inv['points_redeemed'] ?? '0')) ?>"><button type="button" class="btn small" id="point-add">Add</button></div></div>
+      <label class="sd-f sd-check"><input class="check" type="checkbox" name="create_installation" value="1"<?= !empty($h['create_installation']) ? ' checked' : '' ?>> Create Installation</label>
+    </div>
+    <div class="points"><span>Previous Point: <b id="p_prev"></b></span><span>Invoice Point: <b id="p_earn"></b></span><span>Invoice Adjust: <b id="p_adj"></b></span><span>Net Point: <b id="p_net"></b></span><span>Current Point: <b id="p_cur"></b></span><span id="p_name" class="muted"></span></div>
+    <?php if ($inv && $d['payments']): ?><table class="mini"><thead><tr><th>Received</th><th>Method</th><th>Reference</th><th class="num">Amount</th><th></th></tr></thead><tbody><?php foreach ($d['payments'] as $p): ?><tr><td><?= inv_fmt_date($p['paid_at']) ?></td><td><?= sales_h(SDOC_METHODS[$p['payment_method']] ?? $p['payment_method']) ?></td><td><?= sales_h($p['reference']) ?></td><td class="num"><?= sales_money($p['amount']) ?></td><td><a target="_blank" href="<?= $self ?>?receipt=<?= $id ?>&payment=<?= (int) $p['payment_id'] ?>">Receipt</a></td></tr><?php endforeach; ?></tbody></table><?php endif; ?>
+  </div>
+  </section>
+  <div class="si-actions" data-step="5">
+    <button class="btn primary si-save" id="save-btn" type="submit">Save</button>
+    <div class="si-actions-row"><a class="btn" href="javascript:history.back()">Close</a>
+  <?php if ($inv && !$lock): ?><button class="btn danger" name="action" value="void" formnovalidate onclick="return confirm('Void <?= sales_h($inv['invoice_no']) ?>? Its stock goes back to the store.')">Void Invoice</button><?php endif; ?></div>
+    <p class="si-hint">Save first; Print, Preview and Challan open after saving.</p>
+  </div>
+</aside>
 </div>
 <input type="hidden" name="extra_charges" id="h_extra" value="<?= $val('extra_charges', '0') ?>"><input type="hidden" name="discount_amount" id="h_discount" value="<?= $val('discount_amount', '0') ?>"><input type="hidden" name="vat_amount" id="h_vat" value="<?= sales_h((float) ($h['vat_amount'] ?? 0) + (float) ($h['ait_amount'] ?? 0)) ?>">
-<?php if ($inv && !$lock): ?><button class="btn danger" name="action" value="void" formnovalidate onclick="return confirm('Void <?= sales_h($inv['invoice_no']) ?>? Its stock goes back to the store.')" style="margin-top:8px">Void Invoice</button><?php endif; ?>
 </form>
 <?php
 if ($inv) {
     sdoc_attachment_panel($conn, 'invoice', $id, $self, $inv['status'] === 'posted');
 }
 sdoc_page_end([
-    'kind' => 'invoice', 'self' => $self, 'docId' => $id, 'saved' => (bool) $inv, 'lineLock' => $lock, 'void' => $inv && $inv['status'] === 'void',
+    'kind' => 'invoice', 'ui' => '../../doc_ui.js', 'self' => $self, 'docId' => $id, 'saved' => (bool) $inv, 'lineLock' => $lock, 'void' => $inv && $inv['status'] === 'void',
     'items' => $items, 'products' => sdoc_products($conn), 'customers' => sales_customers($conn), 'defaultStore' => $defaultStore, 'stockOn' => sales_stock_on($conn),
     'schedules' => $repost ? (json_decode((string) ($repost['schedules_json'] ?? '[]'), true) ?: []) : array_map(fn($s) => ['due_date' => $s['due_date'], 'amount' => (float) $s['amount'], 'note' => $s['note']], $d['schedules'] ?? []),
     'exchanges' => $repost ? (json_decode((string) ($repost['exchanges_json'] ?? '[]'), true) ?: []) : array_map(fn($x) => ['description' => $x['description'], 'serial_no' => $x['serial_no'], 'quantity' => (float) $x['quantity'], 'amount' => (float) $x['amount']], $d['exchanges'] ?? []),
