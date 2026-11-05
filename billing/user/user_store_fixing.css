@@ -1,0 +1,15 @@
+/* User Wise Store Fixing: label, field and the widening box on one row. */
+.usf-form { display: grid; grid-template-columns: max-content minmax(200px, 340px) minmax(0, 1fr); gap: 9px 12px; align-items: center; }
+.usf-form > label:not(.usf-scope) { margin: 0; font-size: 12px; font-weight: 700; color: #555; white-space: nowrap; }
+.usf-form select { width: 100%; }
+.usf-form select:disabled { background: #f1f1f1; color: #888; }
+.usf-scope { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 12px; font-weight: 700; color: #555; }
+.usf-scope input { margin: 0; }
+.usf-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+.usf-note { margin: 0 0 10px; font-size: 12.5px; }
+.usf-form + .usf-actions button:disabled { opacity: .55; cursor: not-allowed; }
+td .btn-xs { min-height: 26px; padding: 2px 10px; }
+@media (max-width: 640px) {
+  .usf-form { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .usf-scope { margin-bottom: 8px; }
+}

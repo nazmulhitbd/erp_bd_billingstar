@@ -1,0 +1,7 @@
+# Only the wizard itself is public: never list this folder or serve the library directly.
+Options -Indexes
+<FilesMatch "^(install_lib|build_sql)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

@@ -1,0 +1,60 @@
+  /* CSS Document */
+
+/* CSS Document */
+
+*{
+	margin:0;
+	padding:0;
+}
+
+body{
+	font-family: Tahoma, Arial, "helvetica LT Std", sans-serif;
+	font-size:12px;
+	background: #339966;
+}
+
+.wrapper{
+	width:100%;
+	height:auto;
+}
+
+.container{
+	width:100%;
+	margin-top:73px;
+	background: #66CC66;
+	border-top:1px solid #EAE9E9;
+	border-bottom:1px solid #EAE9E9;
+}
+
+.admin_log{
+	width:313px;
+	margin:50px 0 0 60px;
+    float: left;
+}
+
+.logo{
+	margin-left:75px;
+	padding-bottom:20px;
+}
+
+.clear {
+	float:left;
+	clear:both;
+	margin:0;
+	padding:0;
+}
+
+.adpanel{
+   	float:right;
+    background-color: #f0f0f0;
+	width: 30%;
+	margin: 50px;
+	border: 1px solid #d7d7d7;
+	-moz-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 11px;
+	behavior: url(border-radius.htc);
+    overflow: visible;
+    padding: 40px;
+}
+

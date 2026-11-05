@@ -1,0 +1,293 @@
+
+
+
+
+
+
+html,
+body {
+    width: 100%;
+	display:block;
+	margin:0px;
+	padding:0px;
+	color:#333;
+	background:#F4F4F4;
+		position: absolute;
+  	height: 100%;
+  	min-width: 100%;
+}
+
+body,
+td,
+textarea,
+input,
+select {
+    font-family: 'Alef', sans-serif;
+    font-size: 11px;
+	
+}
+
+
+#wrapper {
+	width: 100%;
+	min-width: 1000px;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	text-align:center;
+	background:#F4F4F4;
+}
+
+#headBG{
+	background: #3B5998 repeat-x left bottom;
+	color:#fff;
+	text-shadow:0px #fff;
+    height: 70px;
+    width:100%;
+	border-bottom:0px solid #133783;
+}
+
+.hleft{clear:both;width:100%;float:left}
+.hleft h2{font-size:25px;padding:10px;margin-top:7px;color:#fff;font-weight:bold;font-family: 'Alef', sans-serif;margin-bottom:2px;}
+.hleft span{font-size:13px;color:#fff;float:left;margin-top:8px;font-weight:bold;}
+
+#centerDiv{
+height:auto !IMPORTANT;
+height:100%;
+width:990px;
+margin:0px auto;
+padding:0px;
+text-align:left;
+}
+
+
+.table-responsive{
+
+width:auto;
+height:auto;
+float:right;
+padding:24px;
+background:#fGGff;
+border:1px solid #D9D9D9;
+border-radius:3px;
+box-shadow:0 5px 14px #dadada;
+}
+
+
+.rightside1{
+
+width:630px;
+height:25px;
+float:right;
+padding:24px;
+background:#C0C0C0;
+border:1px solid #D9D9D9;
+border-radius:3px;
+box-shadow:0 5px 14px #dadada;
+}
+
+
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: .83em 0;
+}
+
+
+
+
+/* Footer
+-----------------------------------------------------------------------------*/
+#footer {
+	
+	background: #EFF3F8;
+	position: relative;
+	
+}
+#footer a:hover {text-decoration:underline;}
+.fleft{width:56%;float:left;padding:5px 0px;font-size:12px;}
+.fright{background: #EFF3F8;width:40%;float:right;text-align:right;padding:5px 0px;}
+.fright img{cursor:pointer;}
+.fleft a{color:#333;font-weight:bold;padding:0px 5px;}
+.fleft a:hover{text-decoration:underline;color:#316AC4;}
+.clear{clear:booth;margin:0px;padding:0px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+body {
+  font: 15px/25px 'Lucida Grande', Verdana, sans-serif;
+  color: #404e040;
+  background: #ebc9a2;
+}
+
+
+
+.login {
+  margin: 50px auto;
+  padding: 18px 20px;
+  width: 250px;
+  height: 200px;
+  float:left;
+  background: #C0C0C0;
+  background-clip: padding-box;
+  border: 1px solid #172b4e;
+  border-bottom-color: #142647;
+  border-radius: 5px;
+  
+  
+  	
+  	font-size: 15px;
+  	direction: ltr;
+ 
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), inset 0 0 1px 1px rgba(255, 255, 255, 0.1), 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+
+/* Table style  
+----------------------------------------------------------*/
+
+table.tbl1 thead
+{
+	background: #A3C2EA url('../images/tbl_head_bg.png') repeat-x scroll 0 0;
+	color: #333;
+
+	
+}
+
+
+
+table.tbl1 tr td,
+table.tbl1 tr th
+{
+	border: solid 1px #888;
+	margin: 0;
+	padding: 4px 0;
+}
+
+table.tbl1 tr td
+{
+	text-align: center;
+	background-color: #fff;
+	color: #444;
+}
+
+table.tbl1 tbody tr.alt td
+{
+	background-color: #e4ecf7;
+}
+
+table.tbl1 tr.over td,
+table.tbl1 tbody tr.alt.over td
+{
+	background-color: #bcd4ec;
+	color: #000;
+}
+
+table.tbl1 a
+{
+	color: #2a4a73;
+	text-decoration: underline;
+}
+
+table.tbl1 a:hover
+{
+	text-decoration: none;
+}
+
+
+
+/* Define column widths 
+----------------------------------------------------------*/
+table.tbl1 td.id
+{
+	width: 100px;
+}
+table.tbl1 td.fname
+{
+	width: 100px;
+}
+table.tbl1 td.lname
+{
+	width: 100px;
+}
+table.tbl1 td.bdate
+{
+	width: 100px;
+}

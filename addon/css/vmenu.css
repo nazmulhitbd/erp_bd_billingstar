@@ -1,0 +1,88 @@
+.sidebarmenu{
+     margin-top: 10px;
+     float:left;
+     margin-left:10px;
+}
+#sidebarmenu1{
+    padding-top: 5px;
+}
+.sidebarmenu ul{
+margin: 0;
+padding: 0;
+
+list-style-type: none;
+font: bold 13px Verdana;
+width: 180px; /* Main Menu Item widths */
+border-bottom: 1px solid #ccc;
+}
+
+.sidebarmenu ul li{
+position: relative;
+
+}
+
+/* Top level menu links style */
+
+.sidebarmenu ul li a{
+display: block;
+overflow: auto; /*force hasLayout in IE7 */
+color: Black;
+text-decoration: none;
+padding: 4px;
+border-bottom: 1px solid #778;
+border-right: 1px solid #778;
+
+}
+.barmenu {
+    font-family:Tahoma,Verdana;
+font-size:11px;
+font-weight: 800;
+background-color: #EFF9FE; /*background of tabs (default state)*/
+display: block;
+overflow: auto; /*force hasLayout in IE7 */
+color: Black;
+text-decoration: none;
+padding: 6px;
+border-bottom: 1px solid #778;
+border-right: 1px solid #778;
+
+}
+.sidebarmenu ul li a:link, .sidebarmenu ul li a:visited, .sidebarmenu ul li a:active{
+background-color: #EFF9FE; /*background of tabs (default state)*/
+}
+
+.sidebarmenu ul li a:visited{
+color: black;
+}
+
+.sidebarmenu ul li a:hover{
+background-color: #ccc;
+}
+
+/*Sub level menu items */
+.sidebarmenu ul li ul{
+position: absolute;
+width: 170px; /*Sub Menu Items width */
+top: 0;
+visibility: hidden;
+    z-index:10;
+}
+
+.sidebarmenu a.subfolderstyle{
+/*background: url(right.gif) no-repeat 97% 50%;*/
+
+
+}
+.sidebarmenu ul li a {
+    position: relative;
+}
+.sidebarmenu ul li a span{
+    position: absolute;
+    right: 5px;
+}
+
+
+/* Holly Hack for IE \*/
+* html .sidebarmenu ul li { float: left; height: 1%; }
+* html .sidebarmenu ul li a { height: 1%; }
+/* End */

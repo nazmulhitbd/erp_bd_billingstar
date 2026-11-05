@@ -1,0 +1,9 @@
+.acc-nav{display:flex;flex-wrap:wrap;gap:4px 14px;margin-bottom:8px;font-size:13px;align-items:center}
+.acc-nav b{color:#55657a;margin-right:4px}.acc-nav a{color:#2563a6;text-decoration:none;margin-right:6px}.acc-nav a.active{font-weight:bold;text-decoration:underline}
+.branch-pick{margin-left:auto}.branch-pick select{height:28px}
+fieldset.box{border:1px solid #9aa6b5;border-radius:4px;padding:12px 14px;margin:0}fieldset.box>legend{font-size:20px;font-weight:bold;padding:0 6px}
+.check{width:auto!important;height:auto!important}.selected-row td{background:#fff7d6}.inline{display:flex;gap:6px;align-items:center}.inline input,.inline select{flex:1;min-width:0}
+.hgrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px 10px;align-items:end}.hgrid .field{grid-column:span 3}.hgrid .s2{grid-column:span 2}.hgrid .s4{grid-column:span 4}.hgrid .s6{grid-column:span 6}.hgrid .s12{grid-column:span 12}
+.radios{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0;font-size:13px}.radios label{display:flex;gap:4px;align-items:center}
+.qty-info{color:#a33c3c;font-weight:bold}.totals-box{display:flex;justify-content:flex-end;margin-top:10px}.totals-box table{width:auto}.totals-box td input{width:120px;text-align:right;height:26px}
+@media(max-width:900px){.hgrid .field,.hgrid .s2,.hgrid .s4,.hgrid .s6{grid-column:span 6}}@media(max-width:600px){.hgrid .field,.hgrid .s2,.hgrid .s4,.hgrid .s6{grid-column:span 12}}

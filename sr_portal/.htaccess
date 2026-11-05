@@ -1,0 +1,10 @@
+# SR Portal: the SQL file and shared code are not pages.
+<FilesMatch "\.(sql|md)$|^sr_common\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+Options -Indexes

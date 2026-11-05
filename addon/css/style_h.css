@@ -1,0 +1,4725 @@
+#contentwrapper{
+	float: left;
+	width: 100%;
+	height: auto;
+	margin-top:0px;
+    
+
+}
+
+.container_right{		
+	background:#FFFFFF;
+	padding-bottom:2%;
+	overflow:visible;
+	margin-left:195px;
+}
+
+.left_col{
+    display:inline;
+	margin-left:-195px;
+	 _margin-left: -195px;
+	float:left;
+    position:relative;
+    z-index:100;
+}
+
+.right_col{
+	
+	float:left;
+    width:98%;
+    _margin-left:-.5%;
+    z-index:10;
+	/* if bg and border is needed
+	background:#f6f6f6;
+	border-left:1px solid #e8e6e6;
+	border-right:1px solid #e8e6e6;
+	border-bottom:1px solid #e8e6e6;
+	padding-bottom:10px;*/
+
+}
+
+.right_content{
+	width:100%;
+	height:22px;
+	float:right;
+	position:relative;
+	display:inline-block;
+	vertical-align:baseline;
+}
+
+
+#contentwrapper .main_content {
+    width:90%;
+    height:100%;    
+    float:left;
+    margin-left:0px;
+    margin-top:0px;
+    margin-bottom:20px;    
+}
+ul.jd_menu, 
+ul.jd_menu_vertical {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	float:right;
+}
+ul.jd_menu ul,
+ul.jd_menu_vertical ul {
+	display: none;
+}
+ul.jd_menu li {
+	float: left;
+}
+ul.jd_menu_vertical {
+	width: 100px;
+}
+ul.jd_menu_vertical li {
+	float: none;
+}
+
+/* -- Sub-Menus -- */
+ul.jd_menu ul,
+ul.jd_menu_vertical ul {
+	position: absolute;
+	display: none;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	z-index: 10000;
+}
+ul.jd_menu ul li,
+ul.jd_menu_vertical ul li {
+	float: none;
+	margin: 0px;
+}
+
+
+ul.jd_menu,
+ul.jd_menu ul,
+ul.jd_menu_vertical,
+ul.jd_menu_vertical ul {
+	height: 20px;
+}
+ul.jd_menu_vertical {
+	height: auto;
+	position: relative;
+}
+ul.jd_menu ul {
+	height: auto;
+	text-align:left;
+}
+* html ul.jd_menu ul {
+	width: 1%;
+}
+ul.jd_menu li {
+	font-family: sans-serif;
+	font-size: 15px;
+	font-weight:bold;
+	color: #FFF;
+
+	line-height: 14px;
+
+	margin: 0px;
+	padding: 4px 7px 3px 7px;
+	height: 13px;
+
+	cursor: pointer;
+	white-space: nowrap;
+}
+ul.jd_menu li li {
+	width: 110px;
+}
+ul.jd_menu li a {
+	text-decoration: none;
+}
+
+ul.jd_menu li.jdm_hover,
+ul.jd_menu li.jdm_active {
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+}
+/******added for V/H menu toggling***/
+#menu_btn{
+	display:none;
+	text-align:right;
+	color:white;
+	font-size:12px;
+	cursor:pointer; 
+	font-weight: bold;
+	height:25px;
+}
+/******added for V/H menu toggling***/
+
+
+/* Main Style Sheet for jQuery UI date picker */
+#datepicker_div, .datepicker_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+	width: 185px;
+}
+#datepicker_div {
+	display: none;
+	border: 1px solid #777;
+	z-index: 9999; /*must have*/
+}
+.datepicker_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.datepicker_rtl {
+	direction: rtl;
+}
+.datepicker_dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+button.datepicker_trigger {
+	width: 25px;
+}
+img.datepicker_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.datepicker_prompt {
+	float: left;
+	padding: 2px;
+	background: #ddd;
+	color: #000;
+}
+* html .datepicker_prompt {
+	width: 185px;
+}
+.datepicker_control, .datepicker_links, .datepicker_header, .datepicker {
+	clear: both;
+	float: left;
+	width: 100%;
+	color: #333333;
+}
+.datepicker_control {
+	background: #E9E9E9;
+	padding: 2px 0px;
+}
+.datepicker_links {
+	background: #F9F9F9;
+	padding: 2px 0px;
+}
+.datepicker_control, .datepicker_links {
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+}
+.datepicker_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #333;
+}
+.datepicker_clear, .datepicker_prev {
+	float: left;
+	width: 34%;
+}
+.datepicker_rtl .datepicker_clear, .datepicker_rtl .datepicker_prev {
+	float: right;
+	text-align: right;
+}
+.datepicker_current {
+	float: left;
+	width: 30%;
+	text-align: center;
+}
+.datepicker_close, .datepicker_next {
+	float: right;
+	width: 34%;
+	text-align: right;
+}
+.datepicker_rtl .datepicker_close, .datepicker_rtl .datepicker_next {
+	float: left;
+	text-align: left;
+}
+.datepicker_header {
+	padding: 1px 0 3px;
+	background: #E9E9E9;
+	text-align: center;
+	font-weight: bold;
+	height: 1.3em;
+}
+.datepicker_header select {
+	background: #E9E9E9;
+	color: #333;
+	border: 0px;
+	font-weight: bold;
+}
+.datepicker {
+	background: #ccc;
+	text-align: center;
+	font-size: 100%;
+}
+.datepicker a {
+	display: block;
+	width: 100%;
+}
+.datepicker_titleRow {
+	background: #777;
+}
+.datepicker_daysRow {
+	background: #eee;
+	color: #333;
+}
+.datepicker_weekCol {
+	background: #777;
+	color: #fff;
+}
+.datepicker_daysCell {
+	color: #000;
+	border: 1px solid #ddd;
+}
+.datepicker_daysCell a{
+	display: block;
+}
+.datepicker_weekEndCell {
+	background: #ddd;
+}
+.datepicker_titleRow .datepicker_weekEndCell {
+	background: #777;
+}
+.datepicker_daysCellOver {
+	background: #fff;
+	border: 1px solid #777;
+}
+.datepicker_unselectable {
+	color: #333;
+}
+.datepicker_today {
+	background: #0072B9 !important;
+	color:#333;
+}
+.datepicker_currentDay {
+	background: #999 !important;
+}
+.datepicker_status {
+	background: #ddd;
+	width: 100%;
+	font-size: 80%;
+	text-align: center;
+}
+
+/* ________ Datepicker Links _______
+
+** Reset link properties and then override them with !important */
+#datepicker_div a, .datepicker_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.datepicker_inline .datepicker_links a {
+	padding: 0 5px !important;
+}
+.datepicker_control a, .datepicker_links a {
+	padding: 2px 5px !important;
+	color: #333 !important;
+}
+.datepicker_titleRow a {
+	color: #eee !important;
+}
+.datepicker_control a:hover {
+	background: #333 !important;
+	color: white !important;
+}
+.datepicker_links a:hover, .datepicker_titleRow a:hover {
+	background: #ddd !important;
+	color: #333 !important;
+}
+
+/* ___________ MULTIPLE MONTHS _________*/
+
+.datepicker_multi .datepicker {
+	border: 1px solid #777;
+}
+.datepicker_oneMonth {
+	float: left;
+	width: 185px;
+}
+.datepicker_newRow {
+	clear: left;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.datepicker_cover {
+	display: none; /*sorry for IE5*/
+	display/**/: block; /*sorry for IE5*/
+	position: absolute; /*must have*/
+	z-index: -1; /*must have*/
+	filter: mask(); /*must have*/
+	top: -4px; /*must have*/
+	left: -4px; /*must have*/
+	width: 200px; /*must have*/
+	height: 200px; /*must have*/
+}
+
+
+
+.form {
+	/*font-weight: 10px;*/
+	font-family: Arial, serif;
+}
+
+input, textarea, select {
+	font-weight: normal;
+	font-style: normal;
+	text-align: left;
+	/*font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;*/
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	font-family: Cambria, Times, serif
+}
+
+legend {
+	font-size: 14px;
+}
+.txtCenter td{
+  text-align: center;
+}
+.txtCenter-right td{
+  text-align: right;
+  padding-right: 10px;
+}
+
+a img {border:none;}
+
+table {border-collapse: collapse; border-spacing: 0;}
+q:before, q:after, blockquote:before, blockquote:after {content: "";}
+
+
+
+/* Elements
+----------------------------------------*/
+
+h1, h2, h3, h4, h5, h6{
+	/*color:#5C8127;*/
+	color:#5a5a5a;    
+
+}
+
+
+h1
+{
+	font-size: 1.8em;
+	padding: 0px 0 2px 32px;
+	font-weight: bold;
+}
+
+
+h3
+{
+	padding: 5px 0 2px 10px;
+	font-size:1.2em;
+}
+
+h4
+{
+	margin:.825em 0 .5em 0;
+	font-size:1.25em;
+	border-bottom:1px solid #999999;	
+}
+
+h5
+{
+	margin:.825em 0 .5em 0;
+	font-size:1.125em;
+}
+
+h6
+{
+	color:#5C8127;
+	margin:.825em 0 .5em 0;
+	font-size:1em;
+}
+
+blockquote	{margin: 0 0 18px 18px; color:#666666; font-style: italic;}
+strong		{font-weight:bold;}
+em          {font-style:italic;}
+
+/* Standard Definitions
+----------------------------------------*/
+.left 		{float:left !important; }
+.right 		{float:right !important; position:relative;overflow:auto;}
+.clear	    {clear:both;}
+.small		{font-size:.625em;}
+.large		{font-size:1em;}
+.soft			{color:#D3D3D3;}
+.hide			{display:none;}
+p.last		{margin-bottom:0px;}
+.tleft 		{ text-align: left; }
+.tright 	{ text-align: right; }
+.tcenter 	{ text-align: center; }
+
+.main_container {width: 100%; border-collapse: collapse; }
+.main_container .leftshadow { width: 50px; background: #000a0b url(../images/leftshadow.png) right top repeat-y; }
+.main_container .rightshadow { width: 50px; background: #000a0b url(../images/rightshadow.png) left top repeat-y; }
+
+.main_content { padding-bottom: 30px; }
+.main_content .heading { width: 100%; height: 70px; }
+.main_content .heading h1 { color: #0168cf; width: 50%; }
+.main_content .heading h2 { color: #05780d; width: 50%; }
+.main_content .heading .toolbar { float: right; height: 50px; line-height: 50px; padding: 0 20px; border-bottom: 1px solid #ffc868; }
+.main_content .heading .toolbar .plchldr { height: 15px; width: 20px;}
+.main_content .heading .toolbar a { height: 24px; line-height: 24px;padding: 0 5px; display: block; float: left;  }
+
+.main_content { /*background:  url("../images/bg.png") repeat-x scroll 0 0 #FFFFFF;*/}
+
+#content { padding: 10px 32px; }
+
+
+/* FORM STYLES */
+
+.form { 
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+    margin-bottom: 25px;
+    margin-top: 25px;
+	font-family:Verdana;
+	color:#333;
+	background-color:#FAFAFA;    
+	border-bottom: 2px solid #666;
+	border-top: 1px solid #999;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+.smallForm { }
+.form .smallForm {
+	width: 300px;
+   /* margin-left: auto;*/
+	margin-right: auto;
+	font-family:Verdana;
+	color:#333;
+	background-color:#FAFAFA;
+	border-bottom: 1px solid #666;
+	border-top: 1px solid #999;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+
+
+
+
+.form .smallForm legend {
+
+	background: #C2CBCF url(../images/arrow.png) right top no-repeat;
+	padding: 0px 17px 2px 10px;
+	margin: 0;
+	_margin-left: -7px;
+	color: #333;
+	font-weight: bold;
+	font-size: 12px;
+	border: 1px dashed #999;
+
+}
+
+.form fieldset { border: none; padding: 10px 0;  }
+.form .smallForm fieldset { border: none; padding: 10px 0; }
+.fg300 { border:none; padding: 10px 0px !important; _padding: 0px !important; }
+.form .fs700 { width: 550px; padding-left: 30px; margin: 0;margin-left: auto; margin-right:auto;}
+
+.form .fs650 { width: 550px; padding-left: 30px; margin: 0;margin-left: 30px;border: none;padding: 0px;}
+
+.form .fs350, .form .fs350r { float: left; width: 300px; margin: 0; }
+.form .fs350 { padding-left: 30px; margin: 0;margin-left: auto; margin-right:auto;}
+
+.form .fsend { padding-left: 30px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; background-color: #fdfdfd; }
+
+.form .input { float: left; padding: 0px 0; }
+.form .smallForm .input { float: left; padding: 0px 0; }
+.form .input .title { float: left; display:block; text-align: right; line-height: 24px; padding-right: 10px; font-size:11px; }
+
+.form .input select { height: 17px; padding: 1px; padding-left: 2px; border:1px solid #1d1d1d; border-bottom:1px solid #c1c1c1;border-right:1px solid #c1c1c1;}
+.form .w5s select{ width: 117px; }
+.form .w10 { width: 600px; }
+.form .w5  { width: 300px; }
+.form .w4  { width: 250px; }
+.form .w6  { width: 350px; }
+/* w5 with small label*/
+.form .w5sl  { width: 300px; }
+
+.form .w10s { width: 600px; }
+.form .w5s  { width: 250px; }
+.form .w4s  { width: 200px; }
+.form .w6s  { width: 400px; }
+.form  .req {    
+	width: auto;   
+	border-right:5px solid #F3BABB;
+
+}
+.form .w7s  { margin:0px; padding-left:20px;}
+.form .w7req  { margin:0px; padding-left:20px;}
+
+.form .w8s  { margin:0px; padding-left:10px;}
+.form .w12s  {  font-weight:bold;margin:10px; padding-left:10px;}
+.form .w12req  { font-weight:bold;margin:10px; padding-left:10px;}
+ .form .w12req .error {margin-left:140px;}
+.form .w4nl  { width: 70px; }
+.form .w7req  input{ border-right:5px solid #F3BABB !important}
+
+.form .w10 .title, .form .w5 .title, .form .w4 .title, .form .w6 .title{ width: 170px }
+.form .w10s .title, .form .w5s .title, .form .w4s .title, .form .w6s .title{ width: 100px }
+.form .w11req .title, .form .w5s .title, .form .w4s .title, .form .w6s .title{ width: 80px; font-size:12px;font-weight:bold;color: #999999 }
+/* w5 with small label*/
+/*sako*/
+/*.form .w5sl .title{ width: 150px }*/
+/*sako*/
+.form .w5sl .title{ width: 180px;color:#999999;font-weight: bold;font-size: 12px; }
+
+.form .smallForm .fs300 { padding-left: 30px; margin: 0;margin-left: auto; margin-right:auto;}
+.form .smallForm .w4s title{ width:50px;}
+.form .smallForm .w4s input {width:60px;}
+.form .l75 label { width: 75px }
+
+.form .w7s .title{ width: 130px;}
+.form .w8s .title{ width: 130px;color:#999999;font-weight: bold;font-size: 12px;}
+.form .w12s .title{ width: 130px;}
+.form .w12req .title{ width: 130px;}
+
+.form .w5 input, .form .w5 textarea, .form .w5s input, .form .w5s textarea { width: 110px; }
+.form .w4 input, .form .w4 textarea, .form .w4s input, .form .w4s textarea  { width: 60px; }
+.form .w6 input, .form .w6 textarea, .form .w6s input, .form .w6s textarea  { width: 160px; }
+.form .w10 input, .form .w10 textarea { width: 410px; }
+.form .w10s input, .form .w10s textarea { width: 460px; }
+.form .w12s input, .form .w12s textarea { width: 260px; }
+.form .w12req input, .form .w11 textarea { width: 260px;         
+		  border-right:5px solid #F3BABB !important;
+		  margin-top:5px !important;
+	   }
+.form .w11 input, .form .w11 textarea { width: 200px;         
+		  border-right:5px solid #F3BABB !important;
+
+	   }
+/* w5 with small label*/
+.form .w5sl input, .form .w5sl textarea { width: 60px; }
+
+.form .h2 textarea { height: 40px; }
+.form .h3 textarea { height: 60px; }
+.form .h4 textarea { height: 80px; }
+.form .h5 textarea { height: 100px; }
+.form .h6 textarea { height: 120px; }
+.form .h10 textarea { height: 300px; }
+
+.form .input{ font-size: 95%; }
+.form .input input, .form .input textarea { border: 1px solid #1d1d1d; border-right: 1px solid #c1c1c1; border-bottom: 1px solid #c1c1c1; padding: 1px 2px; font-size: 11px;}
+
+.form .checkbox {  }
+.form .checkbox input { width: 16px; display: block; float: left; border: 1px solid red; padding: 0; margin: 3px 1px; _margin:1px; }
+.form .checkbox .cb label { float: left; display:block; line-height: 20px; }
+
+.form .w5 .cb label, .form .w5s .cb label  { width: 105px; }
+.form .w4 .cb label, .form .w4s .cb label  { width: 55px;  }
+.form .w6 .cb label, .form .w6s .cb label  { width: 155px; }
+.form .w10 .cb label,.form .w10s .cb label { width: 405px; }
+
+.form .input .hasfocus { border: 1px solid #99ccff; border-left: 2px solid #99ccff;}
+.form .required .hasfocus { border-left: 4px solid #99ccff; padding-left: 0px;}
+
+.form .ig12,.ig10, .form .ig5, .form .ig6, .form .ig4 .ig7 { display: block; float: left; }
+.form .smallForm .ig6{ display: block; float: left; }
+.form .ig6  { width: 350px; }
+.form .ig6365  { width: 365px; }
+.form .ig4  { width: 250px; }
+.form .ig10 { width: 600px; }
+.form .ig12 { width: 500px; }
+.form .ig5  { width: 300px; }
+.form .ig7  { width: 500px; margin: 5px;}
+.form .smallForm .ig6{width:300px;}
+.form .smallForm .fs300{width:300px; padding-left: 30px; margin: 0;margin-left: auto; margin-right:auto;}
+.form .boxred { background-color: #FFCCAF; border: 1px solid #FF8A49; margin: -1px }
+.form .boxblue { background-color: #C2D5EE; border: 1px solid #729ED8; margin: -1px }
+.form .boxgrey { background-color: #F3F3F3; border: 1px solid #C0C0C0; margin: -1px; }
+.form .smallForm .boxgrey { background-color: #F3F3F3; border: 1px solid #C0C0C0; margin: -1px; }
+.form .boxgrey, .form .boxred, .form .boxblue, .boxwhite
+{ margin-top: 2px; margin-bottom: 2px; padding-top: 1px; padding-bottom: 1px; }
+
+.form .margin5 { margin-top: 5px; margin-bottom: 5px; padding-top: 5px; padding-bottom: 5px; }
+.form .form-error { border-top: 1px solid red; }
+.form .error { color:#FF2233; float:right; padding-right:10px;width: 500px; }
+.form .error_message { line-height: 14px; margin-right: 10px; float: right; font-size: 1em; color: red;  }
+
+.form .required .title { background: url(../img/required.png) no-repeat right;  }
+.form .error .title { background: url(../img/error16.png) no-repeat right; }
+
+.form .filew6 input { /*height: 20px; */ width: 427px; }
+.form .filew3 input { width: 250px; }
+.form .input .over { background-color: red; border: 1px solid lime; }
+
+.form .submit{
+	float:left;
+	text-align:right;
+	width: 450px;    
+}
+
+.form .smallForm .submit{
+	float:left;
+	text-align:right;
+	width: 250px;
+}
+.form .smallForm .submit input{ font-family:Verdana; border: 1px solid #efefef; border-right: 1px solid #444; border-bottom: 1px solid #444; font-size: 11px; font-weight:bold;text-align: center; width: 75px; background-color:#DBDBDB;color:#333;}
+
+
+.button { width: 75px; border:1px solid #666;text-align: center;cursor:pointer;margin:3px 0 0 3px;padding:1px;}
+
+.form button { height: 23px; }
+
+.form button { text-align: center; }
+.form input[type='submit'] { text-align: center; width: 75px;}
+.pleft160px { padding-left:160px; padding-bottom:3px;}
+
+.hidden { display: none; }
+
+.error {  }
+.error td, .error th { padding: 0 10px; color: #cc8888; }
+
+.tablecontent { border-collapse: separate; }
+.tablecontent th { font-weight: bold; border-bottom: 2px solid #eeeeee; padding: 3px 10px; vertical-align: middle; line-height: 14px; }
+.tablecontent td { padding: 0px 10px ; vertical-align: middle; border-bottom: 1px solid #eeeeee; }
+
+.tablecontent .input { padding: 0; }
+.index .altrow {background-color: #ffffe5; }
+.index .hover { background: #ffeb80 url(../images/ui-bg_glass_100_ffeb80_1x400.png) 50% 50% repeat-x; font-weight: bold; }
+.tablecontent .actions a { float: left; padding: 0 2px; font-weight: bold; }
+.selectall { }  
+
+#content1 .paging1 { float: right; }
+#content1 .paging1 em { padding: 0 5px; font-style:normal; }
+#content1 .paging1 { color: #369; }
+#content1 .paging1 em.disabled { color: #777; }
+
+.options { float: left; padding-left: 20px; }
+.options a { float: left; padding: 0 5px; font-weight: bold; }
+
+.ww350 { width: 350px; }
+.ww500 { width: 500px; }
+.ww700 { width: 700px; }
+.ww200 { width: 200px; }
+
+.ww100p { width: 100%; }
+.ww50p { width: 50%; }
+
+.ww50px  { width:50px !important; }
+.ww30px  { width:30px !important; }
+.ww300px { width:300px !important; }
+
+.ww130px { width:70px !important; margin-left:0 !important;margin-right:0 !important; padding:2px 2px 0 2px !important;}
+.ww130px input {width:50px !important; }
+.ww130px title {width:0px !important;}
+
+.box3 { border: 3px solid #eeeeee; padding: 10px; }
+.mcenter { margin: 0 auto; }
+.mleft { margin-left: 30px; }
+.mright { margin-right: 30px; }
+.mleft500{margin-left:500px;}
+.mleft450{margin-left:450px;}
+.mleft400{margin-left:400px;}
+.mleft350{margin-left:350px;}
+.mleft300{margin-left:300px;}
+.mleft120{margin-left:120px;}
+.radioLeft { padding-left: 20px !important; width: 20px !important; line-height:20px;}
+.radioLeft input{ margin:2px !important; width: 15px !important;}
+
+.mtop2px { margin-top:2px;}
+
+
+.p5 { padding: 5px; }
+.pleft160 {padding-left:160px;}
+.pleft280 {padding-left:280px;}
+.lh5 { line-height: 1.8em; vertical-align: middle;  }
+.verdict { color: #0066cc; }
+.NJ { color: #999999; }
+.AC { color: #009900; font-weight: bold; }
+.WA { color: #CC0000; }
+.PE { color: #009900; }
+
+.disabled {  color: #bbbbbb; }
+.hint { line-height: 20px; }
+.borderRed {}
+.borderRed input{border: 1px solid red !important;}
+.borderNone { border: none !important; }
+
+
+.reduceMarginLeft { margin-left:20px !important;}
+.reduceMarginLeft input { width: 35px !important; }
+.reduceMarginLeft1 { margin: 0; padding-left: 13px !important; }
+.reduceMarginLeft2 { }
+.reduceMarginLeft2 input{ margin-left:-73px !important; margin-top: 3px !important;}
+.reduceMarginLeft3 {border: 0px solid #fff !important; }
+.reduceMarginLeft3 input{ margin:-3px !important; margin-top:3px !important; padding:0px !important; width:20px !important;}
+.reduceMarginLeft3 title{ border: none !important;}
+
+.reduceMarginLeft100px { margin-left:-100px !important;}
+
+.reduceMarginRight { margin-right:-10px !important;}
+.reduceMarginRight60px { margin-right:-60px !important;}
+
+.reduceMarginLeft5px { margin-left:-5px;}
+.mLeft30px { }
+.mLeft30px input{ margin-left:-30px;}
+
+.height20 {width:100%; line-height:20px !important;}
+.height10 {width:100%; line-height:10px !important;}
+.height5 {width:100%; line-height:5px !important;}
+.overflow { overflow:hidden;}
+
+#flash_message { color: #369; border-top: 1px solid #faa781; border-bottom: 1px solid #faa781; background-color: #ffffe1; padding: 1px; text-align: center;}
+
+
+.list{
+
+}
+.listHeader {
+	padding: 9px 19px 6px;
+	height: 57px;
+}
+.listHeader .top{
+	PADDING-LEFT: 20px; MARGIN: 0px; HEIGHT: 22px;
+}
+
+.listHeader .bottom{
+    background-color:#EFF9FE;
+    border:1px solid #DFDFDF;
+	color:#2C2C2C;
+	padding:8px;
+	margin:0px 0px 5px 0px;
+	text-align:right;
+    float:right;
+}
+
+a.listButton
+{
+	font-family:Verdana;
+	border: 1px solid #666;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	width: 100%;
+	cursor: pointer;
+	padding: 2px;
+	padding-left:5px;
+	padding-right:5px;
+	margin-right: 4px;
+}
+A.listButton:hover
+{
+	text-decoration: none;
+}
+
+.listBody {
+	font-family: Verdana;
+	PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; MARGIN: 0px auto; PADDING-TOP: 0px;
+}
+.listBody .top{
+   CLEAR: both;
+   MARGIN: 0px 0px 5px;
+   padding: 4px;
+   background-color:#EFF9FE;
+   border:1px solid #DFDFDF;
+   color:#2C2C2C;
+}
+.listBody .top table{
+	border:0;
+}
+.listBody .top table th{
+	FONT-WEIGHT: bold; 
+	MARGIN-LEFT: 3px;
+	vertical-align: top;
+	color:#2c2c2c;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:2px;
+}
+.listBody .top table td{
+	vertical-align: top;
+	FONT-WEIGHT: normal;
+	MARGIN-LEFT: 3px;
+	color:#2c2c2c;
+	padding-left:5px;
+	padding-right:2px;
+	text-align: right;
+	padding-bottom:2px;
+	padding-top:2px;
+}
+.listBody input{    
+	border: 1px solid #DFDFDF;
+	padding: 1px 2px;
+	font-size: 11px;
+}
+
+
+.listBody .bottom{
+   CLEAR: both;
+   MARGIN: 2px 0px 20px;
+   PADDING-TOP: 1px;
+   background-color:#EFF9FE;
+   border:1px solid #DFDFDF;
+   color:#2C2C2C;
+
+}
+
+.listBody .bottom table{
+	border:0;
+	width:100%;
+} 
+.listBody .bottom table tr{
+	padding:3px;
+
+} 
+.listBody .bottom table th{
+	FONT-WEIGHT: bold;
+	MARGIN-LEFT: 3px;
+	vertical-align: top;
+	color:#2c2c2c;
+	padding-left:7px;
+	padding-right:0px;
+	padding-top:2px;
+	width:50px;
+}
+.listBody .top table td{
+	vertical-align: top;
+	FONT-WEIGHT: normal;
+	MARGIN-LEFT: 3px;
+	color:#2c2c2c;
+	padding-left:5px;
+	padding-right:2px;
+	text-align: right;
+	padding-bottom:2px;
+	padding-top:2px;
+}
+
+
+
+
+
+.listBody .paging{
+	color:#111;
+	font-family:Verdana;
+	margin:0px;
+	padding:0px;
+	height: 18px;
+	text-align: center;
+}
+.listBody .pagecount{
+	color:#111;
+	font-family:Verdana;
+	/*margin:0px;*/
+	padding:0px;
+	height: 18px;
+	text-align: center;
+	padding-right:5px;
+}
+.listBody select{
+	border:1px solid #DFDFDF;
+	padding: 1px;
+	padding-left: 2px;
+	font-size: 10px;
+	margin-bottom:2px;
+
+}
+.listBody .showList{
+
+}
+.listBody .showList table{
+	border:0px;
+	width:100%;
+
+
+}
+
+.listBody .smallShowList{
+   width:50%;
+
+}
+.listBody .smallShowList table{
+	border:0px;
+	width:100%;
+
+}
+
+.listBody .smallShowList table thead th input{
+	margin-left:3px;margin-right:3px;PADDING-LEFT: 5px;
+	width:12px;height:12px;
+	border: none;
+}
+.listBody .smallShowList table tbody td input{
+	margin-top:1px;margin-left:3px;margin-right:2px;
+	PADDING-LEFT: 5px;
+	width:12px;height:12px;
+	border: none;
+}
+.listBody .smallShowList table tbody td{
+	border-bottom:1px solid #DFDFDF;
+	padding-left:5px;
+}
+
+
+.listBody .showList table thead th input{
+	margin-left:3px;margin-right:3px;PADDING-LEFT: 5px; 
+	width:12px;height:12px;
+	border: none;
+}
+/*.listBody .showList table tbody td input{
+	margin-top:1px;margin-left:3px;margin-right:2px;
+	PADDING-LEFT: 5px;
+	/*width:12px;height:12px;
+	border: none;*/
+/*}*/
+
+
+.listBody .showList table tbody td{
+	border-bottom:1px solid #DFDFDF;
+	padding-left:5px;
+}
+.listBody a:link,.listBody a:active,.listBody a:visited{
+	color:#0000CD;
+}
+.minlist  table tbody td
+{
+   /*width:80%;*/
+   padding:0px 5px 0px 15px;
+}
+.neweven{
+   background-color:white;
+   border-right:1px solid #F2F2F2;
+   border-left:1px solid #F2F2F2;
+}
+.newodd{
+   background-color:#F2F2F2;
+   border-right:1px solid #F2F2F2;
+   border-left:1px solid #F2F2F2;
+}
+.listBody fieldset { border: none; padding: 10px 0; }
+.listBody .ig6  { width: 350px;display: block; float: left; }
+.listBody .ig10 { width: 600px; display: block; float: left; }
+
+.listBody .ig5  { width: 300px; display: block; float: left; }
+.listBody .fs350{ float: left; width: 350px; }
+.listBody .fs550{ float: left; width: 550px; }
+.listBody .fs650{ float: left; width: 650px; }
+.listBody .ig7  { width: 550px;display: block; float: left; }
+.listBody .ig7ex  { width: 650px;display: block; float: left; }
+.listBody .boxgrey { background-color: #F3F3F3; border: 1px solid #C0C0C0;  }
+
+.listBody a:visited{
+	color:#EF6868;
+	font-style:italic;
+}
+.listBody legend {
+
+	background: #C2CBCF url(../images/arrow.png) right top no-repeat;
+	padding: 0px 17px 2px 10px;
+	margin: 0;
+	color: #333;
+	font-weight: bold;
+	font-size: 12px;
+	border: 1px dotted #999;
+
+}
+
+.listBody a:hover{
+	color:#FF4500;
+	text-decoration:underline;
+	/*font-weight:bold;*/
+}
+.listfooter{
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+.listBody .paging a:link,.listBody .paging a:active,.listBody .paging a:visited{
+	color:#0000CD;
+}
+.listBody .paging a:hover{
+	color:#FF4500;
+	font-weight: normal !important;
+}
+
+
+/* Added By Pranto */
+ .registration{
+   color:#000000;
+font-family:sans-serif;
+font-size:12px;
+margin-top:20px;
+width:700px;
+}
+
+.registration .actions{
+	font-size: 12px;
+	color: #205708;
+	text-align:right;
+	margin-top:10px;    
+	margin-bottom: -10px;
+}
+.registration .actions a{
+	font-size: 14px;
+	color: #205708;
+	text-align:right;
+	font-weight:normal;
+		text-decoration:underline;
+}
+
+.registration  table{
+	margin-left: 80px;
+	border-collapse:collapse;
+}
+
+.registration tr{
+	margin-bottom:5px;    
+}
+
+.registration th{
+	font-size: 12px;
+	color: #999;
+	font-weight:bold;
+	padding:5px;
+	padding-top: 12px;
+	padding-left: 30px;
+	padding-right:0px;
+	padding-bottom:1px;
+	text-align:left;
+	width:30%;
+	border-bottom: 1px solid #E6EAEE;    
+}
+
+
+.registration td{
+	font-size: 11px;
+	color: #555;
+	font-weight:bold;
+	padding:5px;
+	padding-left:0px;
+	padding-top: 12px;
+	text-align:left;    
+	padding-bottom:1px;
+}
+
+.registration span{
+	font-family:monospace;
+	font-size: 12px;
+	color: #111;
+	font-weight:normal;
+	padding:0px;
+	padding-top: 12px;
+	text-align:justify;
+	line-height:18px;
+}
+
+.registration input {
+	width: 200px;
+	padding: 2px;
+	font-size: 13px;
+	color: #111;
+	border: 1px solid #E0E4E8;
+}
+
+.registration select {
+	width: 208px;
+	padding: 1px;
+	font-size: 13px;
+	color: #111;
+	border: 1px solid #E0E4E8;
+}
+
+
+.registration .req input {
+	width: 195px;
+	padding: 2px;
+	font-size: 13px;
+	color: #111;
+	border: 1px solid #E0E4E8;
+	border-right:5px solid #F3BABB;
+}
+
+.registration .req select {
+	width: 208px;
+	padding: 1px;
+	font-size: 13px;
+	color: #111;
+	border: 1px solid #E0E4E8;
+}
+.registration .exception{
+	color: #111;
+	 font-size: 13px;
+}
+.registration .exception input{
+	width: 15px;
+	padding: 2px;
+	font-size: 12px;
+	color: #111;
+	border: 1px solid #E0E4E8;
+}
+
+.registration .exception a{
+	color: red;
+	text-decoration:underline;
+	font-size: 13px;
+	cursor:default;
+}
+
+.registration button {
+   background-color:#dbdbdb;
+	color:#111;
+	font-family:Verdana;
+	border: 1px solid #666;
+	/*border-right: 1px solid #444;
+	border-bottom: 1px solid #444;
+	*/
+	font-size: 11px;
+	font-weight:bold;
+	text-align: center;	
+	cursor: pointer;	
+	padding-left:5px;
+	padding-right:5px;
+	margin-right: 4px;
+	height: 18px;
+	padding-top:0px;
+}
+
+.registration .tooltip button {
+	border: 1px solid #E0E4E8;
+	font-size: 10px;
+	color: #AB380A;
+	font-weight:bold;
+	padding: 1px;
+	padding-left: 1px;
+	padding-right: 1px;
+	margin-right: 5px;
+	background-color:#F6F6F6;
+	text-align:center;
+}
+.registration h1, h2 {
+	font-size:20px;
+   margin:0;
+   padding:10px 0 0;
+}
+
+.registration h3, h4 {
+	border: 1px solid #BEC0C3;    
+	font-size: 14px;
+	color: #27607F;
+	font-weight:bold;
+	padding: 5px;
+	padding-left: 30px;
+	background-color:#DBDBDB;
+	text-align:left;
+}
+
+.registration h5, h6 {
+	font-size: 14px;
+	color: #27607F;
+	font-weight:bold;
+	padding:10px;
+	text-align:center;
+}
+
+.registration strong {
+
+}
+
+
+/* End by Pranto */
+.fg300{
+	  overflow:hidden;
+	  margin:0px;
+	  padding:0px;
+	}
+
+.input .error {
+ color:red;
+ font-weight:bold;
+}
+.pad20 {
+	margin-left: 20px;
+}
+#report_type {
+  list-style: none;
+  float: left;
+}
+#report_type li { float:left; margin-right: 2px; display: inline-block; padding: 2px 5px; border: 1px solid #cccccc; cursor: pointer;}
+#report_type li.selected { background-color: #369; color: white; }
+#report_type li:hover { background-color: #369; color: white; }
+#date_range { /* float:right;  padding-top: 2px; */ }
+#date_range .search_button {  padding: 0; margin: 0; }
+
+
+/**
+ *
+ */
+.debug { clear: both; border: 1px solid #ccc; border-collapse: collapse; margin: 0 auto}
+.debug tr,
+.odd {
+	font-size: 1em;
+	text-align:left;
+	font-weight:normal;
+	font-style:normal;
+	background-color: #F7F7F7;
+	color: #000000;
+	padding-left: 7px;
+	padding-right: 2px;
+	border: 1px solid #ddd; 
+}
+/**
+ *
+ */
+.even {
+	font-size: 2em;
+	text-align:left;
+	font-weight:normal;
+	font-style:normal;
+	background-color: #FFFFFF;
+	color: #080808;
+	padding-left: 7px;
+	padding-right: 2px;
+}
+
+
+/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+*/
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+
+
+/*
+* jQuery UI CSS Framework
+* Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
+* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Trebuchet%20MS,%20Helvetica,%20Arial,%20sans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=dddddd&bgTextureHeader=02_glass.png&bgImgOpacityHeader=35&borderColorHeader=bbbbbb&fcHeader=444444&iconColorHeader=999999&bgColorContent=c9c9c9&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=50&borderColorContent=aaaaaa&fcContent=333333&iconColorContent=999999&bgColorDefault=eeeeee&bgTextureDefault=02_glass.png&bgImgOpacityDefault=60&borderColorDefault=cccccc&fcDefault=3383bb&iconColorDefault=70b2e1&bgColorHover=f8f8f8&bgTextureHover=02_glass.png&bgImgOpacityHover=100&borderColorHover=bbbbbb&fcHover=599fcf&iconColorHover=3383bb&bgColorActive=999999&bgTextureActive=06_inset_hard.png&bgImgOpacityActive=75&borderColorActive=999999&fcActive=ffffff&iconColorActive=454545&bgColorHighlight=eeeeee&bgTextureHighlight=01_flat.png&bgImgOpacityHighlight=55&borderColorHighlight=ffffff&fcHighlight=444444&iconColorHighlight=3383bb&bgColorError=c0402a&bgTextureError=01_flat.png&bgImgOpacityError=55&borderColorError=c0402a&fcError=ffffff&iconColorError=fbc856&bgColorOverlay=eeeeee&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=0&opacityOverlay=80&bgColorShadow=aaaaaa&bgTextureShadow=01_flat.png&bgImgOpacityShadow=0&opacityShadow=60&thicknessShadow=4px&offsetTopShadow=-4px&offsetLeftShadow=-4px&cornerRadiusShadow=0pxdow=0px
+*/
+
+
+/* Component containers
+----------------------------------*/
+.ui-widget { font-family: Trebuchet MS, Helvetica, Arial, sans-serif; font-size: 1.1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Trebuchet MS, Helvetica, Arial, sans-serif; font-size: 1em; }
+.ui-widget-content { border: 1px solid #aaaaaa; background: #c9c9c9 url(images/ui-bg_inset-soft_50_c9c9c9_1x100.png) 50% bottom repeat-x; color: #333333; }
+.ui-widget-content a { color: #333333; }
+.ui-widget-header { border: 1px solid #bbbbbb; background: #dddddd url(images/ui-bg_glass_35_dddddd_1x400.png) 50% 50% repeat-x; color: #444444; font-weight: bold; }
+.ui-widget-header a { color: #444444; }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid #cccccc; background: #eeeeee url(images/ui-bg_glass_60_eeeeee_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #3383bb; outline: none; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #3383bb; text-decoration: none; outline: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #bbbbbb; background: #f8f8f8 url(images/ui-bg_glass_100_f8f8f8_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #599fcf; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: #599fcf; text-decoration: none; outline: none; }
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #999999; background: #999999 url(images/ui-bg_inset-hard_75_999999_1x100.png) 50% 50% repeat-x; font-weight: bold; color: #ffffff; outline: none; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff; outline: none; text-decoration: none; }
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #ffffff; background: #eeeeee url(images/ui-bg_flat_55_eeeeee_40x100.png) 50% 50% repeat-x; color: #444444; }
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a { color: #444444; }
+.ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #c0402a; background: #c0402a url(images/ui-bg_flat_55_c0402a_40x100.png) 50% 50% repeat-x; color: #ffffff; }
+.ui-state-error a, .ui-widget-content .ui-state-error a { color: #ffffff; }
+.ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #ffffff; }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+.ui-priority-primary, .ui-widget-content .ui-priority-primary { font-weight: bold; }
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_999999_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(images/ui-icons_999999_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(images/ui-icons_999999_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(images/ui-icons_70b2e1_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ui-icons_3383bb_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(images/ui-icons_454545_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_3383bb_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_fbc856_256x240.png); }
+
+/* positioning */
+.ui-icon-carat-1-n { background-position: 0 0; }
+.ui-icon-carat-1-ne { background-position: -16px 0; }
+.ui-icon-carat-1-e { background-position: -32px 0; }
+.ui-icon-carat-1-se { background-position: -48px 0; }
+.ui-icon-carat-1-s { background-position: -64px 0; }
+.ui-icon-carat-1-sw { background-position: -80px 0; }
+.ui-icon-carat-1-w { background-position: -96px 0; }
+.ui-icon-carat-1-nw { background-position: -112px 0; }
+.ui-icon-carat-2-n-s { background-position: -128px 0; }
+.ui-icon-carat-2-e-w { background-position: -144px 0; }
+.ui-icon-triangle-1-n { background-position: 0 -16px; }
+.ui-icon-triangle-1-ne { background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-position: -32px -16px; }
+.ui-icon-triangle-1-se { background-position: -48px -16px; }
+.ui-icon-triangle-1-s { background-position: -64px -16px; }
+.ui-icon-triangle-1-sw { background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w { background-position: -144px -16px; }
+.ui-icon-arrow-1-n { background-position: 0 -32px; }
+.ui-icon-arrow-1-ne { background-position: -16px -32px; }
+.ui-icon-arrow-1-e { background-position: -32px -32px; }
+.ui-icon-arrow-1-se { background-position: -48px -32px; }
+.ui-icon-arrow-1-s { background-position: -64px -32px; }
+.ui-icon-arrow-1-sw { background-position: -80px -32px; }
+.ui-icon-arrow-1-w { background-position: -96px -32px; }
+.ui-icon-arrow-1-nw { background-position: -112px -32px; }
+.ui-icon-arrow-2-n-s { background-position: -128px -32px; }
+.ui-icon-arrow-2-ne-sw { background-position: -144px -32px; }
+.ui-icon-arrow-2-e-w { background-position: -160px -32px; }
+.ui-icon-arrow-2-se-nw { background-position: -176px -32px; }
+.ui-icon-arrowstop-1-n { background-position: -192px -32px; }
+.ui-icon-arrowstop-1-e { background-position: -208px -32px; }
+.ui-icon-arrowstop-1-s { background-position: -224px -32px; }
+.ui-icon-arrowstop-1-w { background-position: -240px -32px; }
+.ui-icon-arrowthick-1-n { background-position: 0 -48px; }
+.ui-icon-arrowthick-1-ne { background-position: -16px -48px; }
+.ui-icon-arrowthick-1-e { background-position: -32px -48px; }
+.ui-icon-arrowthick-1-se { background-position: -48px -48px; }
+.ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+.ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
+.ui-icon-arrowthick-1-w { background-position: -96px -48px; }
+.ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
+.ui-icon-arrowthick-2-n-s { background-position: -128px -48px; }
+.ui-icon-arrowthick-2-ne-sw { background-position: -144px -48px; }
+.ui-icon-arrowthick-2-e-w { background-position: -160px -48px; }
+.ui-icon-arrowthick-2-se-nw { background-position: -176px -48px; }
+.ui-icon-arrowthickstop-1-n { background-position: -192px -48px; }
+.ui-icon-arrowthickstop-1-e { background-position: -208px -48px; }
+.ui-icon-arrowthickstop-1-s { background-position: -224px -48px; }
+.ui-icon-arrowthickstop-1-w { background-position: -240px -48px; }
+.ui-icon-arrowreturnthick-1-w { background-position: 0 -64px; }
+.ui-icon-arrowreturnthick-1-n { background-position: -16px -64px; }
+.ui-icon-arrowreturnthick-1-e { background-position: -32px -64px; }
+.ui-icon-arrowreturnthick-1-s { background-position: -48px -64px; }
+.ui-icon-arrowreturn-1-w { background-position: -64px -64px; }
+.ui-icon-arrowreturn-1-n { background-position: -80px -64px; }
+.ui-icon-arrowreturn-1-e { background-position: -96px -64px; }
+.ui-icon-arrowreturn-1-s { background-position: -112px -64px; }
+.ui-icon-arrowrefresh-1-w { background-position: -128px -64px; }
+.ui-icon-arrowrefresh-1-n { background-position: -144px -64px; }
+.ui-icon-arrowrefresh-1-e { background-position: -160px -64px; }
+.ui-icon-arrowrefresh-1-s { background-position: -176px -64px; }
+.ui-icon-arrow-4 { background-position: 0 -80px; }
+.ui-icon-arrow-4-diag { background-position: -16px -80px; }
+.ui-icon-extlink { background-position: -32px -80px; }
+.ui-icon-newwin { background-position: -48px -80px; }
+.ui-icon-refresh { background-position: -64px -80px; }
+.ui-icon-shuffle { background-position: -80px -80px; }
+.ui-icon-transfer-e-w { background-position: -96px -80px; }
+.ui-icon-transferthick-e-w { background-position: -112px -80px; }
+.ui-icon-folder-collapsed { background-position: 0 -96px; }
+.ui-icon-folder-open { background-position: -16px -96px; }
+.ui-icon-document { background-position: -32px -96px; }
+.ui-icon-document-b { background-position: -48px -96px; }
+.ui-icon-note { background-position: -64px -96px; }
+.ui-icon-mail-closed { background-position: -80px -96px; }
+.ui-icon-mail-open { background-position: -96px -96px; }
+.ui-icon-suitcase { background-position: -112px -96px; }
+.ui-icon-comment { background-position: -128px -96px; }
+.ui-icon-person { background-position: -144px -96px; }
+.ui-icon-print { background-position: -160px -96px; }
+.ui-icon-trash { background-position: -176px -96px; }
+.ui-icon-locked { background-position: -192px -96px; }
+.ui-icon-unlocked { background-position: -208px -96px; }
+.ui-icon-bookmark { background-position: -224px -96px; }
+.ui-icon-tag { background-position: -240px -96px; }
+.ui-icon-home { background-position: 0 -112px; }
+.ui-icon-flag { background-position: -16px -112px; }
+.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-cart { background-position: -48px -112px; }
+.ui-icon-pencil { background-position: -64px -112px; }
+.ui-icon-clock { background-position: -80px -112px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-zoomin { background-position: -128px -112px; }
+.ui-icon-zoomout { background-position: -144px -112px; }
+.ui-icon-search { background-position: -160px -112px; }
+.ui-icon-wrench { background-position: -176px -112px; }
+.ui-icon-gear { background-position: -192px -112px; }
+.ui-icon-heart { background-position: -208px -112px; }
+.ui-icon-star { background-position: -224px -112px; }
+.ui-icon-link { background-position: -240px -112px; }
+.ui-icon-cancel { background-position: 0 -128px; }
+.ui-icon-plus { background-position: -16px -128px; }
+.ui-icon-plusthick { background-position: -32px -128px; }
+.ui-icon-minus { background-position: -48px -128px; }
+.ui-icon-minusthick { background-position: -64px -128px; }
+.ui-icon-close { background-position: -80px -128px; }
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-key { background-position: -112px -128px; }
+.ui-icon-lightbulb { background-position: -128px -128px; }
+.ui-icon-scissors { background-position: -144px -128px; }
+.ui-icon-clipboard { background-position: -160px -128px; }
+.ui-icon-copy { background-position: -176px -128px; }
+.ui-icon-contact { background-position: -192px -128px; }
+.ui-icon-image { background-position: -208px -128px; }
+.ui-icon-video { background-position: -224px -128px; }
+.ui-icon-script { background-position: -240px -128px; }
+.ui-icon-alert { background-position: 0 -144px; }
+.ui-icon-info { background-position: -16px -144px; }
+.ui-icon-notice { background-position: -32px -144px; }
+.ui-icon-help { background-position: -48px -144px; }
+.ui-icon-check { background-position: -64px -144px; }
+.ui-icon-bullet { background-position: -80px -144px; }
+.ui-icon-radio-off { background-position: -96px -144px; }
+.ui-icon-radio-on { background-position: -112px -144px; }
+.ui-icon-pin-w { background-position: -128px -144px; }
+.ui-icon-pin-s { background-position: -144px -144px; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-seek-next { background-position: -32px -160px; }
+.ui-icon-seek-prev { background-position: -48px -160px; }
+.ui-icon-seek-end { background-position: -64px -160px; }
+.ui-icon-seek-first { background-position: -80px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+.ui-icon-eject { background-position: -112px -160px; }
+.ui-icon-volume-off { background-position: -128px -160px; }
+.ui-icon-volume-on { background-position: -144px -160px; }
+.ui-icon-power { background-position: 0 -176px; }
+.ui-icon-signal-diag { background-position: -16px -176px; }
+.ui-icon-signal { background-position: -32px -176px; }
+.ui-icon-battery-0 { background-position: -48px -176px; }
+.ui-icon-battery-1 { background-position: -64px -176px; }
+.ui-icon-battery-2 { background-position: -80px -176px; }
+.ui-icon-battery-3 { background-position: -96px -176px; }
+.ui-icon-circle-plus { background-position: 0 -192px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-icon-circle-close { background-position: -32px -192px; }
+.ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-icon-circle-triangle-s { background-position: -64px -192px; }
+.ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+.ui-icon-circle-arrow-e { background-position: -112px -192px; }
+.ui-icon-circle-arrow-s { background-position: -128px -192px; }
+.ui-icon-circle-arrow-w { background-position: -144px -192px; }
+.ui-icon-circle-arrow-n { background-position: -160px -192px; }
+.ui-icon-circle-zoomin { background-position: -176px -192px; }
+.ui-icon-circle-zoomout { background-position: -192px -192px; }
+.ui-icon-circle-check { background-position: -208px -192px; }
+.ui-icon-circlesmall-plus { background-position: 0 -208px; }
+.ui-icon-circlesmall-minus { background-position: -16px -208px; }
+.ui-icon-circlesmall-close { background-position: -32px -208px; }
+.ui-icon-squaresmall-plus { background-position: -48px -208px; }
+.ui-icon-squaresmall-minus { background-position: -64px -208px; }
+.ui-icon-squaresmall-close { background-position: -80px -208px; }
+.ui-icon-grip-dotted-vertical { background-position: 0 -224px; }
+.ui-icon-grip-dotted-horizontal { background-position: -16px -224px; }
+.ui-icon-grip-solid-vertical { background-position: -32px -224px; }
+.ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
+.ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; }
+.ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; }
+.ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; }
+.ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+.ui-corner-top { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; }
+.ui-corner-bottom { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+.ui-corner-right {  -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; }
+.ui-corner-left { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; }
+.ui-corner-all { -moz-border-radius: 6px; -webkit-border-radius: 6px; }
+
+/* Overlays */
+.ui-widget-overlay { background: #eeeeee url(images/ui-bg_flat_0_eeeeee_40x100.png) 50% 50% repeat-x; opacity: .80;filter:Alpha(Opacity=80); }
+.ui-widget-shadow { margin: -4px 0 0 -4px; padding: 4px; background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x; opacity: .60;filter:Alpha(Opacity=60); -moz-border-radius: 0pxdow=0px; -webkit-border-radius: 0pxdow=0px; }/* Accordion
+----------------------------------*/
+.ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
+.ui-accordion .ui-accordion-li-fix { display: inline; }
+.ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
+.ui-accordion .ui-accordion-header a { display: block; font-size: 1em; padding: .5em .5em .5em 2.2em; }
+.ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; }
+.ui-accordion .ui-accordion-content-active { display: block; }/* Datepicker
+----------------------------------*/
+.ui-datepicker { width: 17em; padding: .2em .2em 0; }
+.ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left:2px; }
+.ui-datepicker .ui-datepicker-next { right:2px; }
+.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
+.ui-datepicker .ui-datepicker-title select { float:left; font-size:1em; margin:1px 0; }
+.ui-datepicker select.ui-datepicker-month-year {width: 100%;}
+.ui-datepicker select.ui-datepicker-month, 
+.ui-datepicker select.ui-datepicker-year { width: 49%;}
+.ui-datepicker .ui-datepicker-title select.ui-datepicker-year { float: right; }
+.ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
+.ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
+.ui-datepicker td { border: 0; padding: 1px; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: right; text-decoration: none; }
+.ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
+.ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
+.ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }
+
+/* with multiple calendars */
+.ui-datepicker.ui-datepicker-multi { width:auto; }
+.ui-datepicker-multi .ui-datepicker-group { float:left; }
+.ui-datepicker-multi .ui-datepicker-group table { width:95%; margin:0 auto .4em; }
+.ui-datepicker-multi-2 .ui-datepicker-group { width:50%; }
+.ui-datepicker-multi-3 .ui-datepicker-group { width:33.3%; }
+.ui-datepicker-multi-4 .ui-datepicker-group { width:25%; }
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
+.ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
+.ui-datepicker-row-break { clear:both; width:100%; }
+
+/* RTL support */
+.ui-datepicker-rtl { direction: rtl; }
+.ui-datepicker-rtl .ui-datepicker-prev { right: 2px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next { left: 2px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 1px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next:hover { left: 1px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane { clear:right; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button { float: left; }
+.ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group { float:right; }
+.ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+.ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+/* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
+.ui-datepicker-cover {
+	display: none; /*sorry for IE5*/
+	display/**/: block; /*sorry for IE5*/
+	position: absolute; /*must have*/
+	z-index: -1; /*must have*/
+	filter: mask(); /*must have*/
+	top: -4px; /*must have*/
+	left: -4px; /*must have*/
+	width: 200px; /*must have*/
+	height: 200px; /*must have*/
+}/* Dialog
+----------------------------------*/
+.ui-dialog { position: relative; padding: .2em; width: 300px; }
+.ui-dialog .ui-dialog-titlebar { padding: .5em .3em .3em 1em; position: relative;  }
+.ui-dialog .ui-dialog-title { float: left; margin: .1em 0 .2em; } 
+.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+.ui-dialog .ui-dialog-content { border: 0; padding: .5em 1em; background: none; overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
+.ui-dialog .ui-dialog-buttonpane button { float: right; margin: .5em .4em .5em 0; cursor: pointer; padding: .2em .6em .3em .6em; line-height: 1.4em; width:auto; overflow:visible; }
+.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }
+/* Progressbar
+----------------------------------*/
+.ui-progressbar { height:2em; text-align: left; }
+.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }/* Resizable
+----------------------------------*/
+.ui-resizable { position: relative;}
+.ui-resizable-handle { position: absolute;font-size: 0.1px;z-index: 99999; display: block;}
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0px; }
+.ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0px; }
+.ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0px; height: 100%; }
+.ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0px; height: 100%; }
+.ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
+.ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
+.ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
+.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}/* Slider
+----------------------------------*/
+.ui-slider { position: relative; text-align: left; }
+.ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
+.ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; }
+
+.ui-slider-horizontal { height: .8em; }
+.ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
+.ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+.ui-slider-horizontal .ui-slider-range-min { left: 0; }
+.ui-slider-horizontal .ui-slider-range-max { right: 0; }
+
+.ui-slider-vertical { width: .8em; height: 100px; }
+.ui-slider-vertical .ui-slider-handle { left: -.3em; margin-left: 0; margin-bottom: -.6em; }
+.ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }
+.ui-slider-vertical .ui-slider-range-min { bottom: 0; }
+.ui-slider-vertical .ui-slider-range-max { top: 0; }/* Tabs
+----------------------------------*/
+.ui-tabs { padding: .2em; zoom: 1; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { position: relative; float: left; border-bottom-width: 0 !important; margin: 0 .2em -1px 0; padding: 0; }
+.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .5em 1em; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 1px; border-bottom-width: 0; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+
+.Test
+{
+	font-size:20px;
+	font-family:Arial;
+}
+
+body,a,li,p,td,ul,li
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+}
+
+h2
+{
+	font-size: 20px;
+	margin: 0;
+	padding: 0;
+	padding-top: 10px;
+}
+
+A
+{
+	font-family: Tahoma, Verdana;
+	text-decoration: none;
+		color:#333;
+}
+
+a:hover
+{
+	text-decoration:none;
+		color:#fff;
+}
+
+input,select,textarea
+{
+	font-family: Tahoma;
+	font-size:10px;
+}
+
+.Description
+{
+	font-size:12px;
+}
+
+.HintTitle
+{
+	font-weight:bold;
+	font-size:10px;
+}
+
+.HintContent
+{
+	font-size:10px;
+}
+
+.WUIokcancel
+{
+	line-height: 30px;
+}
+
+H1
+{
+	font-size:14px;
+}
+
+.FormTitle
+{
+	font-weight:bold;
+	font-size:12px;
+}
+
+.FormButton, .FormButton_disabled
+{
+	font-weight: bold;
+}
+
+.FormLabelEven
+{
+	font-weight:bold;
+	font-size:10px;
+}
+
+.FormLabelOdd
+{
+	font-weight:bold;
+	font-size:10px;
+}
+
+.FormrowTitle
+{
+	text-align: left;
+}
+
+.FormrowTitleColumn
+{
+	text-align: left;
+	font-weight: bold;
+}
+
+.FormValueEven
+{
+	font-size:10px;
+}
+
+.FormHelpEven
+{
+	font-size:10px;
+}
+
+.FormValueOdd
+{
+	font-size:10px;
+}
+
+.FormHelpOdd
+{
+	font-size:10px;
+}
+
+.WUIformrequired
+{
+	font-style: normal;
+	font-size: 10px;
+}
+
+.WUIrsheaderel
+{
+	font-weight: bold;
+}
+
+.WUIfield
+{
+	border-bottom: 1px solid #dfdfdf;
+   padding-left: 10px;
+}
+
+.NavigatorPageNumber
+{
+	text-decoration:none;
+	font-weight:bold;
+	font-size:10px;
+}
+
+.NavigatorPageNumber:hover
+{
+	text-decoration:underline;
+	font-weight:bold;
+	font-size:10px;
+}
+
+.NavigatorText
+{
+	text-decoration:none;
+	font-weight:bold;
+	font-size:10px;
+}
+
+.HelpWindowContent
+{
+	font-size: 12px;
+}
+
+.HelpWindowContent li
+{
+	font-size: 11px;
+}
+
+.Button
+{
+	font-size:10px;
+	font-weight:bold;
+}
+
+.LeftPanelMain
+{
+	font-size:12px;
+	font-weight:bold;
+}
+
+.LeftPanelSub
+{
+	font-size:10px;
+	margin-left:10px;
+}
+
+A.WUIquicklink, A.WUIquicklink_disabled
+{
+	font-size: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+.WUIseparatorVertical
+{
+	line-height: 0px;
+}
+
+/*--------------------------------------------------------
+wui:tabpanel
+--------------------------------------------------------*/
+
+.WUItabbutton
+{
+	line-height: 14px;
+	font-weight: normal;
+	font-size: 10px;
+}
+
+.WUItabbutton_active
+{
+	line-height: 14px;
+	font-weight: bold;
+	font-size: 10px;
+}
+
+/*--------------------------------------------------------
+wui:form
+--------------------------------------------------------*/
+
+.WUIformrequired
+{
+	line-height: 35px;
+}
+
+.WUItabbutton A
+{
+	font-family: Tahoma;
+	font-weight: normal;
+}
+
+.WUItabbutton_active A
+{
+	font-family: Tahoma;
+}
+
+.WUIformrequired
+{
+	font-size: 12px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.WUIformrow_input
+{
+	font-weight: normal;
+	font-size: 10px;
+}
+
+.WUIformrow_select
+{
+	font-size: 10px;
+}
+
+/*--------------------------------------------------------
+wui:group
+--------------------------------------------------------*/
+
+.WUIgroup
+{
+}
+
+.WUIgroupList
+{
+	font-size: 17px;
+	white-space: nowrap;
+}
+
+.WUIgrouptitle
+{
+	font-size: 12px;
+	font-weight: bold;
+}
+
+/*--------------------------------------------------------
+XUL wui:group
+--------------------------------------------------------*/
+
+.XULgrouptitle
+{
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+/*--------------------------------------------------------
+wui:list
+--------------------------------------------------------*/
+
+.WUIlistrowLP
+{
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.WUIlistHeader
+{
+	font-weight: bold;
+}
+
+/*--------------------------------------------------------
+WUI:recordset
+--------------------------------------------------------*/
+
+.WUInavigator_PagesActive
+{
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.WUIrsheaderel
+{
+	font-size: 10px;
+}
+
+/*--------------------------------------------------------
+	DDMenu
+--------------------------------------------------------*/
+
+.DDMenuSeparator
+{
+	line-height: 0px;
+}
+
+.DDMenuList
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+}
+
+A.DDMenuItem
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+/*--------------------------------------------------------
+	WUI:CALENDAR
+
+	Style dla kalendarzyka oraz 
+	okna wui:windowlayer.
+--------------------------------------------------------*/
+/*
+.WUIcalMain
+{
+	font-family: Tahoma, Verdana;
+	font-size: 12px;
+}
+
+.WUInavCalSelect
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+}
+
+.WUIcalItem
+{
+	font-size: 10px;
+	text-align: left;
+	font-weight: normal;
+}
+
+.WUIcalItemDay
+{
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.WUIcalItemClick
+{
+	font-size: 14px;
+	text-align: left;
+}
+
+.WUIcalHead
+{
+	line-height: 20px;
+	font-size: 11px;
+}
+
+.WUIbutton
+{
+	font-family: Tahoma, Verdana;
+	font-size: 10px;
+}
+
+.WUIcalSeparator
+{
+	line-height: 0px;
+}
+*/
+/*--------------------------------------------------------
+	WUI:SCHEDULER
+--------------------------------------------------------*/
+
+.WUIcal2Main
+{
+	font-family: Tahoma, Verdana;
+	font-size: 12px;
+}
+
+.WUIcal2Item
+{
+	font-size: 10px;
+	text-align: left;
+	font-weight: normal;
+}
+
+.WUIcal2ItemDay
+{
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.WUIcal2ItemClick
+{
+	font-size: 14px;
+	text-align: left;
+}
+
+/*--------------------------------------------------------
+	WUI:MEDIA
+--------------------------------------------------------*/
+
+.WUI_media_img_preview
+{
+	text-align: center;
+}
+
+/*--------------------------------------------------------
+	WUI:OUTLOOK BAR
+--------------------------------------------------------*/
+
+.WUIOutlookBarMain
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+}
+
+.WUIOutlookBarOption
+{
+	line-height: 18px;
+	text-align: center;
+}
+
+/*--------------------------------------------------------
+	WUI:FAKESELECT
+--------------------------------------------------------*/
+
+.fakeselect_default
+{
+	font-weight: normal;
+}
+
+.fakeselect_default .fakeselectdisplay
+{
+	font-size: 11px;
+}
+
+.fakeselect_fakeoption
+{
+	font-weight: normal;
+	font-size: 11px;
+}
+
+/*--------------------------------------------------------
+	wui:windowlayer
+--------------------------------------------------------*/
+
+.WUIwindowlayerHead
+{
+	font-size: 12px;
+}
+
+.WUIwindowlayer_tab
+{
+	font-size: 11px;
+}
+
+.WUIwindowlayer_tab .WUItabbutton A
+{
+	font-family: Tahoma;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+/*--------------------------------------------------------
+	wui:wizard
+--------------------------------------------------------*/
+
+.WUIwizardstep
+{
+	font-size: 14px;
+}
+
+.WUIwizardHeader
+{
+	font-size: 12px;
+}
+
+.WUIwizardContent
+{
+	font-size: 12px;
+}
+
+.WUIwizardstepContent
+{
+	font-size: 12px;
+}
+
+/*--------------------------------------------------------
+	pozostale
+--------------------------------------------------------*/
+
+.WUImsgbox_text
+{
+	font-family: Tahoma;
+	font-size: 11px;
+}
+
+/*--------------------------------------------------------
+	HTML AREA
+--------------------------------------------------------*/
+
+.htmlarea .toolbar table
+{
+	font-family: tahoma,verdana,sans-serif;
+	font-size: 11px;
+}
+
+.htmlarea .toolbar .indicator
+{
+	text-align: center;
+}
+
+.htmlarea .toolbar select
+{
+	font: 11px Tahoma,Verdana,sans-serif;
+}
+
+.htmlarea .statusBar
+{
+	font: 11px Tahoma,Verdana,sans-serif;
+}
+
+/* Hidden DIV popup dialogs (PopupDiv) */
+
+.dialog, .dialog button, .dialog input, .dialog select, .dialog textarea, .dialog table
+{
+	font: 11px Tahoma,Verdana,sans-serif;
+}
+
+.dialog .title
+{
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.dialog .title .button
+{
+	text-align: center;
+}
+
+.dialog .label
+{
+	text-align: right;
+}
+
+.dialog .buttons
+{
+	text-align: right;
+}
+
+.dialog legend
+{
+	font-weight: bold;
+}
+
+.popupwin .title
+{
+	font-weight: bold;
+	font-size: 120%;
+	letter-spacing: 2px;
+}
+.remove_button
+{
+   font-size: 9px;
+   cursor: pointer;
+   line-height: 9px;
+   margin: 2px 2px 1px;
+   padding-left: 3px;
+   padding-right: 3px;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   text-align: center;
+   width: 100px;
+   -moz-border-radius-bottomleft: 5px;
+   -moz-border-radius-bottomright: 5px;
+   -moz-border-radius-topleft: 5px;
+   -moz-border-radius-topright: 5px;
+   color: red;
+   vertical-align: top;
+   font-family: 'Lucida Grande', sans-serif;
+   font-style: normal;
+   font-variant: normal;
+   font-weight: normal;
+   border: medium none;
+   background: #D6D6D6 none repeat scroll 0 0;
+}
+
+
+body
+{
+	color: #000000;
+}
+
+A
+{
+	color: #0000ef;
+}
+
+A:hover
+{
+	color: #0000ef;
+	text-decoration: underline;
+}
+
+.Hint
+{
+	border-color: #000000;
+	background-color: #ccc;
+}
+
+.HintTitle
+{
+	border-color: #000000;
+}
+
+.HintContent
+{
+	background-color:#ffffff;
+}
+
+
+.Navigator
+{
+	border-color: #A0A0A0;
+	background-color: #D8D6D9;
+}
+
+
+.FormTitle
+{
+	background-color:#cccccc;
+}
+
+.FormSubmit
+{
+	border-top: solid 1px #ccc;
+}
+
+.FormButton
+{
+	/*background-color: #3a487e;*/
+	/*background-color: #669900;*/
+	background-color: #BF7111;
+	color: #fff;
+}
+
+.FormButton_disabled
+{
+	background-color: #c1c1c1;
+	color: #efefef;
+}
+
+.FormLine
+{
+	background-color:#ff0000;
+}
+
+.FormLabelEven
+{
+	background-color: #eaedf7;
+	border-bottom: 1px solid #b9c2dd;
+}
+
+.FormLabelOdd
+{
+	background-color: #fff;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.FormrowTitle
+{
+}
+
+.WUItab .FormrowTitle
+{
+	color: #000;
+}
+
+.FormValueEven
+{
+	background-color:#ffcccc;
+}
+
+.FormHelpEven
+{
+	background-color:#ffcccc;
+}
+
+.FormValueOdd
+{
+	background-color:#cccccc;
+}
+
+.FormHelpOdd
+{
+	background-color:#cccccc;
+}
+
+.WUIformrequired
+{
+	color: #f00;
+}
+
+.Button
+{
+	border-color: #cccccc;
+	background: #cccccc;
+}
+
+.Menu
+{
+	border-color: #000000;
+}
+
+.MenuContainerTop
+{
+	border-color: #ff0000;
+}
+
+.MenuContainer
+{
+	border-color: #00ff00;
+}
+
+.MenuItemTop
+{
+	border-color: #0000ff;
+}
+
+.MenuItem
+{
+	border-color: #0000ff;
+}
+
+.MenuItemTop
+{
+	border-color: #0000ff;
+	background: #cccccc;
+}
+
+.PrintTop
+{
+	background-color:#cccccc;
+}
+
+.PrintBottom
+{
+	background-color:#cccccc;
+}
+
+/* Komentarze */
+
+.Comment
+{
+	border-color: #cccccc;
+}
+
+.CommentList
+{
+	border-color: #cccccc;
+}
+
+.CommentListHeader
+{
+	background-color:#cccccc;
+}
+
+.CommentListElement
+{
+	border-color: #efefef;
+}
+
+/*Klasy dla administratora*/
+
+.AdminTopPanel
+{
+	background: #d6d3ce;
+	border-color: #000 !important;
+}
+
+.AdminMenuPath
+{
+	color: #fff;
+	background-color: #b0b0b0;
+	border-color: #000 !important;
+	border-right: solid 1px #000 !important;
+}
+
+.WUIseparatorVertical
+{
+	border-left: solid 1px #848284;
+	border-right: solid 1px #ffffff;
+}
+
+.WUIseparatorHorizontal
+{
+	border-bottom: solid 1px #848284;
+	border-top: solid 1px #ffffff;
+}
+
+.WUIquicklinks A
+{
+	background-color: #BF7111;
+	color: #fff;
+}
+
+A.WUIquicklink_disabled
+{
+	background-color: #b0b0b0;
+}
+
+.WUIquicklinks A:hover
+{
+	color: #fff;
+}
+
+.WUITopMenu A
+{
+	color: #2D4173;
+}
+
+/*--------------------------------------------------------
+wui:recordset
+--------------------------------------------------------*/
+
+.WUIrsrecordrowactive
+{
+	background-color: #BECDE2;
+}
+
+.WUIrsrecordrowodd
+{
+	background-color: #EAECF8;
+}
+
+.WUIrsrecordroweven
+{
+	background-color: #ffffff;
+}
+
+.WUIrsheaderel
+{
+	border-left: 1px solid #fff;
+	color: #E8FCFF;
+}
+
+.WUIfield
+{
+	border-bottom: 1px solid #dfdfdf;
+}
+
+
+
+.WUIrsDivOverflow
+{
+	background-color: #dfdfdf;
+}
+
+.WUIrsDivOverflowList
+{
+	background-color: #ffffff;
+}
+
+.WUInavigator_PagesActive
+{
+	color: #ffa54a;
+}
+
+/*--------------------------------------------------------
+wui:tabpanel
+--------------------------------------------------------*/
+
+.WUItabbutton
+{
+	border-color: #d7d7d7;
+	background-color: #ebebeb;
+}
+
+.WUItabbutton_active
+{
+  background: #ccc;
+  border-color: #999;
+}
+
+.WUItablist
+{
+	background: #ccc;
+}
+
+.WUItabbutton A
+{
+	color: #000;
+}
+
+.WUItabbutton A:hover
+{
+	color: #000;
+}
+
+.WUItabbutton_active A
+{
+	color: #000;
+}
+
+.WUItabbutton_active A:hover
+{
+	color: #000;
+}
+
+.WUItablist_zero
+{
+	background-color: #cecfce;
+	height: 100%;
+	border-bottom: solid 1px #afafaf;
+}
+
+
+/*--------------------------------------------------------
+wui:hint
+--------------------------------------------------------*/
+
+.WUIhelp_smoke
+{
+	background: #999999;
+	color: #000000;
+	opacity: 0.8;
+}
+
+.WUIddmenu
+{
+	border-color: #000000;
+	border-color: #000000;
+}
+
+/*--------------------------------------------------------
+wui:hr
+--------------------------------------------------------*/
+
+.WUIhr
+{
+  color: #999999;  
+}
+
+/*--------------------------------------------------------
+wui:list
+--------------------------------------------------------*/
+
+.WUIlist
+{
+
+}
+
+.WUIlistheader
+{
+  background: #999999;
+}
+
+.WUIlisfield
+{
+  background: #cccccc;
+}
+
+.WUIlistel
+{
+  background: #cccccc;
+}
+
+/*--------------------------------------------------------
+wui:group
+--------------------------------------------------------*/
+
+.WUIgroup
+{
+}
+
+.WUIgroupList
+{
+	/*color: #ff9900;*/
+}
+
+.WUIgrouptitle
+{
+	color: #000;
+}
+
+.WUIgroupListSeparator
+{
+	border-top: solid 1px #000;
+}
+
+/*--------------------------------------------------------
+	DDMenu
+--------------------------------------------------------*/
+
+.DDMenuList
+{
+	border-left: solid 1px #000;
+	border-top: solid 1px #000;
+	border-right: solid 1px #acacac;
+	border-bottom: solid 1px #acacac;
+	background: #ccc;
+	color: #000000;
+}
+
+.DDMenu
+{
+	border-color: #ccc;
+	color: #000000;
+}
+
+.DDMenu_over
+{
+	border-left: solid 1px #ffffff;
+	border-top: solid 1px #ffffff;
+	border-bottom: solid 1px #848284;
+	border-right: solid 1px #848284;
+	color: #000000;
+}
+
+.DDMenu_click
+{
+	border-right: solid 1px #ffffff;
+	border-bottom: solid 1px #ffffff;
+	border-top: solid 1px #848284;
+	border-left: solid 1px #848284;
+	color: #000000;
+}
+
+.DDMenuBox
+{
+	background: #ccc;
+	color: #000000;
+}
+
+.DDMenuSeparator
+{
+	border-top: solid 1px #848284;
+	border-bottom: solid 1px #ffffff;
+}
+
+A.DDMenuItem
+{
+	color: #000000;
+}
+
+A.DDMenuItem:hover
+{
+	background-color: #08246b;
+	color: #ffffff;
+}
+
+.DDMenuSub
+{
+	color: #000000;
+}
+
+
+/*--------------------------------------------------------
+	WUI:CALENDAR
+
+	Style dla kalendarzyka oraz 
+	okna wui:windowlayer.
+--------------------------------------------------------*/
+/*
+.WUIcalMain
+{
+	background: #ccc;
+	color: #000000;
+}
+
+.WUIcalItem
+{
+	border-bottom: solid 1px #848284;
+	border-top: solid 1px #fff;
+	border-left: solid 1px #fff;
+	border-right: solid 1px #848284;
+}
+
+.WUIcalItemDay
+{
+	background-color: #c7c7c7;
+	border-bottom: solid 1px #848284;
+	border-top: solid 1px #fff;
+	border-left: solid 1px #fff;
+	border-right: solid 1px #848284;
+}
+
+.WUIcalItemClick
+{
+	color: #888;
+	border-color: #aaa;
+	background-color: #eee;
+}
+
+.WUIcalHead
+{
+	background-color: #08246b;
+	color: #fff;
+}
+
+.WUIbutton
+{
+	background: #ccc;
+	color: #000000;
+}
+*/
+
+.WUIcalSeparator
+{
+	border-top: solid 1px #848284;
+	border-bottom: solid 1px #ffffff;
+}
+
+
+/*--------------------------------------------------------
+	WUI:SCHEDULER
+--------------------------------------------------------*/
+
+.WUIcal2Main
+{
+	background: #ccc;
+	color: #000000;
+}
+
+.WUIcal2Item
+{
+	border-bottom: solid 1px #848284;
+	border-top: solid 1px #fff;
+	border-left: solid 1px #fff;
+	border-right: solid 1px #848284;
+}
+
+.WUIcal2ItemDay
+{
+	background-color: #c7c7c7;
+	border-bottom: solid 1px #848284;
+	border-top: solid 1px #fff;
+	border-left: solid 1px #fff;
+	border-right: solid 1px #848284;
+}
+
+.WUIcal2ItemClick
+{
+	color: #888;
+	border-color: #aaa;
+	background-color: #eee;
+}
+
+/*--------------------------------------------------------
+	WUI:MEDIA
+--------------------------------------------------------*/
+
+.WUI_media_preview_button
+{
+	background: url('../img/mime_bmp_icon.gif') center #aaa;
+	border-color: #fff;
+}
+
+.WUIpreviewNavTop
+{
+	background-color: #ccc;
+}
+
+.WUIfileinput_preview
+{
+	background: #fff;
+}
+
+/*--------------------------------------------------------
+	WUI:OUTLOOK BAR
+--------------------------------------------------------*/
+
+.WUIOutlookBarOption
+{
+	background: #ccc;
+}
+
+.WUIOutlookBarOptionContent
+{
+	background-color: #aaa;
+	border-left: 2px solid #555;
+	border-right: 2px solid #555;
+	border-bottom: 1px solid #555;
+}
+
+/*--------------------------------------------------------
+	WUI:FAKESELECT
+--------------------------------------------------------*/
+
+.fakeselect_Button
+{
+	background-image: url("../img/fakeselect_button.gif");
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.fakeselect_default .fakeselectdisplay
+{
+	background-color:#ffffff;
+}
+
+.fakeselect_default .fakeselectoption
+{
+	border-color: black;
+	background-color:#ffffff;
+}
+
+.fakeselect_table
+{
+	border-top: 1px solid black;
+	border-left: 1px solid black; 
+	border-right: 1px solid white; 
+	border-bottom: 1px solid white;
+}
+
+/*--------------------------------------------------------
+	wui:windowlayer
+--------------------------------------------------------*/
+
+.WUIwindowlayer
+{
+	background-color: #ccc;
+}
+
+.WUIwindowlayerHead
+{
+	background-color: #08246b;
+	color: #fff;
+}
+
+.WUIwindowlayer_tab .WUItabbutton
+{
+	background-color: #e7e7e7;
+	border-bottom: 0px solid #fff;
+}
+
+.WUIwindowlayer_tab .WUItabbutton A
+{
+	color: #000;
+}
+
+.WUIwindowlayer_tab .WUItabbutton A:hover
+{
+	color: #000;
+}
+
+.WUIwindowlayer_tab .WUItabbutton_active
+{
+	background-color: #e7e7e7;
+	border-bottom: 1px solid #e7e7e7;
+}
+
+.WUIwindowlayer_tab .WUItablist
+{
+	background-color: #e7e7e7;
+}
+
+/*--------------------------------------------------------
+	wui:form
+--------------------------------------------------------*/
+
+.WUIformrow_input
+{
+
+}
+
+/*--------------------------------------------------------
+	wui:wizard
+--------------------------------------------------------*/
+
+.WUIwizardMain
+{
+	background-color: #ccc;
+}
+
+.WUIwizardHeader
+{
+	color: #fff;
+	background-color: #08246b;
+}
+
+.WUIwizardContent .WUItablist
+{
+	background-color: #E0E0E0;
+}
+
+.WUIwizardContent .WUItabbutton
+{
+	background-color: #E0E0E0;
+	border-color: #656565;
+}
+
+.WUIwizardContent .WUItabbutton A
+{
+	background-color: #E0E0E0;
+}
+
+.WUIwizardContent .WUItabbutton A:hover
+{
+	background-color: #E0E0E0;
+}
+
+.WUIwizardContent .WUItabbutton_active
+{
+	background-color: #E0E0E0;
+	border-color: #656565;
+}
+
+.WUIwizardContent .WUItabbutton_active A
+{
+	background-color: #E0E0E0;
+}
+
+.WUIwizardContent .WUItabbutton_active A:hover
+{
+	color: #000;
+}
+
+.WUIwizardContent .WUItablist_zero
+{
+	background-color: #E0E0E0;
+}
+
+/*--------------------------------------------------------
+	HTML AREA
+--------------------------------------------------------*/
+
+.htmlarea
+{
+	background: #fff;
+}
+
+.htmlarea .toolbar {
+  background: ButtonFace;
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+.htmlarea .toolbar .button {
+  background: ButtonFace;
+  color: ButtonText;
+  border-color: ButtonFace;
+}
+
+.htmlarea .toolbar .buttonHover {
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+.htmlarea .toolbar .buttonActive, .htmlarea .toolbar .buttonPressed {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+
+.htmlarea .toolbar .buttonPressed {
+  background: ButtonHighlight;
+}
+
+.htmlarea .toolbar .indicator {
+  border-color: ButtonShadow;
+}
+
+.htmlarea .toolbar .separator {
+  border-left: 1px solid ButtonShadow;
+  border-right: 1px solid ButtonHighlight;
+}
+
+.htmlarea .toolbar select:active { background: FieldFace; color: ButtonText; }
+
+.htmlarea .statusBar {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+  background-color: ButtonFace;
+  color: ButtonText;
+}
+
+.htmlarea .statusBar .statusBarTree a {
+  color: #00f;
+}
+
+.htmlarea .statusBar .statusBarTree a:visited { color: #00f; }
+
+.htmlarea .statusBar .statusBarTree a:hover {
+  background-color: Highlight;
+  color: HighlightText;
+  border-color: HighlightText;
+}
+
+/* Hidden DIV popup dialogs (PopupDiv) */
+
+.dialog {
+  color: ButtonText;
+  background: ButtonFace;
+}
+
+.dialog .title {
+  background: #008;
+  color: #ff8;
+  border-bottom: 1px solid #000;
+}
+
+.dialog .title .button {
+  border-color: #66a;
+  color: #fff;
+}
+
+.dialog .title .button-hilite { border-color: #88f; background: #44c; }
+
+.dialog .buttonColor {
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+.dialog .buttonColor-hilite {
+  border-color: #000;
+}
+
+.dialog .buttonColor .chooser, .dialog .buttonColor .nocolor {
+  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+}
+
+.dialog .buttonColor .nocolor-hilite { background-color: #fff; color: #f00; }
+
+.popupdiv {
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+.popupwin .title {
+  background: #fff;
+  color: #000;
+}
+
+
+
+html
+{
+	height: 100%;
+}
+
+a,li,p,td
+{
+
+}
+
+input[type=text]
+{
+  
+}
+
+input,select,textarea
+{
+    
+/*   background-color:white;
+   border-bottom-color:*/
+}
+
+.Description
+{
+}
+
+.Hint
+{
+	border: 1px solid;
+	position: absolute;
+	left:0px;
+	top:0px;
+	width:200px;
+	margin-left: 3px;
+	height: 50px;
+	z-index:1;
+}
+
+.HintTitle
+{
+	border-bottom: 1px solid;
+	height: 15px;
+	padding-left: 5px;
+}
+
+.HintContent
+{
+	height: 23px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	overflow: auto;
+}
+
+.NavigatorPageNumber
+{
+	margin-left:3px;
+	margin-right:3px;
+}
+
+.NavigatorPageNumber:hover
+{
+	margin-left:3px;
+	margin-right:3px;
+}
+
+.ActiveNavigatorPageNumber
+{
+	margin-left:3px;
+	margin-right:3px;
+	color: #ff0000;
+	text-decoration:none;
+	font-weight:bold;
+	font-size:10px;	
+}
+
+.NavigatorText
+{
+	margin-left:3px;
+	margin-right:3px;
+}
+
+.Navigator
+{
+	border:1px solid;
+}
+
+.FormTitle
+{
+	padding:3px;
+}
+
+.FormSubmit
+{
+	padding:3px;
+	margin-top: 3px;
+}
+
+.FormButton, .FormButton_disabled
+{
+	margin: 3px 0 0 3px;
+	padding: 1px;
+	border: 0;
+	cursor: pointer;
+}
+
+.FormLine
+{
+	height:3px;
+}
+
+.FormLabelEven
+{
+	padding: 5px;
+}
+
+.FormLabelOdd
+{
+	padding: 5px;
+}
+
+.FormValueEven
+{
+	padding:3px;
+}
+
+.FormHelpEven
+{
+	padding:3px;
+}
+
+.FormValueOdd
+{
+	padding:3px;
+}
+
+.FormHelpOdd
+{
+	padding:3px;
+}
+
+.FormrowTitle
+{
+	margin: 0px;
+}
+
+.HelpWindowContent
+{
+	padding: 10px;
+	margin-left: 10px;
+}
+
+.HelpWindowContent li
+{
+	margin-left: 14px;
+}
+
+.TopPanel
+{
+}
+
+.LeftPanel
+{
+	width:150px;
+	padding-left:5px;
+}
+
+.ContentPanel
+{
+	width:600px;
+}
+
+.Button
+{
+	border:outset 2px;
+	margin:2px;
+	padding:4px;
+	cursor:pointer;
+}
+
+.Menu
+{
+	border:1px solid;
+   z-index: 100;
+}
+
+.MenuContainerTop
+{
+	border:1px solid;
+	margin:10px;
+}
+
+.MenuContainer
+{
+	border:1px solid;
+	margin:10px;
+}
+
+.MenuItemTop
+{
+	border:1px solid;
+	margin:5px;
+	padding:2px;
+}
+
+.MenuItem
+{
+	border:1px solid;
+	margin:5px;
+}
+
+.MenuItemTop
+{
+	border:1px solid;
+	margin:5px;
+}
+
+.PrintTop
+{
+	padding:5px;
+}
+
+.PrintBottom
+{
+	padding:5px;
+}
+
+.PrintContent
+{
+	padding:5px;
+}
+
+.Comment
+{
+	border:1px solid;
+	margin:0px;
+	margin-bottom:5px;
+}
+
+.CommentList
+{
+	border:1px solid;
+	margin:0px;
+	margin-bottom:5px;
+	padding:2px;
+}
+
+.CommentListHeader
+{
+	margin:0px;
+	margin-bottom:5px;
+}
+
+.CommentListElement
+{
+	border:1px solid;
+	margin:0px;
+	margin-bottom:5px;
+}
+
+
+.AdminTopPanel
+{
+	border-right: solid 1px !important;
+}
+
+.AdminCenterPanel
+{
+	overflow: auto;
+	border-color: #000 !important;
+	border-right: solid 1px #000 !important;	
+}
+
+.AdminBottomPanel
+{
+	display: block;
+	border-color: #000 !important;
+	border-right: solid 1px #000 !important;	
+}
+
+.AdminLeftPanel
+{
+	overflow:auto;
+	position:absolute;
+	margin-top: 0px;
+}
+
+.AdminContentPanel
+{
+	overflow:auto;
+	margin: 0px;
+	padding: 0px;
+	position:absolute;
+}
+
+.AdminMenuPath
+{
+	height: 15px;
+	padding: 0px;
+	margin: 0px;
+	font-size: 12px;
+	font-weight: bold;	
+}
+
+.WUIseparatorVertical
+{
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	margin-left: 5px;
+	margin-right: 10px;
+	width: 0px;
+}
+
+.WUIseparatorHorizontal
+{
+	width: 100%;
+	padding: 0;
+	margin: 10px 0 10px 0;
+	height: 0;
+}
+
+.WUIquicklinks
+{
+	text-align: right;
+	height: 23px;
+   width:96%;   
+   margin: 0 auto;
+}
+.button_header
+{
+   padding-top:5px;	
+   border-top: #A0A0A0 1px solid;
+   border-bottom: #A0A0A0 1px solid;
+	background-color: #E8E6E9;
+	text-align: right;
+	height: 23px;
+   width:96%;
+   margin: 0 auto;
+}
+
+.button_header A
+{
+	background-color: #BF7111;
+	color: #fff;
+}
+
+A.button_header_disabled
+{
+	background-color: #b0b0b0;
+}
+
+.button_header A:hover
+{
+	color: #fff;
+}
+A.WUIquicklink, A.WUIquicklink_disabled
+{
+	width: 100%;
+	cursor: pointer;
+	padding: 4px;
+	margin-right: 10px;
+}
+
+A.WUIquicklink_disabled
+{
+	cursor: default;
+}
+
+A.WUIquicklink:hover, A.WUIquicklink_disabled:hover
+{
+	text-decoration: none;
+}
+
+.WUITopMenu A:hover
+{
+	text-decoration: underline;
+}
+
+/*--------------------------------------------------------
+wui:hint
+--------------------------------------------------------*/
+
+.WUIhelp_smoke
+{
+	display: block;
+	position: absolute;
+	z-index: 9;
+}
+
+.WUIhelpid
+{
+	width: 20px;
+	margin: 0px;
+	margin-left: 5px;
+	padding: 0px;
+	vertical-align: top;
+}
+
+.WUIddmenu
+{
+	float: left;
+	border: solid 1px ;
+}
+
+/*--------------------------------------------------------
+wui:form
+--------------------------------------------------------*/
+
+.WUIform
+{
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+.WUIformrow_radio
+{
+	/*margin: 0 5px 0 0;*/
+	top: 3px;
+	position: relative;
+	padding: 0;
+}
+
+.WUIformrow_checkbox
+{
+	margin: 2px 0 0 0;
+	padding: 0;
+}
+
+.WUIformrow_input
+{
+	width: 90%;
+
+	height: 12px;
+}
+
+.WUIformrow_file
+{
+	width: 90%;
+	height: 18px;
+}
+
+.WUIformrow_textarea
+{
+	width: 90%;
+	height: 100px;
+}
+
+.WUIformrow_select
+{
+	height: 16px;
+}
+
+/*--------------------------------------------------------
+wui:hr
+--------------------------------------------------------*/
+
+.WUIhr
+{
+  width: 100%;
+}
+
+/*--------------------------------------------------------
+wui:list
+--------------------------------------------------------*/
+
+.WUIlistrowLP
+{
+	width: 25px;
+}
+
+/*--------------------------------------------------------
+wui:group
+--------------------------------------------------------*/
+
+.WUIgroup
+{
+	padding: 5px;
+	display: table;
+}
+
+.WUIgroupListHelp
+{
+	padding: 10px;
+	width: 80%;
+}
+
+.WUIgrouptitle
+{
+	padding: 5px;
+}
+
+/*--------------------------------------------------------
+wui:tabpanel
+--------------------------------------------------------*/
+
+.WUItabpanel
+{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.WUItabbutton
+{
+	height: 14px;
+	position: relative;
+	float: left;
+	display: block;
+	cursor: pointer;
+	padding: 4px;
+	margin-left: 2px;
+	margin-right: 2px;
+	margin-top: 5px;
+	border-left: solid 2px;	
+	border-right: solid 2px;
+	border-top: solid 3px;
+	vertical-align: bottom;
+	margin-bottom: 0;
+}
+
+.WUItabbutton_active
+{
+	position: relative;
+	float: left;
+	cursor: pointer;
+	padding: 4px;
+	margin-left: 3px;
+	margin-top: 5px;
+	margin-bottom: 0;
+	margin-right: 3px;
+	border-left: solid 2px;	
+	border-right: solid 2px;
+	border-top: solid 4px;
+	vertical-align: bottom;
+	height: 14px;
+}
+
+.WUItablist
+{
+	padding: 7px;
+	height: 100%;
+}
+
+.WUItablist_zero
+{
+	padding: 7px;
+	padding: 0;
+	margin: 0;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	height: 100%;
+}
+
+.WUItab
+{
+	height: 100%;
+}
+
+/*--------------------------------------------------------
+WUI:recordset
+--------------------------------------------------------*/
+
+.WUIfield
+{
+	padding-right: 5px;
+}
+
+.WUIrsheader
+{
+	height: 20px;
+	color:white;
+}
+
+.WUIrsheaderel
+{
+	white-space: nowrap;
+	padding-left: 5px;
+}
+
+.WUIrsrecordrowactive
+{
+	height: 10px;
+}
+
+.WUIrsrecordrowodd
+{
+	height: 10px;
+}
+
+.WUIrsrecordroweven
+{
+	height: 10px;
+}
+
+.WUIrsDivOverflow
+{
+}
+
+/*--------------------------------------------------------
+ wui:tree
+--------------------------------------------------------*/
+
+.WUItreeNode
+{
+	margin-left: 20px;
+	font-size: 11px;
+	border: 0;
+	z-index: 3;
+	clear: both;
+}
+
+.WUItreeItem
+{
+	margin-left: 20px;
+	clear: both;
+	z-index: 3;
+	position: relative;
+	line-height: 16px;
+}
+
+.WUItreeLabel
+{
+	clear: both;
+	z-index: 3;
+	position: relative;
+	line-height: 16px;
+}
+
+.WUItreeItem A
+{
+	display: block;
+	z-index: 3;
+}
+
+.WUItreeNodeContent
+{
+	background-image: url(img/tree/tree_bg.gif);
+	background-repeat:  repeat-y;
+}
+
+.WUItreeNode img, .WUItreeItem img
+{
+	border:0;
+	margin:0;
+	padding:0;
+	margin-right: 5px;
+	float: left;
+	z-index: 3;
+	position: relative;
+	margin-top: -2px
+}
+
+.WUItreeClicked
+{
+	position: absolute;
+	width: 100%;
+	height: 15px;
+	z-index: 1;
+	background-color: #2D4173;
+	left: 0;
+	margin: 0;
+	display: none;
+}
+
+/*
+.WUItree
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+	padding-left: 5px;
+	margin-left: 10px;
+	cursor: default;
+}
+
+.WUItreeitem
+{
+	height: 17px;
+	padding-top: 1px;
+}
+
+A.tree
+{
+	font-family: Tahoma, Verdana;
+	font-size: 11px;
+	height: 17px;
+	text-decoration: none;
+	cursor: default;
+	font-weight: normal;
+}
+
+A.tree:link
+{
+
+}
+
+A.tree:visited
+{
+
+}
+
+A.tree:active
+{
+
+}
+
+A.tree:hover
+{
+	text-decoration: underline;
+}
+
+.WUItree_onclick
+{
+	height: 17px;
+	font-weight: bold;
+	padding-top: 1px;
+}
+
+.WUItree_input
+{
+	border: solid 1px #000;
+	font-weight: normal;
+}
+*/
+
+/*--------------------------------------------------------
+	DDMenu
+--------------------------------------------------------*/
+
+.DDMenuList
+{
+	white-space: nowrap;
+	height: 23px;
+	cursor: default;
+}
+
+.DDMenu
+{
+	float: left;
+	padding: 3px;
+	border: solid 1px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 1px;
+}
+
+.DDMenu_over
+{
+	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	padding-bottom: 3px;
+	margin-top: 2px;
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.DDMenu_click
+{
+	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	padding-bottom: 3px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 2px;
+}
+
+.DDMenuBox
+{
+	position: absolute;
+	display: none;
+	margin-top: -17px;
+	border-style: outset;
+	border-width: 2px;
+	z-index: 10;
+	align: right;
+}
+
+.DDMenuSeparator
+{
+	height: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 3px;
+	margin-bottom: -3px;
+	padding: 0px;
+	width: 100px;
+}
+
+A.DDMenuItem
+{
+	position: relative;
+	cursor: default;
+	display: block;
+	padding: 3px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.DDMenuSub
+{
+	padding: 3px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.DDMenuSubItem
+{
+	white-space: nowrap;
+}
+
+/*--------------------------------------------------------
+	WUI:CALENDAR
+
+	Style dla kalendarzyka oraz 
+	okna wui:windowlayer.
+--------------------------------------------------------*/
+/*
+.WUIcalMain
+{
+	position: absolute;
+	width: 220px;
+	border-style: outset;
+	border-width: 2px;
+	margin-top: 0px;
+	margin-left: 12px;
+	padding: 5px;
+	z-index: 50;
+	cursor: default;
+}
+
+.WUIcalNavBlock
+{
+	display: inline;
+}
+
+.WUIcalItem
+{
+	width: 26px;
+	height: 23px;
+	margin: 0px;
+	float: left;
+	padding-left: 3px;
+	padding-top: 2px;
+}
+
+.WUIcalItemDay
+{
+	width: 29px;
+	height: 15px;
+	margin: 0px;
+	float: left;
+	padding-left: 0px;
+	padding-top: 2px;
+}
+
+.WUIcalItemClick
+{
+	width: 26px;
+	height: 23px;
+	margin: 0px;
+	float: left;
+	padding-left: 3px;
+	padding-top: 2px;
+	border: 1px solid;
+}
+
+.WUIcalHead
+{
+	margin: 0px;
+	padding: 0px;
+	margin-left: -7px;
+	margin-right: -7px;
+	margin-top: -8px;
+	height: 20px;
+}
+
+.WUIbutton
+{
+	border-style: outset;
+	border-width: 2px;
+	margin: 0px;
+	padding: 0px;	
+}
+*/
+
+.WUIcalSeparator, .WUIgroupListSeparator
+{
+	height: 0px;
+	padding: 0px;
+	margin: 0px;
+	margin: 0;
+	width: 100%;
+	clear: both;
+}
+
+
+/*--------------------------------------------------------
+	WUI:SCHEDULER
+--------------------------------------------------------*/
+
+.WUIcal2Main
+{
+	position: absolute;
+	width: 610px;
+	border-style: outset;
+	border-width: 2px;
+	margin-top: 0px;
+	margin-left: 12px;
+	padding: 5px;
+	z-index: 10;
+	cursor: default;
+}
+
+.WUIcal2Item
+{
+	width: 82px;
+	height: 33px;
+	margin: 0px;
+	float: left;
+	padding-left: 3px;
+	padding-top: 2px;
+}
+
+.WUIcal2ItemDay
+{
+	width: 85px;
+	height: 15px;
+	margin: 0px;
+	float: left;
+	padding-left: 0px;
+	padding-top: 2px;
+}
+
+.WUIcal2ItemClick
+{
+	width: 82px;
+	height: 33px;
+	margin: 0px;
+	float: left;
+	padding-left: 3px;
+	padding-top: 2px;
+	border: 1px solid;
+}
+
+/*--------------------------------------------------------
+	WUI:MEDIA
+--------------------------------------------------------*/
+
+.WUI_media_preview_button
+{
+	height: 20px;
+	width: 20px;
+	float: right;
+	background-repeat: no-repeat;
+	border: solid 1px;
+}
+
+.WUI_media_img_preview
+{
+	margin: 0px;
+	padding: 0px;
+	width: 90%;
+	height: 100%;
+}
+
+.WUIpreviewNavTop
+{
+	width: 100%;
+	padding: 5px;
+}
+
+.WUIfileinput_preview
+{
+	width: 100%;
+	margin-top: 10px;
+	height: 100px;
+	overflow: auto;
+	border: solid 1px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+/*--------------------------------------------------------
+	WUI:OUTLOOK BAR
+--------------------------------------------------------*/
+
+.WUIOutlookBarMain
+{
+	width: 200px;
+}
+
+.WUIOutlookBarOption
+{
+	height: 20px;
+	border-style: outset;
+	border-width: 2px;
+	cursor: pointer;
+}
+
+.WUIOutlookBarOptionContent
+{
+	display: none;
+	height: 0px;
+	overflow: auto;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+
+/*--------------------------------------------------------
+	WUI:FAKESELECT
+--------------------------------------------------------*/
+
+.fakeselect_default
+{
+	position: relative;
+	width: 100px;
+	cursor: pointer;
+	padding: 0px;
+	margin: 0px;
+	z-index: 88;
+}
+
+.fakeselect_Button
+{
+	height: 15px;
+	width: 15px;
+}
+
+.fakeselect_default .fakeselectdisplay
+{
+	position:relative;
+	display:block;
+	padding-top:1px;
+	padding-bottom:1px;
+	padding-left:2px;
+	overflow: hidden;
+	height: 13px;
+}
+
+.fakeselect_default .fakeselectoption
+{
+	position: absolute;
+	display: none;
+	border: 1px solid;
+	max-height: 175px;
+	overflow: auto;
+	padding-left: 2px;
+}
+
+.fakeselect_fakeoption
+{
+	width: 90%;
+}
+
+/*--------------------------------------------------------
+	wui:windowlayer
+--------------------------------------------------------*/
+
+.WUIwindowlayer
+{
+	position: absolute;
+	border: 1px;
+	border-style: outset;
+}
+
+.WUIwindowlayerHead
+{
+	margin: 0px;
+	padding: 0px;
+	height: 15px;
+}
+
+.WUIwindowlayer_tab
+{
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	display: block;
+}
+
+.WUIwindowlayer_tab .WUItabbutton
+{
+	border: 1px;
+	margin-right: 0px;
+	border-style: outset;
+}
+
+.WUIwindowlayer_tab .WUItabbutton_active
+{
+	border: 1px;
+	margin-right: 0px;
+	border-style: outset;
+}
+
+.WUIwindowlayer_tab .WUItablist
+{
+	padding: 10px;
+	margin: 0px;
+	border: 1px;	
+	border-style: outset;
+	border-top: 0px;
+}
+
+.WUIwindowlayer_tab .WUItablist_zero
+{
+	padding: 0px;
+}
+
+/*--------------------------------------------------------
+	wui:wizard
+--------------------------------------------------------*/
+
+.WUIwizardMain
+{
+	border: 2px;
+	border-style: outset;
+}
+
+.WUIwizardstep
+{
+	height: 20px;
+}
+
+.WUIwizardHeader
+{
+	height: 17px;
+	padding: 0px;
+	padding-left: 10px;
+	padding-top: 2px;
+}
+
+.WUIwizardContent
+{
+	margin-top: 10px;
+}
+
+.WUIwizardstepContent
+{
+	float: left;
+	padding: 10px;
+	width: 30%;
+}
+
+.WUIwizardContent .WUItablist_zero
+{
+	padding: 7px;
+	overflow: auto; 	
+	padding: 0px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+/*--------------------------------------------------------
+	pozostale
+--------------------------------------------------------*/
+
+/* dla nowej warstwy tworzonej dynamicznie */
+.WUInewDiv
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.WUImsgbox_text
+{
+	font-family: Tahoma;
+	font-size: 11px;
+}
+
+/*--------------------------------------------------------
+	HTML AREA
+--------------------------------------------------------*/
+
+.htmlarea .toolbar {
+  cursor: default;
+  padding: 1px 1px 2px 1px;
+  border: 1px solid;
+}
+.htmlarea .toolbar img { border: none; }
+.htmlarea .toolbar .label { padding: 0px 3px; }
+
+.htmlarea .toolbar .button {
+  border: 1px solid;
+  padding: 1px;
+  margin: 0px;
+  width: 18px;
+  height: 18px;
+}
+.htmlarea .toolbar .buttonHover {
+  border: 1px solid;
+}
+.htmlarea .toolbar .buttonActive, .htmlarea .toolbar .buttonPressed {
+  padding: 2px 0px 0px 2px;
+  border: 1px solid;
+}
+
+.htmlarea .toolbar .indicator {
+  padding: 0px 3px;
+  overflow: hidden;
+  width: 20px;
+  cursor: default;
+  border: 1px solid;
+}
+
+.htmlarea .toolbar .buttonDisabled img {
+  filter: alpha(opacity = 25);
+  -moz-opacity: 0.25;
+}
+
+.htmlarea .toolbar .separator {
+  margin: 3px;
+  width: 0px;
+  height: 16px;
+  padding: 0px;
+}
+
+.htmlarea .toolbar .space { width: 5px; }
+
+.htmlarea .toolbar select,
+.htmlarea .toolbar select:hover,
+
+
+.htmlarea .statusBar {
+  border: 1px solid;
+  padding: 2px 4px;
+}
+
+.htmlarea .statusBar .statusBarTree a {
+  padding: 2px 5px;
+}
+
+
+.htmlarea .statusBar .statusBarTree a:hover {
+  background-color: Highlight;
+  color: HighlightText;
+  padding: 1px 4px;
+  border: 1px solid;
+}
+
+
+/* Hidden DIV popup dialogs (PopupDiv) */
+
+.dialog .content { padding: 2px; }
+
+.dialog table { border-collapse: collapse; }
+
+.dialog .title {
+  padding: 1px 0px 2px 5px;
+  cursor: default;
+}
+
+.dialog .title .button {
+  float: right;
+  border: 1px solid;
+  padding: 0px 1px 0px 2px;
+  margin-right: 1px;
+}
+
+.dialog button {
+  width: 5em;
+  padding: 0px;
+}
+
+.dialog .buttonColor {
+  padding: 1px;
+  cursor: default;
+  border: 1px solid;
+}
+
+.dialog .buttonColor .chooser, .dialog .buttonColor .nocolor {
+  height: 0.6em;
+  border: 1px solid;
+  padding: 0px 1em;
+}
+
+.dialog .buttonColor .nocolor { padding: 0px; }
+
+.dialog .label { width: 6em; }
+.dialog .value input { width: 100%; }
+.dialog .buttons { padding: 2px 4px 0px 4px; }
+
+.dialog fieldset table { margin: 2px 0px; }
+
+.popupdiv {
+  border: 2px solid;
+}
+
+.popupwin {
+  padding: 0px;
+  margin: 0px;
+}
+
+.popupwin .title {
+  padding: 3px 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+form { margin: 0px; border: none; }
+.errors
+{
+   color : #FF0000;
+   overflow:auto;
+}
+
+.paging
+{
+   color: #369;
+
+   text-align: center;
+}
+
+.paging em{ padding: 0 5px ; font-style: normal}
+
+.pagecount { border-top: 1px dotted #bbe; text-align: center; margin-top: 10px}
+.buttonDiv
+{
+   background-color:#F0F0E8;
+   padding-left:40%;
+   height:20px;
+}
+
+.coreContent {
+
+}
+
+.coreContent .contentHeader {
+   PADDING-RIGHT: 0px;
+   PADDING-LEFT: 0px;
+   PADDING-BOTTOM: 5px;
+   MARGIN: 0px 0px 5px;
+   PADDING-TOP: 0px;
+}
+
+.coreContent .contentHeader .headerTop {
+	PADDING-LEFT: 10px;
+	MARGIN: 0px;
+	HEIGHT: 45px;
+}
+.coreContent .contentHeader .headerBottom {
+	BORDER-TOP: #dfdfdf 1px solid;
+	BORDER-BOTTOM: #dfdfdf 1px solid;
+}
+
+.coreContent .contentHeader .headerBottom .contentError
+{
+	width:96%;
+	margin: 0 auto;
+	text-align:center;
+	color:red;
+}
+
+
+/* the overlayed element */
+.apple_overlay {
+    
+    /* initially overlay is hidden */
+    /*display:none;*/
+    
+    /* growing background image */
+    /*background-image:url(../../img/overlay/white.png);*/
+    
+    /* 
+        width after the growing animation finishes
+        height is automatically calculated
+    */
+    width:800px;
+    z-index: 1002;
+    /* some padding to layout nested elements nicely  */
+    /*padding:35px;*/
+    position:absolute;
+    /*margin-top: -900px;*/
+	top:10%;
+    /* a little styling */  
+    /*font-size:11px;*/
+}
+
+/* default close button positioned on upper right corner */
+.apple_overlay a.close {
+    background-image:url(../images/close.png);
+    position:absolute; right:-15px; top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+}
+
+.overlay {
+    /*background-image:url(http://static.flowplayer.org/tools/img/overlay/white.png);*/
+    color:#efefef;
+    height:600px;
+    border: 1px solid #999; 
+    background: white; 
+    margin-left: auto !important; 
+    margin-right: auto !important;
+}
+.contentWrap {
+    height:441px;
+    overflow-y:auto;
+}
+
+
+.handle {
+    cursor: move;
+    }
+	
+	
+.modal {
+        background-color:#fff;
+        display:none;
+        border:2px solid #333;    
+        opacity:0.8;
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        -moz-box-shadow: 0 0 50px #ccc;
+        -webkit-box-shadow: 0 0 50px #ccc;
+    }    
+
+
+
+
+.smallButtonWidthForPayment{ background-color:#8D0202;color:#fff; text-align: center; width:80px;  height:18px; border:1px solid #666 !important;margin-left:-30px;}
+
+
+
+
+
+
+/*
+.wrapper{
+	width:100%;
+	height:auto;
+    
+}
+
+.header_d {
+   background: #474747 url(../images/banner_repeat.gif) top repeat-x;
+   width: 100%;
+   height:53px;
+   
+}
+#banner {
+	background: url(../images/banner.gif) right top no-repeat;
+	width: 100%;
+	height:53px;
+	float: right;
+}
+
+#banner .image_left {
+	float:left;
+   height:50px;
+   position:absolute;
+   padding-left:5px;
+   padding-top:3px;
+   width:100px;
+}
+
+#banner .text_right {
+	font-family:Geneva, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#fff;
+	padding-right:30px;
+	float:right;
+}
+
+.banner_bottom{
+	background:#001868;
+	width:100%;
+	height:20px;
+	border-top:1px solid #2846aa;
+	border-bottom:1px solid #2846aa;
+	position:relative;
+}
+
+.menu_tt{
+	width:150px;
+	height:15px;
+	background:#008dd0;
+	color:#FFFFFF;
+	margin-top:5px;
+	margin-bottom:2px;
+	font-size:12px;
+	font-weight:bold;
+	padding:5px 10px;
+}
+
+
+
+.container{
+	width:100%;
+	background:#eaeaea;
+	margin:0 auto;
+	position:relative;
+	z-index:2;
+	border-bottom:1px solid #437fc9;
+}
+
+
+
+.container_bd{
+	font-size:14px;
+	
+}
+
+.container_right{
+	font-size:11px;
+	
+	background:#FFFFFF;
+	padding-bottom:2%;
+ 
+	margin-left:192px;
+}
+
+.left_col{
+	width:192px;
+	
+	float:left;
+	display:inline;
+	position:relative;
+	z-index:2;
+
+}
+
+
+
+.right_col{
+	width:98%;
+	
+	margin-left:1%;
+	_margin-left:1%;
+	float:left;
+
+	 if bg and border is needed
+	background:#f6f6f6;
+	border-left:1px solid #e8e6e6;
+	border-right:1px solid #e8e6e6;
+	border-bottom:1px solid #e8e6e6;
+	padding-bottom:10px;
+
+}
+
+.right_content{
+	width:100%;
+	height:22px;
+	float:right;
+	position:relative;
+	display:inline-block;
+	vertical-align:baseline;
+}
+
+.content_bd{
+	width:98%;
+	margin:1% 0 0 1%;
+}
+*/
+
+
+/*---- end footer -------*/
+

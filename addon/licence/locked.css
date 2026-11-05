@@ -1,0 +1,9 @@
+/* Lock screen, see licence_stop() in addon/inc/licence.php. To use your own artwork, replace expired.png. */
+* { box-sizing: border-box; }
+body { display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 16px; background: #eef1f6; color: #1f2937; font: 16px/1.5 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.licence-lock { width: 100%; max-width: 640px; text-align: center; }
+.licence-lock img { display: block; width: 100%; height: auto; }
+.licence-lock h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.licence-lock p { margin: 16px 0 0; }
+.licence-lock a { color: #2563a6; }
+.licence-links { font-size: 14px; }

@@ -1,0 +1,24 @@
+
+	font-size:12px;
+	font-family: 'Quattrocento Sans', sans-serif; 
+	= Globsl Style Rule */
+html > body * {
+	outline:none;
+}
+
+
+h1, h2, h3, h4, h5, h6, form, label, input, legend, textarea, select, ul,dl, dt, dd, p, div {
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+
+tr, p {
+	margin:0px;
+	padding:5px;
+	
+	
+	
+	
+}

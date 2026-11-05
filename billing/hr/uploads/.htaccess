@@ -1,0 +1,7 @@
+# Employee documents are served only through billing/hr/employees.php?download=ID and the person's own portal after login.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Deny from all
+</IfModule>

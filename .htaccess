@@ -1,0 +1,34 @@
+Options -Indexes
+# Keep repository metadata, credentials, database dumps, and project notes
+# outside the public HTTP surface when this directory is served by Apache.
+<IfModule mod_alias.c>
+    RedirectMatch 404 "(?i)/\.git(?:/|$)"
+</IfModule>
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(?:\..*|github_pat_[^/]+|.*\.(?:sql|md))$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# The admin area was vsc/ before: old bookmarks and links in saved notifications keep working.
+<IfModule mod_alias.c>
+    RedirectMatch 301 "^(.*)/vsc/(.*)$" "$1/billing/$2"
+</IfModule>
+
+# Old file types kept for the pages to read, never for browsers. A disabled folder stays disabled.
+<IfModule mod_authz_core.c>
+    <FilesMatch "(?i)\.(dat|xyz|ucns|bak|old|orig|log|ini|env|sh|lock|dist|swp|phar|phtml|php[0-9])$|~$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule mod_alias.c>
+    RedirectMatch 404 "(?i)/(store_portal---|addon/mac|addon/display)(/|$)"
+</IfModule>
+
+# PHP pages send these too. This also covers styles, scripts and pictures.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "same-origin"
+    Header always unset X-Powered-By
+</IfModule>

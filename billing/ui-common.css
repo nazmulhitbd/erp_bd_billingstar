@@ -1,0 +1,253 @@
+/*
+ * Common look for every page opened in the admin frame (topmain.php adds this file and the class "ui-common" to the
+ * page's <html> when it loads). One design for page area, boxes, record tables, buttons, form fields and alerts,
+ * over both the older Bootstrap 3 / WUI pages and the newer sales.css / inv.css pages. The page's own path and
+ * module link bar are hidden: the menu bar above the frame shows the page name and path.
+ * Every page sits in one block, the Complain Received layout: a titled frame around an inner box. RMA pages draw it
+ * themselves (.rma-box, .rma-inner); topmenu.js wraps all other pages in .ui-block, .ui-block-inner.
+ */
+html.ui-common {
+  --ui-brand: #2563eb;
+  --ui-brand-dark: #1d4ed8;
+  --ui-brand-soft: #eef4ff;
+  --ui-ink: #1e293b;
+  --ui-muted: #64748b;
+  --ui-line: #e5e9f0;
+  --ui-soft: #f8fafc;
+  --ui-head: #f1f5f9;
+  --ui-radius: 10px;
+}
+
+/* ---------- Page area ---------- */
+html.ui-common body { margin: 0; background: #fff !important; color: var(--ui-ink); font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; font-size: 13.5px; }
+html.ui-common .ui-page, html.ui-common .rma-wrap { padding: 10px 14px; }
+
+/* ---------- The block ---------- */
+html.ui-common fieldset.ui-block, html.ui-common fieldset.rma-box { min-width: 0; margin: 0; padding: 0 10px 10px; border: 1px solid #777; background: #fff; }
+html.ui-common fieldset.ui-block > legend, html.ui-common fieldset.rma-box > legend { width: auto; margin: 0; padding: 0 4px; border: 0; color: var(--ui-ink); font-size: 20px; font-weight: 700; line-height: 1.3; }
+html.ui-common .ui-block-inner, html.ui-common .rma-inner { padding: 14px 18px; border: 1px solid #ddd; background: #fff; }
+/* Each page's own outer frame gives way to the block. */
+html.ui-common .ui-block-inner .wrap, html.ui-common .ui-block-inner .dash { max-width: none; margin: 0; padding: 0; }
+html.ui-common body.Body { padding: 0; }
+html.ui-common .ui-block-inner main.panel { padding: 0 !important; background: none; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; margin: 0; }
+html.ui-common fieldset.box.ui-flat { min-width: 0; margin: 0; padding: 0; border: 0; }
+html.ui-common fieldset.box.ui-flat > legend { display: none; }
+
+/* ---------- One common page path: hide each page's own path, page name and module link bar ---------- */
+html.ui-common .ui-hide,
+html.ui-common nav.sales-nav > a,
+html.ui-common nav.acc-nav > span,
+html.ui-common nav.acc-nav > b,
+html.ui-common .header_caption,
+html.ui-common #LabelURHere,
+html.ui-common #LabelURHereSmall { display: none !important; }
+/* The branch picker that lived in those bars stays, on the right. */
+html.ui-common nav.sales-nav, html.ui-common nav.acc-nav { display: flex; justify-content: flex-end; margin: 0 0 6px; min-height: 0; }
+html.ui-common nav.sales-nav:not(:has(.branch-pick)), html.ui-common nav.acc-nav:not(:has(.branch-pick)) { display: none; }
+html.ui-common .branch-pick label { font-size: 12.5px; color: var(--ui-muted); display: flex; gap: 6px; align-items: center; }
+
+/* ---------- Boxes ---------- */
+html.ui-common .panel,
+html.ui-common fieldset.box fieldset,
+html.ui-common .box-body { background: #fff; border: 1px solid var(--ui-line) !important; border-radius: var(--ui-radius) !important; box-shadow: 0 1px 2px rgba(15, 23, 42, .04) !important; }
+html.ui-common .panel { margin-bottom: 12px; }
+html.ui-common .panel-body { padding: 14px 16px; }
+html.ui-common .section { margin-top: 10px; padding: 10px 0 0; background: none; border: 0; border-top: 1px dashed #e2e2e2; border-radius: 0; box-shadow: none; }
+html.ui-common .entry, html.ui-common .sleft { padding: 0; background: none; border: 0; }
+html.ui-common .box-body { padding: 0; overflow: auto; }
+html.ui-common .section-title, html.ui-common fieldset.box fieldset > legend { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ui-muted); border: 0; margin-bottom: 8px; width: auto; padding: 0 4px; }
+html.ui-common ol.breadcrumb, html.ui-common .search_panel, html.ui-common .filter_background { background: var(--ui-soft) !important; border: 1px solid var(--ui-line) !important; border-radius: var(--ui-radius) !important; padding: 12px 14px !important; margin-bottom: 12px; }
+html.ui-common ol.breadcrumb > li + li::before { content: none; }
+html.ui-common .summary { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; background: transparent; border: 0; margin: 4px 0 12px; }
+html.ui-common .summary > div { flex: 1 1 150px; padding: 10px 14px; background: var(--ui-soft); border: 1px solid var(--ui-line); border-radius: var(--ui-radius); color: var(--ui-muted); font-size: 12px; }
+html.ui-common .summary > div b { display: block; margin-top: 2px; color: var(--ui-ink); font-size: 17px; }
+html.ui-common h1, html.ui-common h2, html.ui-common h3, html.ui-common h4 { color: var(--ui-ink); font-weight: 650; }
+
+/* ---------- Alerts ---------- */
+html.ui-common .alert,
+html.ui-common .errorbox { border: 1px solid transparent; border-left-width: 4px; border-radius: var(--ui-radius); padding: 11px 14px; margin: 0 0 12px; font-size: 13.5px; line-height: 1.5; box-shadow: none; }
+html.ui-common .alert-success, html.ui-common .alert.success, html.ui-common .alert.ok { background: #ecfdf3; border-color: #a7e3c0; border-left-color: #16a34a; color: #14532d; }
+html.ui-common .alert-danger, html.ui-common .alert.error, html.ui-common .alert.err { background: #fef2f2; border-color: #f5c2c2; border-left-color: #dc2626; color: #7f1d1d; }
+html.ui-common .alert-warning, html.ui-common .errorbox { background: #fffbeb; border-color: #f6dfa0; border-left-color: #d97706; color: #78350f; }
+html.ui-common .alert-info, html.ui-common .alert.info { background: var(--ui-brand-soft); border-color: #c7d7fb; border-left-color: var(--ui-brand); color: #1e3a8a; }
+
+/* ---------- Buttons: one primary, one default, one danger, one small ---------- */
+html.ui-common .btn,
+html.ui-common .rma-btn,
+html.ui-common .FormButton,
+html.ui-common input[type="submit"],
+html.ui-common input[type="button"],
+html.ui-common input[type="reset"],
+html.ui-common button:not(.close):not([class*="datepicker"]) {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 5px 14px;
+  border: 1px solid #cfd8e3; border-radius: 8px; background: #fff; color: var(--ui-ink); font: inherit; font-size: 13.5px; font-weight: 600;
+  line-height: 1.2; text-decoration: none; text-shadow: none; box-shadow: none; background-image: none; cursor: pointer; vertical-align: middle; transition: background .12s, border-color .12s;
+}
+html.ui-common .btn:hover,
+html.ui-common .rma-btn:hover,
+html.ui-common .FormButton:hover,
+html.ui-common input[type="submit"]:hover,
+html.ui-common input[type="button"]:hover,
+html.ui-common button:not(.close):not([class*="datepicker"]):hover { background: var(--ui-soft); border-color: #b8c4d4; color: var(--ui-ink); text-decoration: none; }
+/* Primary: the page's main action looks like every other button, as on Complain Received */
+html.ui-common .btn-primary,
+html.ui-common .btn.primary,
+html.ui-common input[type="submit"],
+html.ui-common .FormButton { background: #fff !important; border-color: #cfd8e3 !important; color: var(--ui-ink) !important; }
+html.ui-common .btn-primary:hover,
+html.ui-common .btn.primary:hover,
+html.ui-common input[type="submit"]:hover,
+html.ui-common .FormButton:hover { background: var(--ui-soft) !important; border-color: #b8c4d4 !important; color: var(--ui-ink) !important; }
+/* Danger: delete, remove, disable */
+html.ui-common .btn-danger,
+html.ui-common .btn.danger,
+html.ui-common #ButtonRemove { background: #fff !important; border-color: #f1b4b4 !important; color: #b91c1c !important; }
+html.ui-common .btn-danger:hover,
+html.ui-common .btn.danger:hover,
+html.ui-common #ButtonRemove:hover { background: #fef2f2 !important; }
+html.ui-common .btn-success { background: #16a34a; border-color: #16a34a; color: #fff; }
+html.ui-common .btn-link { border-color: transparent; background: none; color: var(--ui-brand); }
+/* Small: buttons inside record rows */
+html.ui-common .btn-sm, html.ui-common .btn-xs, html.ui-common .btn.small,
+html.ui-common table .btn, html.ui-common table button:not(.close), html.ui-common table input[type="submit"] { min-height: 28px; padding: 3px 10px; font-size: 12.5px; border-radius: 7px; }
+html.ui-common .btn:disabled, html.ui-common button:disabled, html.ui-common input:disabled[type="submit"] { opacity: .5; cursor: not-allowed; }
+html.ui-common .btn-group { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+html.ui-common .btn-group > .btn { border-radius: 8px !important; margin: 0 !important; }
+html.ui-common .btn-group > .btn-default.active { background: var(--ui-brand-soft); border-color: #c7d7fb; color: var(--ui-brand); }
+html.ui-common .toolbar, html.ui-common .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+/* Labels used as row buttons / status (Edit Role, Payments, Active …) become one pill style */
+html.ui-common .label, html.ui-common .badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 600; line-height: 1.4; }
+html.ui-common .label-primary { background: var(--ui-brand-soft); color: var(--ui-brand); }
+html.ui-common .label-success, html.ui-common .badge.converted, html.ui-common .badge.ok { background: #ecfdf3; color: #15803d; }
+html.ui-common .label-danger, html.ui-common .badge.cancelled, html.ui-common .badge.bad { background: #fef2f2; color: #b91c1c; }
+html.ui-common .label-warning, html.ui-common .badge.open { background: #fffbeb; color: #b45309; }
+html.ui-common .label-default, html.ui-common .badge:not([class*=" "]) { background: #f1f5f9; color: #475569; }
+html.ui-common a:hover > .label { filter: brightness(.95); }
+
+/* ---------- Record tables ---------- */
+html.ui-common table.table,
+html.ui-common .table-scroll table,
+html.ui-common main.panel table:not(.Navigator):not(.totals),
+html.ui-common table#example2 { width: 100%; border-collapse: collapse !important; border-spacing: 0; background: #fff; font-size: 13px; margin: 0; }
+html.ui-common table.table > thead > tr > td,
+html.ui-common table.table > thead > tr > th,
+html.ui-common .table-scroll th,
+html.ui-common main.panel table:not(.Navigator):not(.totals) th,
+html.ui-common tr.WUIrsheader > td,
+html.ui-common tr.WUIrsheader > th { background: #f0f0f0 !important; color: #444 !important; font-size: 12px; font-weight: 700; text-transform: none; letter-spacing: .01em; padding: 8px 6px !important; border: 1px solid #d6d6d6 !important; white-space: nowrap; vertical-align: middle !important; }
+html.ui-common table.table > tbody > tr > td,
+html.ui-common .table-scroll td,
+html.ui-common main.panel table:not(.Navigator):not(.totals) td,
+html.ui-common td.WUIfield { padding: 5px 6px !important; border: 1px solid #e0e0e0 !important; background: transparent; vertical-align: middle !important; color: var(--ui-ink); }
+html.ui-common tr.WUIrsrecordroweven, html.ui-common tr.WUIrsrecordrowodd { background: #fff !important; }
+html.ui-common table.table > tbody > tr:nth-child(even) > td,
+html.ui-common .table-scroll tbody tr:nth-child(even) td,
+html.ui-common tr.WUIrsrecordrowodd > td { background: #fbfcfe; }
+html.ui-common table.table > tbody > tr:hover > td,
+html.ui-common .table-scroll tbody tr:hover td,
+html.ui-common tr.WUIrsrecordroweven:hover > td, html.ui-common tr.WUIrsrecordrowodd:hover > td { background: var(--ui-brand-soft) !important; }
+html.ui-common table.table-bordered { border: 0 !important; }
+html.ui-common td.num, html.ui-common th.num { text-align: right; font-variant-numeric: tabular-nums; }
+html.ui-common td .empty, html.ui-common td.empty { color: var(--ui-muted); text-align: center; padding: 22px !important; }
+html.ui-common .table-scroll, html.ui-common .rma-grid-wrap { border: 1px solid #ccc; border-radius: 0; overflow: auto; }
+html.ui-common .grid-box { min-height: 300px; max-height: 480px; }
+html.ui-common table a { color: var(--ui-brand); text-decoration: none; }
+html.ui-common table a:hover { text-decoration: underline; }
+
+/* Pager bar of the record lists */
+html.ui-common table.Navigator { width: 100%; background: var(--ui-soft) !important; border: 1px solid var(--ui-line) !important; border-radius: var(--ui-radius); padding: 4px 8px; margin: 0 0 10px; font-size: 12.5px; color: var(--ui-muted); }
+html.ui-common table.Navigator td { padding: 6px 8px !important; border: 0 !important; background: transparent !important; }
+html.ui-common table.Navigator a { color: var(--ui-brand); font-weight: 600; text-decoration: none; }
+html.ui-common table.Navigator strong { color: var(--ui-ink); }
+
+/* ---------- Form fields ---------- */
+html.ui-common input[type="text"], html.ui-common input[type="search"], html.ui-common input[type="number"], html.ui-common input[type="password"],
+html.ui-common input[type="email"], html.ui-common input[type="date"], html.ui-common input[type="month"], html.ui-common input[type="tel"],
+html.ui-common input:not([type]), html.ui-common select, html.ui-common textarea, html.ui-common .form-control, html.ui-common .input {
+  border: 1px solid #cfd8e3 !important; border-radius: 8px !important; background-color: #fff; color: var(--ui-ink) !important; font: inherit; font-size: 13.5px; box-shadow: none !important; min-height: 30px; padding: 3px 8px;
+}
+html.ui-common textarea { min-height: 70px; }
+html.ui-common table input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]), html.ui-common table select { min-height: 30px; padding: 3px 8px; }
+html.ui-common input:focus, html.ui-common select:focus, html.ui-common textarea:focus, html.ui-common .form-control:focus { border-color: var(--ui-brand) !important; outline: 0; box-shadow: 0 0 0 3px rgba(37, 99, 235, .15) !important; }
+html.ui-common input[readonly], html.ui-common input:disabled, html.ui-common select:disabled { background: var(--ui-soft); color: var(--ui-muted) !important; }
+html.ui-common label, html.ui-common .FormrowTitle { color: #475569; font-weight: 600; font-size: 12.5px; }
+/* Label beside its field, on one line, as on Complain Received; the field drops under the label only when too narrow. */
+html.ui-common .field { flex-flow: row wrap; align-items: center; gap: 3px 8px; }
+html.ui-common .field:has(> textarea) { align-items: flex-start; }
+html.ui-common .field > label, html.ui-common .rep-grid label { min-width: max-content; margin: 0; white-space: nowrap; font-weight: 700; font-size: 12px; color: #555; }
+html.ui-common .field > :not(label) { flex: 1 1 90px; width: auto; min-width: 0; }
+html.ui-common .hgrid { align-items: center; gap: 9px 12px; }
+html.ui-common .sgrid, html.ui-common .grid { gap: 9px 12px; }
+html.ui-common .sgrid > label { font-size: 12px; color: #555; }
+html.ui-common .radios label { font-weight: 700; font-size: 12px; color: #555; white-space: nowrap; }
+html.ui-common .rep-grid label { flex-flow: row wrap; align-items: center; gap: 3px 8px; }
+html.ui-common .rep-grid label > input, html.ui-common .rep-grid label > select { flex: 1 1 90px; width: auto; min-width: 0; }
+html.ui-common .form-group:has(> label):not(:has(> [class*="col-"])) { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; }
+html.ui-common .form-group > label { margin: 0; white-space: nowrap; }
+html.ui-common .form-group > .form-control { flex: 1 1 90px; width: auto; }
+html.ui-common input[type="checkbox"], html.ui-common input[type="radio"] { accent-color: var(--ui-brand); width: 15px; height: 15px; vertical-align: middle; }
+
+@media print {
+  html.ui-common body, html.ui-common .ui-page, html.ui-common .rma-wrap { padding: 0; }
+  html.ui-common fieldset.ui-block, html.ui-common fieldset.rma-box, html.ui-common .ui-block-inner, html.ui-common .rma-inner { padding: 0; border: 0; }
+  html.ui-common fieldset.ui-block > legend { display: none; }
+  html.ui-common .panel, html.ui-common .section, html.ui-common .box-body { box-shadow: none !important; }
+}
+
+/* Pager under a list (addon/portal/list-pager.js); every row still prints */
+html.ui-common .list-pager { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; border: 1px solid; border-top: 0; font-size: 12.5px; }
+html.ui-common .list-pager .nav { display: flex; gap: 4px; }
+html.ui-common .list-pager a, html.ui-common .list-pager span.off { min-width: 34px; padding: 4px 9px; border: 1px solid; border-radius: 8px; font-weight: 600; text-align: center; text-decoration: none; }
+html.ui-common .list-pager span.off { opacity: .45; }
+html.ui-common .list-pager .count { flex: 1; }
+@media screen { html.ui-common tr.list-off { display: none; } }
+@media print { html.ui-common .list-pager { display: none; } }
+html.ui-common .list-pager { padding: 8px 10px; border-color: #ccc; background: var(--ui-soft); color: var(--ui-muted); }
+html.ui-common .list-pager select { min-height: 28px; padding: 2px 6px; }
+html.ui-common .list-pager a, html.ui-common .list-pager span.off { border-color: #cfd8e3; background: #fff; color: var(--ui-ink); }
+
+/* ---------- Responsive: these follow the frame's width, so they work on every page ---------- */
+html.ui-common img, html.ui-common video, html.ui-common iframe, html.ui-common input, html.ui-common select, html.ui-common textarea { max-width: 100%; }
+
+@media screen and (max-width: 900px) {
+  html.ui-common .ui-table-scroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  html.ui-common .table-scroll, html.ui-common .rma-grid-wrap { -webkit-overflow-scrolling: touch; }
+  html.ui-common .ui-form-table { width: 100% !important; }
+  /* A table keeps its natural width and scrolls in its box, rather than squeezing every column. */
+  html.ui-common .ui-table-scroll > table, html.ui-common .table-scroll > table, html.ui-common .rma-grid-wrap > table { width: max-content; min-width: 100%; max-width: none; }
+  html.ui-common .rma-filter input, html.ui-common .rma-filter select { min-width: 0; max-width: 100%; }
+}
+
+@media screen and (max-width: 640px) {
+  html.ui-common .ui-page, html.ui-common .rma-wrap { padding: 6px; }
+  html.ui-common fieldset.ui-block, html.ui-common fieldset.rma-box { padding: 0 6px 6px; }
+  html.ui-common fieldset.ui-block > legend, html.ui-common fieldset.rma-box > legend { font-size: 17px; }
+  html.ui-common .ui-block-inner, html.ui-common .rma-inner { padding: 10px; }
+
+  /* Label above its field, large enough to tap; 16px stops iOS zooming in on focus. */
+  html.ui-common input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]), html.ui-common select, html.ui-common textarea, html.ui-common .form-control, html.ui-common table input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]), html.ui-common table select { min-height: 40px; font-size: 16px; }
+  html.ui-common input[style*="max-width"], html.ui-common select[style*="max-width"], html.ui-common input[style*="width"], html.ui-common select[style*="width"] { max-width: 100% !important; }
+  html.ui-common .btn, html.ui-common .rma-btn, html.ui-common .FormButton, html.ui-common input[type="submit"], html.ui-common input[type="button"], html.ui-common input[type="reset"], html.ui-common button:not(.close):not([class*="datepicker"]) { min-height: 40px; }
+  html.ui-common input[type="checkbox"], html.ui-common input[type="radio"] { width: 18px; height: 18px; }
+  html.ui-common .field, html.ui-common .form-group:has(> label):not(:has(> [class*="col-"])), html.ui-common .rep-grid label { flex-direction: column; align-items: stretch; flex-wrap: nowrap; }
+  html.ui-common .field > :not(label), html.ui-common .rep-grid label > input, html.ui-common .rep-grid label > select, html.ui-common .form-group > .form-control { flex: none; width: 100%; }
+  html.ui-common .field > label, html.ui-common .rep-grid label, html.ui-common .radios label { white-space: normal; }
+  html.ui-common .sgrid, html.ui-common .sgrid.two, html.ui-common .sgrid.three, html.ui-common .sgrid.four { grid-template-columns: minmax(0, 1fr); gap: 3px 0; }
+  html.ui-common .sgrid > label:not(:first-child) { margin-top: 7px; }
+  html.ui-common .radios, html.ui-common .rep-row { align-items: stretch; }
+  html.ui-common .radios label, html.ui-common .rep-row label { flex: 1 1 100%; flex-direction: column; align-items: stretch; }
+  html.ui-common .radios input:not(.check), html.ui-common .radios select, html.ui-common .rep-row input, html.ui-common .rep-row select { width: 100% !important; }
+  html.ui-common .rma-field select { flex: none; width: 100%; }
+  html.ui-common .list-search .input, html.ui-common .rma-toolbar input { flex: 1 1 100%; max-width: none; }
+
+  /* A form laid out with a table becomes one column. */
+  html.ui-common .ui-form-table, html.ui-common .ui-form-table > tbody, html.ui-common .ui-form-table > tbody > tr, html.ui-common .ui-form-table > tbody > tr > td { display: block; width: 100% !important; }
+  html.ui-common .ui-form-table > tbody > tr > td { padding: 3px 0 !important; border: 0 !important; }
+  html.ui-common .ui-form-table > tbody > tr > td:empty { display: none; }
+  html.ui-common .ui-form-table input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]), html.ui-common .ui-form-table select { width: 100% !important; }
+
+  html.ui-common .summary > div { flex: 1 1 40%; }
+  html.ui-common .sbottom, html.ui-common .bottom { grid-template-columns: minmax(0, 1fr); }
+  html.ui-common .titlebar { align-items: stretch; }
+}

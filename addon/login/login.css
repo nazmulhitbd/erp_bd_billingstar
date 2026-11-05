@@ -1,0 +1,103 @@
+/* Sign-in page. --brand, --brand-ink and --brand-deep come from Company & Login Settings (addon/display/display.php). */
+:root { --ink: #1f2937; --muted: #64748b; --line: #cbd5e1; --fill: #f1f2f4; --danger: #b42318; --danger-soft: #fef3f2; }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { display: grid; place-items: center; min-height: 100vh; min-height: 100dvh; padding: 24px; background: radial-gradient(circle at 12% 0, var(--brand), var(--brand-deep) 70%); color: var(--ink); font: 15px/1.5 Poppins, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+h1, h2, p { margin: 0; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.lg-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.lg { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 11fr) minmax(0, 10fr); width: 100%; max-width: 1120px; min-height: min(680px, calc(100vh - 48px)); overflow: hidden; border-radius: 26px; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, .28); }
+
+/* Curved panel: an ellipse, so it grows with the content and the white text stays on the brand colour. */
+.lg-brand { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 28px; padding: 44px 19% 76px 52px; border-radius: 0 42% 42% 0 / 0 50% 50% 0; background: linear-gradient(150deg, var(--brand), var(--brand-deep)); color: var(--brand-ink); }
+.lg-brand > * { position: relative; z-index: 1; }
+.lg-brand::before, .lg-brand::after, .lg-form::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.lg-brand::before { left: -70px; bottom: -90px; width: 250px; height: 250px; background: radial-gradient(circle at 70% 25%, var(--brand), var(--brand-deep) 75%); }
+.lg-brand::after { right: -5%; bottom: 5%; width: clamp(150px, 19vw, 215px); aspect-ratio: 1; background: radial-gradient(circle at 34% 28%, var(--brand), var(--brand-deep) 85%); box-shadow: 0 14px 30px rgba(0, 0, 0, .22); }
+.lg-brand :focus-visible { outline-color: var(--brand-ink); }
+.lg-mark { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.lg-mark img { max-width: 150px; max-height: 56px; padding: 6px; border-radius: 10px; background: #fff; object-fit: contain; }
+.lg-icon { flex: 0 0 48px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 12px; background: color-mix(in srgb, var(--brand-ink) 16%, transparent); font-size: 23px; }
+.lg-mark strong { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+.lg-mark span:not(.lg-icon) { display: block; font-size: 13px; opacity: .85; }
+.lg-intro { margin-top: auto; }
+.lg-intro h1 { font-size: clamp(32px, 3.8vw, 46px); line-height: 1.1; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.lg-headline { margin-top: 10px; font-size: clamp(16px, 1.6vw, 19px); font-weight: 500; letter-spacing: .06em; text-transform: uppercase; overflow-wrap: anywhere; }
+.lg-intro p:not(.lg-headline) { margin-top: 10px; max-width: 46ch; font-size: 14px; opacity: .92; }
+.lg-contact { list-style: none; display: grid; gap: 7px; margin: 0 0 auto; padding: 0; font-size: 13.5px; }
+.lg-contact li { display: flex; gap: 10px; min-width: 0; overflow-wrap: anywhere; }
+.lg-contact .bi { flex: none; margin-top: 1px; opacity: .85; }
+.lg-contact a { color: inherit; text-decoration: none; }
+.lg-contact a:hover { text-decoration: underline; }
+.lg-form .lg-contact { display: none; }
+
+.lg-form { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 36px 44px 28px 36px; }
+.lg-form::after { z-index: -1; right: -55px; bottom: -65px; width: 175px; height: 175px; background: radial-gradient(circle at 30% 25%, var(--brand), var(--brand-deep) 85%); }
+.lg-card { width: 100%; max-width: 380px; }
+.lg-card h2 { font-size: 34px; font-weight: 700; line-height: 1.2; letter-spacing: .02em; }
+.lg-sub { margin: 4px 0 20px; color: var(--muted); font-size: 13.5px; }
+.lg-demo { margin-bottom: 12px; padding: 6px 10px; border-radius: 8px; background: var(--fill); color: var(--muted); font-size: 13px; }
+.lg-error { margin-bottom: 14px; padding: 9px 12px; border-radius: 10px; background: var(--danger-soft); color: var(--danger); font-weight: 500; }
+.lg-field { margin-bottom: 14px; }
+.lg-input { position: relative; display: flex; align-items: center; }
+.lg-input > .bi { position: absolute; left: 16px; color: var(--ink); font-size: 18px; pointer-events: none; }
+.lg-input input, .lg-input select { width: 100%; height: 52px; padding: 8px 14px 8px 46px; border: 1px solid transparent; border-radius: 12px; background: var(--fill); color: var(--ink); font: inherit; font-size: 14px; }
+.lg-input input::placeholder { color: var(--muted); opacity: 1; }
+.lg-input input:focus, .lg-input select:focus { border-color: var(--brand); outline: 2px solid color-mix(in srgb, var(--brand) 30%, transparent); outline-offset: 0; background: #fff; }
+#InputPassword { padding-right: 72px; }
+.lg-eye { position: absolute; right: 6px; height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); font: inherit; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+.lg-eye:hover { background: color-mix(in srgb, var(--brand) 10%, transparent); }
+.lg-check { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; font-size: 13px; font-weight: 500; cursor: pointer; }
+.lg-check input { width: 16px; height: 16px; margin: 0; accent-color: var(--brand-deep); }
+.lg-submit { display: flex; align-items: center; justify-content: center; width: 100%; height: 50px; border: 0; border-radius: 10px; background: var(--brand-deep); color: var(--brand-ink); font: inherit; font-weight: 600; letter-spacing: .04em; cursor: pointer; }
+.lg-submit:hover { filter: brightness(1.15); }
+.lg-or { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: var(--muted); font-size: 12.5px; }
+.lg-or::before, .lg-or::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+.lg-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; font-size: 13px; }
+.lg-links a { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 46px; padding: 6px 8px; border: 2px solid #475569; border-radius: 10px; color: var(--ink); font-weight: 500; text-align: center; text-decoration: none; }
+.lg-links a:hover { border-color: var(--brand-deep); background: var(--fill); }
+.lg-notice { display: flex; gap: 10px; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--fill); font-size: 13.5px; }
+.lg-notice .bi { color: var(--muted); }
+.lg-foot { width: 100%; max-width: 380px; padding-right: 40px; color: var(--muted); font-size: 12px; text-align: center; }
+.lg-foot a { color: inherit; }
+
+/* Touch screens: 16px stops iOS zooming in when a field is tapped. */
+@media (max-width: 860px), (pointer: coarse) {
+  .lg-input input, .lg-input select { font-size: 16px; }
+}
+
+/* Tablet and phone landscape: the same two-sided card, tighter. */
+@media (max-width: 860px) {
+  body { padding: 16px; }
+  .lg { min-height: min(620px, calc(100dvh - 32px)); border-radius: 20px; }
+  .lg-brand { gap: 20px; padding: 28px 15% 60px 30px; }
+  .lg-brand::after { right: 0; bottom: 4%; width: 130px; }
+  .lg-form { padding: 24px 28px 20px 20px; }
+  .lg-form::after { width: 120px; height: 120px; right: -45px; bottom: -50px; }
+  .lg-card h2 { font-size: 28px; }
+  .lg-foot { padding-right: 30px; }
+  .lg-links .bi { display: none; }
+}
+
+/* Phone: brand header, then the form, then contact details. */
+@media (max-width: 699.98px) {
+  body { display: block; padding: 12px; }
+  .lg { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .lg-brand { gap: 14px; padding: 20px 20px 34px; border-radius: 0 0 50% 50% / 0 0 26px 26px; }
+  .lg-brand::before, .lg-brand::after, .lg-form::after { display: none; }
+  .lg-brand .lg-contact { display: none; }
+  .lg-mark img { max-height: 44px; }
+  .lg-intro { margin-top: 0; }
+  .lg-intro h1 { font-size: 26px; }
+  .lg-headline { margin-top: 3px; font-size: 14px; }
+  .lg-form { justify-content: flex-start; padding: 20px 20px 18px; }
+  .lg-card { max-width: 440px; }
+  .lg-form .lg-contact { display: grid; width: 100%; max-width: 440px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); }
+  .lg-foot { max-width: none; padding-right: 0; }
+  .lg-links .bi { display: inline-block; }
+}
+@media (max-width: 360px) {
+  .lg-links { grid-template-columns: minmax(0, 1fr); }
+}

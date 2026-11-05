@@ -1,0 +1,161 @@
+body {padding:0; margin:0; border:0; font:76% "times new roman", serif; text-align:center; background:#fff url(stu.gif) no-repeat 40px 27px;}
+a {color:#000;}
+a:visited {color:#111;}
+a:active {color:#222;}
+a:hover {text-decoration:none; color:#000;}
+p {font:normal 0.9em/1.5em verdana, arial, serif; margin:0; padding:0.5em 0;}
+p.small, p.small a, p.small a:visited {font-size:10px; color:#888;}
+h2 {font-size:1.6em; margin:0; padding:5px 0 5px 0; color:#444;}
+h3 {font-size:1.1em; color:#666; margin:0; padding:0 0 15px 0;}
+
+#wrapper {min-width:750px; text-align:left; position:relative;}
+/*zahed change margin top*/
+#heading {padding:10px 20px 0 20px; border-bottom:5px solid #A0522D; margin:0 0 0px 0;}
+/*zahed change margin top*/
+* html #heading {height:95px;}
+#heading h1 {font: bold italic 3em "times new roman", serif; margin:0 0 0 50px; padding:0;}
+#heading h1 span {color:#8B0000; padding-left:2px;}
+#heading h2 {font: normal 0.9em verdana, arial, sans-serif; margin-left:50px; padding-bottom:10px; color:#8B0000;}
+
+#search {float:right; margin:10px;}
+#search form {font: 11px verdana, arial, serif; margin:0; padding:0;}
+#search form img {border:0; float:left; margin-right:10px;}
+#search input {font: 11px verdana, arial, serif;}
+
+
+#navigation {clear:both; width:920px; padding:0; margin:0 auto; list-style:none; height:25px; position:relative; z-index:500; font-size:12px; font-family: arial, verdana, sans-serif;}
+#navigation li {float:left; margin-right:4px; background: url(stunicholls_1.gif);}
+#navigation li a.top {display:block; float:left; height:25px; line-height:25px; color:#333; text-decoration:none; font-weight:bold; text-align:center; padding:0 0 0 5px; cursor:pointer; background:url(stunicholls_0.gif);}
+#navigation li a b {float:left; display:block; padding:0 10px 0 5px; background:url(stunicholls_0.gif) right top; color:#333;}
+#navigation li.current a {color:#000; background:url(stunicholls_2.gif)}
+#navigation li.current a b {color:#000; background:url(stunicholls_2.gif) right top;}
+#navigation li a.top:hover {color:#000; background: url(stunicholls_1.gif);}
+#navigation li a.top:hover b {color:#000; background:url(stunicholls_1.gif) right top;}
+#navigation li.current a.top:hover {color:#000; background: url(stunicholls_2.gif); cursor:default;}
+#navigation li.current a.top:hover b {color:#000; background:url(stunicholls_2.gif) right top;}
+
+#navigation table {border-collapse:collapse; margin-right:-10px;}
+
+#navigation ul {position:absolute; left:-9999px; top:-9999px; padding:0; margin:0; list-style:none; background: #fc0 url(sub_back.gif); padding:10px 0; white-space:nowrap; height:auto; width:auto; z-index:300; text-align:left;}
+
+#navigation li:hover {position:relative; z-index:300;}
+#navigation a:hover {position:relative; z-index:300; background: transparent; font-weight:normal;}
+
+#navigation :hover ul {left:0; top:25px; white-space:nowrap; border:1px solid #fff; border-width:0 1px 1px; border-color:#fff #ccc #aaa #eee;}
+#navigation :hover ul li a:hover {text-decoration:underline;}
+
+/* it could have been this simple if all browsers understood */
+/* show next level */
+#navigation li:hover li:hover > ul {left:-15px; margin-left:100%; top:-10px; border:1px solid #fff; border-color:#fff #ccc #aaa #eee;}
+/* keep further levels hidden */
+#navigation li:hover > ul ul {position:absolute; left:-9999px; top:-9999px; width:auto;}
+/* show path followed */
+#navigation li:hover li:hover > a {text-decoration:underline; font-weight:normal;}
+
+#navigation :hover ul li {float:none; background:transparent;}
+#navigation a:hover ul li {float:left;}
+#navigation :hover ul li a {display:block; font-size:12px; height:18px; line-height:18px; width:auto; padding:0 10px; color:#000;  background:url(trans.gif); text-decoration:none; text-align:left;}
+
+/* show next level */
+#navigation a:hover a:hover ul,
+#navigation a:hover a:hover a:hover ul
+{left:100%; top:-10px; border:1px solid #fff; border-color:#fff #ccc #aaa #eee;}
+
+/* keep further levels hidden */
+#navigation a:hover ul ul,
+#navigation a:hover a:hover ul ul
+{position:absolute; left:-9999px; top:-9999px;}
+
+#content {clear:both; position:relative;}
+
+#content, #middle {width:100%; margin:0px auto;}
+#middle {border-top:1px solid #ddd; background:transparent url(images/middle_back.gif) repeat-y; height:auto;}
+
+#information {display:inline; width:475px; float:left; margin-right:35px;}
+#right {display:inline; float:left; width:240px; text-align:right;}
+#right a img {border:0; display:block; float:right; margin-bottom:10px;}
+#right h2 {color:#444;}
+
+#right ul {margin:0; padding:0; list-style:none;}
+#right ul li a {font:normal 0.9em/1.5em verdana, arial, sans-serif; font-weight:bold; color:#c60; text-decoration:underline; line-height:1.5em;}
+#right ul li a:hover {text-decoration:none;}
+
+/*zahed change margin top*/
+#footer {clear:both; padding:0 0 50px 0; border-top:2px solid #A0522D; margin-top:0px; text-align:center; color:#444;}
+/*zahed change margin top*/
+#foot {width:750px; margin:0 auto; text-align:left;}
+p#footnav {float:left;}
+p#footnav b {border:1px solid #ddd;}
+#footer a {color:#444;}
+.clear {clear:both;}
+
+#cie {width:750px; height:310px; background:url(http://www.stunicholls.com/images/bookworm3.jpg) no-repeat right bottom; padding:0; z-index:1;}
+#cie h2#cont {background:transparent; color:#888; font-size:1.5em;}
+#cie h2#is {background:transparent; color:#888; font-size:3.5em;}
+#cie h2#everything {background:transparent; color:#888; font-size:5em;}
+
+#cie h3 {color:#e80; position:absolute; bottom:-20px; right:0; font-size:2em;}
+
+#content ol li, #information ol li {font: normal 0.9em/1.5em verdana, arial, sans-serif; padding:3px 0;}
+.bold {font-weight:bold;}
+a.rss img {border:0; margin-bottom:-3px;}
+
+#ads {padding-top:11px; border-top:1px solid #ddd; margin-top:25px; margin-bottom:-25px;}
+#line {width:750px; margin:0 auto;}
+#square {padding:10px 0 10px 8px; border-top:1px solid #fc0; border-bottom:1px solid #fc0; text-align:left;}
+#googlehead {width:234px; height:60px; margin:0 auto;}
+
+.bred {color:#c00; font-weight:bold;}
+
+p.adlink {color:#080;}
+p.adlink a {color:#c60; font-weight:bold;}
+
+
+
+
+
+
+
+
+
+
+
+#outer {width:504px; height:510px; position:relative; background:url(red_frog.jpg) no-repeat 0px 160px;}
+
+#outer #content {clear:left; position:absolute; left:230px; top:10px; width:250px; z-index:10;}
+
+#menu {list-style-type:none; padding:0; margin:0; width:125px; position:absolute; top:70px; left:0; border:1px solid #fff; border-width:0 1px 1px; z-index:100;}
+#menu ul {list-style-type:none; padding:0; margin:0; width:125px;}
+#menu li {float:left; background:#657; position:relative; border-top:1px solid #fff;}
+
+#menu li.sub {background:#d30;}
+
+#menu li, #menu li a {display:block; color:#fff; font-family:arial, sans-serif; font-size:11px; line-height:24px; width:125px; text-decoration:none;  cursor:pointer; font-weight:bold; text-indent:5px;}
+
+
+#menu ul,
+#menu li.click ul ul,
+#menu li.click ul li.hover ul ul {display:none;}
+
+#menu li.hover {color:#ff0; z-index:500;}
+#menu li.click {color:#ff0;}
+
+#menu li.click ul {display:block;}
+#menu li.click ul li.hover ul, 
+#menu li.click ul li.hover ul li.hover ul {display:block; position:absolute; left:110px; top:-1px; border:1px solid #fff; border-width:0 1px 1px;}
+
+#menu li.click ul li.fly {background: #657 url(frog_arrow.gif) no-repeat top right;}
+#menu li.click ul li.hover {background:#98a;}
+
+#menu li.click ul li.hover ul li {background:#c60;}
+#menu li.click ul li.hover ul li.hover ul li {background:#780; z-index:500;}
+
+#menu li.click ul li.hover ul li.fly {background: #c60 url(frog_arrow.gif) no-repeat top right;}
+#menu li.click ul li.hover ul li.hover {z-index:500; background:#fa4;}
+#menu li.click ul li.hover ul li.hover a {color:#000;}
+
+#menu li.click ul li.hover ul li.hover ul li.hover {background:#aa0;}
+#menu li.click ul li.hover ul li.hover ul li.hover a {color:#fff;}
+
+#outer img {display:block; float:right;}
+#outer p {margin:0px; padding:17px 0 0 0; color:#000; font-size:12px; font-family:arial, sans-serif; text-align:justify;}

@@ -1,0 +1,9 @@
+# Everything here is a library, loaded by the pages with include. Only images, styles and scripts are for browsers.
+<FilesMatch "\.(php|phtml|phar|inc)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>

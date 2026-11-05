@@ -1,0 +1,20 @@
+/* User Wise Ledger Fixing: label beside field, rows like the desktop screen. */
+.ulf-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 9px; }
+.ulf-row > label:not(.ulf-box) { margin: 0; font-size: 12px; font-weight: 700; color: #555; white-space: nowrap; }
+.ulf-row select { flex: 0 1 300px; min-width: 0; width: auto; }
+.ulf-row select:disabled { background: #f1f1f1; color: #888; }
+.ulf-box { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 12px; font-weight: 700; color: #555; }
+.ulf-box input { margin: 0; }
+.ulf-modes { gap: 8px 22px; }
+.ulf-actions { display: flex; gap: 8px; margin: 12px 0; }
+.ulf-actions button:disabled { opacity: .55; cursor: not-allowed; }
+.ulf-list { max-height: 320px; }
+.ulf-c { width: 90px; text-align: center; }
+.ulf-title { margin: 18px 0 4px; font-size: 14px; font-weight: 700; }
+.ulf-note { margin: 0 0 10px; font-size: 12.5px; }
+td .btn-xs { min-height: 26px; padding: 2px 10px; }
+@media (max-width: 640px) {
+  .ulf-row { align-items: stretch; flex-direction: column; gap: 4px; }
+  .ulf-row select { flex: none; width: 100%; }
+  .ulf-modes { flex-flow: row wrap; gap: 8px 18px; }
+}

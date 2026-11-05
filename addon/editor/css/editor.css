@@ -1,0 +1,18 @@
+input{padding:5px 8px;background:#45c2f3;color:#fff;margin:10px 0 0;border-radius:2px;border:1px solid #5f5f5f;width:100px;float:right;box-shadow:1px 1px 1px #000}
+input:hover{box-shadow:1px 1px 1px #bbb;cursor:pointer}
+.action{
+background:#BAF765;
+background:linear-gradient(#BAF765,#A7E059) repeat scroll 0 0 transparent;
+border-radius:0 0 5px 5px;
+box-shadow:0 2px 5px #487C00;
+display:none;
+padding:5px 10px;
+position:fixed;
+text-shadow:1px 1px 0 #D6F3AE;
+top:0;
+width:100%;
+z-index:999;
+text-align:center
+}
+.action h3{color:#282828;display:inline-block}
+.action img{margin:0 10px 0px 0}

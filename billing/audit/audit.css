@@ -1,0 +1,18 @@
+/* The Audit menu, on top of sales.css. */
+.a-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.a-tile { display: block; padding: 12px 14px; border: 1px solid #e1e5f0; border-radius: 10px; background: #fff; color: #1c2540; text-decoration: none; }
+.a-tile b { display: block; font-size: 24px; line-height: 1.25; }
+.a-tile span { color: #5d6784; font-size: 13px; }
+.a-tile.bad b { color: #b42318; }
+.ab { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.ab-info { background: #e3ecfd; color: #1d4ed8; }
+.ab-warn { background: #fef3d7; color: #8a5a06; }
+.ab-bad { background: #fde8e6; color: #b42318; }
+.a-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.a-facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; margin: 0 0 14px; }
+.a-facts dt { color: #5d6784; }
+.a-facts dd { margin: 0; overflow-wrap: anywhere; }
+.a-raw { max-height: 320px; overflow: auto; padding: 10px; border-radius: 8px; background: #f1f3fa; font: 12px/1.45 ui-monospace, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.a-old { color: #b42318; }
+.a-new { color: #137333; }
+small { color: #5d6784; }
