@@ -278,7 +278,7 @@
     body.insertBefore(page, body.firstChild);
     var boxes = inner.querySelectorAll('fieldset.box');
     var heading = inner.querySelector('.titlebar h1, h1, h2');
-    if (heading && heading.closest('table, form')) heading = null;
+    if (heading && heading.closest('table, form, .si-hero')) heading = null; // a document's own header bar keeps its title
     if (boxes.length === 1) {
       boxes[0].classList.add('ui-flat');
       heading = heading || boxes[0].querySelector('legend');

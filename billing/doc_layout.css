@@ -91,6 +91,7 @@ html .sd-card .grid-box table td,html .sd-card .grid-box table th{white-space:no
 /* ======================= Sales Invoice: header, main column and summary column (sales_invoice.php) =======================
    The fields follow the width of their card (container queries), not the window, so the layout fits the top menu, the
    side menu, a tablet or a phone. */
+form.si [hidden],.si-hero [hidden]{display:none!important}
 form.si{--si-ink:#0f172a;--si-muted:#64748b;--si-line:#e2e8f0;--si-soft:#f8fafc;--si-brand:#2563eb;--si-navy:#0f1d40}
 .si-hero{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:0 0 14px;padding:16px 18px;border:1px solid var(--si-line);border-radius:14px;background:linear-gradient(120deg,#ffffff 0%,#f3f7ff 60%,#eef2ff 100%)}
 .si-hero-main{display:flex;align-items:center;gap:14px;min-width:0}
@@ -253,3 +254,24 @@ form.si .si-change b{color:#0f172a;font-variant-numeric:tabular-nums}
 html.ui-common fieldset.ui-block:has(form.si)>legend,html.ui-common fieldset.box:has(form.si)>legend{display:none}
 html.ui-common fieldset.ui-block:has(form.si){border:0!important;padding:0!important}
 html.ui-common fieldset.ui-block:has(form.si)>.ui-block-inner{padding:0!important;border:0!important;background:transparent!important}
+
+/* ======================= POS Sales (sales/pos_sales/pos_sales.php): scan, cart, pay — all from the keyboard ======================= */
+form.pos .pos-scan{padding:16px 18px;background:linear-gradient(120deg,#ffffff 0%,#f3f7ff 100%)}
+form.pos .pos-scanrow{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:end}
+form.pos .pos-scan input:not([type=checkbox]){height:54px!important;font-size:18px!important;border-radius:12px!important;background:#fff!important;border:2px solid #c7d7fb!important}
+form.pos .pos-scan input:focus{border-color:#2563eb!important;box-shadow:0 0 0 4px #2563eb26!important}
+form.pos .pos-qty input{text-align:center;font-weight:700}
+form.pos .pos-help{display:flex;flex-wrap:wrap;gap:4px 10px;margin:10px 0 0;color:#64748b;font-size:12px}
+form.pos .pos-help kbd,.pos-hero kbd{padding:1px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#334155;font:600 11px/1.5 inherit;box-shadow:0 1px 0 #cbd5e1}
+form.pos #cart-body td input{width:96px;height:34px;border:1px solid #cbd5e1;border-radius:8px;text-align:right;padding:4px 8px;font:inherit}
+form.pos #cart-body td input:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px #2563eb26}
+form.pos .pos-totals td input{max-width:140px}
+form.pos .pos-received,form.pos .pos-change,form.pos .pos-print{grid-column:1/-1}
+form.pos .pos-received input{height:52px!important;font-size:22px!important;font-weight:700;text-align:right;border:2px solid #86efac!important;background:#f0fdf4!important}
+form.pos .pos-received input:focus{border-color:#16a34a!important;box-shadow:0 0 0 4px #16a34a26!important}
+form.pos .pos-change output{display:block;padding:10px 14px;border-radius:12px;background:#fef9c3;color:#854d0e;font-size:22px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+form.pos .pos-print select{height:44px!important;font-weight:600}
+form.pos .si-save small{font-weight:500;opacity:.8;margin-left:4px}
+form.pos select:focus,form.pos .si-save:focus{outline:3px solid #93b4ff;outline-offset:2px}
+.pos-print-frame{position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none}
+@media (max-width:720px){form.pos .pos-scanrow{grid-template-columns:90px minmax(0,1fr)}form.pos .pos-help{display:none}}

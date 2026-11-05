@@ -293,7 +293,7 @@ function sales_page_start($title, $active = '')
         'return' => ['../sales_retrun/sales_return.php', 'Sales Return'],
     ];
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">';
-    echo '<title>' . sales_h($title) . '</title><link rel="stylesheet" href="../sales.css"></head><body><div class="wrap">';
+    echo '<title>' . sales_h($title) . '</title><link rel="stylesheet" href="../sales.css"><link rel="stylesheet" href="../../doc_layout.css?v=' . (int) @filemtime(dirname(__DIR__) . '/doc_layout.css') . '"></head><body><div class="wrap">';
     echo '<nav class="sales-nav">';
     foreach ($links as $key => [$href, $label]) {
         echo '<a href="' . sales_h($href) . '"' . ($key === $active ? ' class="active"' : '') . '>' . sales_h($label) . '</a>';

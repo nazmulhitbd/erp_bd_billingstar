@@ -6,6 +6,7 @@
  *  - A search list (customer, product, supplier): Up / Down choose, Enter picks (the first match when none is chosen)
  *    and moves on, Esc closes it.
  *  - Past the last field Enter stops on the form's own button (Save, Show, Apply); Enter there sends the form.
+ *  - data-next="#id" on a field sends Enter to that field instead of the next one in the page.
  *  - Mobile No: Enter runs its Search. The last product field stops on Add; after Add the cursor goes back to Model.
  *    Enter in an empty Model field, once lines were added, jumps to the totals and payment, then to Save.
  *  - A text box such as Serial/IMEI keeps Enter for a new line; Enter on an empty line moves on.
@@ -53,6 +54,9 @@
     var list = fieldsOf(form);
     var i = list.indexOf(from);
     if (back) return i > 0 ? list[i - 1] : null;
+    // A field may name where Enter goes next (data-next="#id"), when that field can take the cursor
+    var named = from.getAttribute('data-next') && document.querySelector(from.getAttribute('data-next'));
+    if (named && usable(named)) return named;
     // Model left empty after lines were added: skip the rest of the product row
     if (from.id === 'e_model' && !from.value.trim() && hasItems()) {
       var section = from.closest('section, .entry, .product-form');
