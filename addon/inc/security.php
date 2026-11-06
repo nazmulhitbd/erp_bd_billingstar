@@ -91,6 +91,9 @@ function bs_dialog_start()
         $v = (int) @filemtime($root . "addon/dialog/$name.js") + (int) @filemtime($root . "addon/dialog/$name.css");
         $tags .= '<link rel="stylesheet" href="' . $up . "addon/dialog/$name.css?v=$v" . '"><script src="' . $up . "addon/dialog/$name.js?v=$v" . '"></script>';
     }
+    if (function_exists('bs_lang_from_query')) {
+        bs_lang_from_query(); // ?lang=xx from the account menu
+    }
     ob_start(function ($html, $phase) use ($tags) {
         static $done = false;
         if ($done || $html === '') {
@@ -110,6 +113,8 @@ function bs_dialog_start()
             return $html;
         }
         $done = true;
+        $html = function_exists('bs_translate_html') ? bs_translate_html($html) : $html; // the user's language first (English phrases)
+        $html = function_exists('bs_country_text') ? bs_country_text($html) : $html; // then the country's tax words in what stayed English
         $at = null;
         if (preg_match('/<head\b[^>]*>/i', $html, $m, PREG_OFFSET_CAPTURE)) {
             $at = $m[0][1] + strlen($m[0][0]);

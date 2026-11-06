@@ -8,6 +8,7 @@ require_once __DIR__ . '/shell_common.php';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?php echo $h($main_title); ?></title>
+<link rel="icon" type="image/svg+xml" href="../addon/images/petabill-favicon.svg">
 <meta name="Author" content="MoonNetworks">
 <meta name="Description" content="MoonBilling">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
@@ -35,7 +36,7 @@ function test(url) { window.open(url, 'frm_main'); }
 <header class="app-header"<?php echo !empty($index_bgcolor) ? ' style="--brand:' . $h($index_bgcolor) . '"' : ''; ?>>
   <button type="button" class="nav-toggle btn btn-light" aria-controls="navigation" aria-expanded="false" title="Menu"><i class="bi bi-list"></i></button>
   <a class="brand" href="<?php echo $h(perm_link($home)); ?>" target="frm_main" data-path="<?php echo $h($menu[0]['label'] ?? 'Home'); ?>">
-    <span class="brand-mark"><?php if ($shellLogo !== ''): ?><img src="../<?php echo $h($shellLogo); ?>" alt=""><?php else: ?><i class="bi bi-receipt-cutoff"></i><?php endif; ?></span>
+    <span class="brand-mark"><?php if ($shellLogo !== ''): ?><img src="../<?php echo $h($shellLogo); ?>" alt=""><?php else: ?><img src="../addon/images/petabill-mark.svg" alt=""><?php endif; ?></span>
     <span class="brand-text"><span class="brand-name"><?php echo $top_menu_deading; ?></span><span class="brand-slogan"><?php echo $top_menu_slogan; ?></span></span>
   </a>
   <div class="menu-search">
@@ -45,7 +46,7 @@ function test(url) { window.open(url, 'frm_main'); }
   </div>
   <div class="header-tools">
 <?php if (count($branchNames) > 1): ?>
-    <form method="post" action="user/switch_branch.php" class="branch-switch" title="Working branch">
+    <form method="post" action="user/switch_branch.php" class="branch-switch" title="Working branch"><?php echo perm_form_field(); ?>
       <i class="bi bi-diagram-3"></i>
       <select name="branch_id" class="form-select form-select-sm" aria-label="Working branch" onchange="this.form.submit()">
 <?php foreach ($branchNames as $id => $name): ?>

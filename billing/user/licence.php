@@ -1,5 +1,5 @@
 <?php
-/** Settings > Service Licence: what Billing CRM allows this install, and connecting to it. SuperAdmin only. */
+/** Settings > Service Licence: what PetaBill Cloud allows this install, and connecting to it. SuperAdmin only. */
 require_once dirname(__DIR__) . '/trader/trader_common.php';
 
 if (!perm_is_super()) {
@@ -70,12 +70,18 @@ if ($data):
 <div class="summary"><div>Service Code<b><?= (int) $data['service_code'] ?></b></div><div>Plan<b><?= sales_h($data['plan']) ?></b></div><div>Started<b><?= sales_h($data['start_date']) ?></b></div><div>Expires<b><?= sales_h($data['expiry_date']) ?></b></div><div>Days Left<b><?= (int) $status['days'] ?></b></div></div>
 <section class="section"><div class="section-title">Modules</div>
 <div class="grid g4"><?php foreach ($data['all_modules'] as $code): if (!isset($names[$code])) { continue; } ?><div><?= licence_module_on($code) ? '✓' : '✗' ?> <?= sales_h($names[$code]) ?></div><?php endforeach; ?></div></section>
+<section class="section"><div class="section-title">Package limits<?= ($data['package'] ?? '') !== '' ? ' · ' . sales_h($data['package']) : '' ?></div>
+<table class="data"><thead><tr><th>Limit</th><th class="num">In use</th><th class="num">Allowed</th><th>Status</th></tr></thead><tbody>
+<?php foreach (LICENCE_LIMITS as $name => [, , $many]): $max = licence_limit($name); $used = licence_used($name); ?>
+<tr><td><?= sales_h(ucfirst($many)) ?></td><td class="num"><?= number_format($used) ?></td><td class="num"><?= $max === null ? 'No limit' : number_format($max) ?></td><td><?= $max === null ? '' : ($used >= $max ? '<span class="badge warn">Full: adding more is stopped</span>' : number_format($max - $used) . ' left') ?></td></tr>
+<?php endforeach; ?></tbody></table>
+<p class="footnote">Set by your package in PetaBill Cloud. Reaching a limit only stops adding more; nothing already here is removed or locked. One install runs one company.</p></section>
 <section class="section"><div class="section-title">Last check</div>
 <p class="footnote" style="margin-top:0">This install checks by itself every minute while it is in use. Panel: <?= sales_h($row['crm_url']) ?>. Last answer: <?= (int) $row['checked_at'] ? date('Y-m-d H:i', (int) $row['checked_at']) : 'never' ?>.<?= (string) $row['last_error'] !== '' ? ' Last problem: ' . sales_h($row['last_error']) : '' ?></p>
 <form method="post"><?= sales_csrf_field() ?><div class="toolbar"><button class="btn primary" name="action" value="edit_check">Check Now</button></div></form></section>
 <?php endif;
 if (!$row || $status['locked']): ?>
-<section class="section"><div class="section-title">Connect to Billing CRM</div>
+<section class="section"><div class="section-title">Connect to PetaBill Cloud</div>
 <?php if (!$row): ?><p class="footnote" style="margin-top:0">This install is not connected, so nothing is limited. Once connected, the panel controls its expiry date and modules.</p><?php endif; ?>
 <form method="post"><?= sales_csrf_field() ?><div class="field"><label for="connection">Connection Code</label><textarea id="connection" name="connection" rows="5" required></textarea></div>
 <div class="toolbar" style="margin-top:10px"><button class="btn primary" name="action" value="edit_connect">Connect</button></div></form></section>

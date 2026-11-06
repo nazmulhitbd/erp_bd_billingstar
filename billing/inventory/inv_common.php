@@ -118,16 +118,12 @@ function inv_assert_unlocked(mysqli $db, $date, $branchId)
 /** Reserve the next document number inside a transaction, e.g. DESPUR2024000001. */
 function inv_next_no(mysqli $db, $code, $date)
 {
-    $year = (int) substr($date, 0, 4);
-    sales_exec($db, 'INSERT INTO inv_sequences (doc_code, seq_year, last_number) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE last_number = last_number + 1', 'si', [$code, $year])->close();
-    $row = sales_row($db, 'SELECT last_number FROM inv_sequences WHERE doc_code=? AND seq_year=? FOR UPDATE', 'si', [$code, $year]);
-    return inv_setting($db, 'doc_prefix', 'DES') . $code . $year . str_pad((string) $row['last_number'], 6, '0', STR_PAD_LEFT);
+    return docno_next($db, 'INV_' . $code, $date); // Settings > Document Numbering
 }
 
 function inv_peek_no(mysqli $db, $code)
 {
-    $row = sales_row($db, 'SELECT last_number + 1 AS n FROM inv_sequences WHERE doc_code=? AND seq_year=?', 'si', [$code, (int) date('Y')]);
-    return inv_setting($db, 'doc_prefix', 'DES') . $code . date('Y') . str_pad((string) ($row['n'] ?? 1), 6, '0', STR_PAD_LEFT);
+    return docno_peek($db, 'INV_' . $code);
 }
 
 /* ---------------- Products, stores and stock ---------------- */

@@ -45,7 +45,7 @@ if ($base !== '') { // first build only: php build_sql.php path/to/base_schema.s
 if ($structure === false || $structure === '') {
     exit("The database structure section was not found.\n");
 }
-$out = "-- Billing Star: everything a new installation runs, in order. Made by build_sql.php: change the module schema, then rebuild.\n-- SECTION: Database structure\n" . rtrim($structure) . "\n";
+$out = "-- PetaBill: everything a new installation runs, in order. Made by build_sql.php: change the module schema, then rebuild.\n-- SECTION: Database structure\n" . rtrim($structure) . "\n";
 foreach (BUILD_MODULES as $label => $file) {
     $sql = file_get_contents("$root/$file");
     if ($sql === false || preg_match('/^-- SECTION: /m', $sql)) {

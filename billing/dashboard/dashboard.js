@@ -8,15 +8,19 @@
   var C2 = css.getPropertyValue('--series-2').trim() || '#93b4f5';
   var MUTED = '#64748b', GRID = '#eef1f6', INK = '#334155';
 
+  var MONEY = window.BS_MONEY || { symbol: '৳', lakh: true }; // the country edition (dashboard.php)
+  var SYM = MONEY.symbol;
   function compact(v) {
     var a = Math.abs(v), s;
-    if (a >= 10000000) s = (a / 10000000).toFixed(a >= 100000000 ? 0 : 1) + ' Cr';
-    else if (a >= 100000) s = (a / 100000).toFixed(a >= 1000000 ? 0 : 1) + ' L';
+    if (MONEY.lakh && a >= 10000000) s = (a / 10000000).toFixed(a >= 100000000 ? 0 : 1) + ' Cr';
+    else if (MONEY.lakh && a >= 100000) s = (a / 100000).toFixed(a >= 1000000 ? 0 : 1) + ' L';
+    else if (!MONEY.lakh && a >= 1000000000) s = (a / 1000000000).toFixed(1) + ' B';
+    else if (!MONEY.lakh && a >= 1000000) s = (a / 1000000).toFixed(a >= 10000000 ? 0 : 1) + ' M';
     else if (a >= 1000) s = (a / 1000).toFixed(a >= 10000 ? 0 : 1) + 'K';
     else s = String(Math.round(a));
     return (v < 0 ? '-' : '') + s.replace('.0 ', ' ').replace(/\.0K$/, 'K');
   }
-  function full(v) { return '৳ ' + Number(v).toLocaleString('en-IN', { maximumFractionDigits: 0 }); }
+  function full(v) { return SYM + ' ' + Number(v).toLocaleString(MONEY.lakh ? 'en-IN' : 'en-US', { maximumFractionDigits: 0 }); }
   function el(name, attrs, parent) {
     var n = document.createElementNS(SVGNS, name);
     for (var k in attrs) n.setAttribute(k, attrs[k]);
@@ -69,7 +73,7 @@
     el('stop', { offset: '100%', 'stop-color': C1, 'stop-opacity': 0.02 }, grad);
     for (var v = 0; v <= sc.max + 1e-9; v += sc.step) {
       el('line', { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), stroke: GRID }, svg);
-      text(svg, pad.l - 8, y(v) + 4, '৳' + compact(v), { 'text-anchor': 'end' });
+      text(svg, pad.l - 8, y(v) + 4, SYM + compact(v), { 'text-anchor': 'end' });
     }
     var every = Math.max(1, Math.ceil(rows.length / Math.max(2, Math.floor(iw / 70))));
     rows.forEach(function (r, i) {
@@ -147,7 +151,7 @@
       }
     });
     text(svg, c, c - 6, caption, { 'text-anchor': 'middle', 'font-size': 13 });
-    text(svg, c, c + 16, '৳' + compact(total), { 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 600, fill: '#0f172a' });
+    text(svg, c, c + 16, SYM + compact(total), { 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 600, fill: '#0f172a' });
   }
 
   /* ---------- Horizontal bars ---------- */
@@ -167,7 +171,7 @@
     box.style.height = H + 'px';
     for (var v = 0; v <= sc.max + 1e-9; v += sc.step) {
       el('line', { x1: x(v), x2: x(v), y1: pad.t, y2: H - pad.b, stroke: GRID }, svg);
-      text(svg, x(v), H - 6, '৳' + compact(v), { 'text-anchor': 'middle' });
+      text(svg, x(v), H - 6, SYM + compact(v), { 'text-anchor': 'middle' });
     }
     rows.forEach(function (r, i) {
       var cy = pad.t + i * rowH + rowH / 2;
@@ -177,7 +181,7 @@
       var bw = Math.max(2, x(r.value) - x(0));
       var bar = el('rect', { x: x(0), y: cy - 7, width: bw, height: 14, rx: 3, fill: colour }, svg);
       el('title', {}, bar).textContent = r.label + ': ' + full(r.value);
-      text(svg, x(0) + bw + 6, cy + 4, '৳' + compact(r.value), { fill: INK, 'font-size': 11.5, 'font-weight': 600 });
+      text(svg, x(0) + bw + 6, cy + 4, SYM + compact(r.value), { fill: INK, 'font-size': 11.5, 'font-weight': 600 });
     });
   }
 

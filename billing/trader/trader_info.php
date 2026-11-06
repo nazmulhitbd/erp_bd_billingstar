@@ -187,6 +187,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         trader_sync($conn, $traderId);
         $conn->commit();
+        if (($v['bin'] ?? '') !== '' && !bs_tax_id_valid(bs_country_code(), $v['bin'])) { // a warning, never a refusal
+            $message .= ' Check the ' . bs_country()['tax_id'] . ' "' . $v['bin'] . '": it does not match the usual format (' . (BS_TAX_ID_HINT[bs_country_code()] ?? '') . ').';
+        }
         sales_flash_redirect($self . '&id=' . $traderId, 'success', $message);
     } catch (Throwable $e) {
         try { $conn->rollback(); } catch (Throwable $ignored) {}

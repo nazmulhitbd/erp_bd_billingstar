@@ -56,11 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         sales_flash_redirect($self, 'success', 'SMS settings saved.');
     }
     if ($action === 'edit_test_mail') {
-        $error = msg_mail($post('test_to'), 'Billing Star test email', "Email from Billing Star is working.\n", true);
+        $error = msg_mail($post('test_to'), 'PetaBill test email', "Email from PetaBill is working.\n", true);
         sales_flash_redirect($self, $error === '' ? 'success' : 'error', $error === '' ? 'The mail server accepted the test email. Check the inbox and spam folder.' : $error);
     }
     if ($action === 'edit_test_sms') {
-        $error = msg_sms($post('test_to', 30), 'Billing Star test SMS', true);
+        $error = msg_sms($post('test_to', 30), 'PetaBill test SMS', true);
         sales_flash_redirect($self, $error === '' ? 'success' : 'error', $error === '' ? 'The gateway accepted the test SMS. Check the phone.' : $error);
     }
     sales_flash_redirect($self, 'error', 'Unknown action.');
@@ -78,7 +78,7 @@ echo sales_flash_html($flash);
 <form method="post" autocomplete="off"><?= sales_csrf_field() ?>
 <div class="grid g2">
 <div class="field"><label for="mail_from">From Email</label><input type="email" id="mail_from" name="mail_from" maxlength="190" value="<?= sales_h(msg_get('mail_from')) ?>"></div>
-<div class="field"><label for="mail_name">From Name</label><input id="mail_name" name="mail_name" maxlength="80" value="<?= sales_h(msg_get('mail_name', 'Billing Star')) ?>"></div>
+<div class="field"><label for="mail_name">From Name</label><input id="mail_name" name="mail_name" maxlength="80" value="<?= sales_h(msg_get('mail_name', 'PetaBill')) ?>"></div>
 <div class="field"><label for="smtp_host">SMTP Server</label><input id="smtp_host" name="smtp_host" maxlength="190" placeholder="mail.example.com" value="<?= sales_h(msg_get('smtp_host')) ?>"></div>
 <div class="field"><label for="smtp_port">SMTP Port</label><input type="number" id="smtp_port" name="smtp_port" min="1" max="65535" value="<?= (int) msg_get('smtp_port', '587') ?>"></div>
 <div class="field"><label for="smtp_secure">Security</label><select id="smtp_secure" name="smtp_secure"><?php foreach (['tls' => 'STARTTLS (port 587)', 'ssl' => 'SSL (port 465)', 'none' => 'None (not safe)'] as $value => $label): ?><option value="<?= $value ?>"<?= $value === $secure ? ' selected' : '' ?>><?= $label ?></option><?php endforeach; ?></select></div>

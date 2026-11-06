@@ -15,6 +15,7 @@ $companyName = trim((string) ($companyRow[0]['setting_value'] ?? '')) ?: strip_t
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?php echo $h($main_title); ?></title>
+<link rel="icon" type="image/svg+xml" href="../addon/images/petabill-favicon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <meta name="ui-common-css" content="ui-common.css?v=<?php echo (int) @filemtime(__DIR__ . '/ui-common.css'); ?>">
@@ -42,7 +43,7 @@ function test(url) { window.open(url, 'frm_main'); }
 <div class="side-layout">
 <aside class="app-nav side-nav" id="navigation" aria-label="Main menu">
   <a class="brand side-brand" href="<?php echo $h(perm_link($home)); ?>" target="frm_main" data-path="<?php echo $h($menu[0]['label'] ?? 'Home'); ?>">
-    <span class="brand-mark"><?php if ($shellLogo !== ''): ?><img src="../<?php echo $h($shellLogo); ?>" alt=""><?php else: ?><i class="bi bi-receipt-cutoff"></i><?php endif; ?></span>
+    <span class="brand-mark"><?php if ($shellLogo !== ''): ?><img src="../<?php echo $h($shellLogo); ?>" alt=""><?php else: ?><img src="../addon/images/petabill-mark.svg" alt=""><?php endif; ?></span>
     <span class="brand-name"><?php echo $top_menu_deading; ?></span>
   </a>
   <ul class="nav-list">
@@ -106,7 +107,7 @@ function test(url) { window.open(url, 'frm_main'); }
     <div class="company-box d-none d-lg-flex">
       <b title="<?php echo $h($companyName); ?>"><?php echo $h($companyName); ?></b>
 <?php if (count($branchNames) > 1): ?>
-      <form method="post" action="user/switch_branch.php" class="branch-switch" title="Working branch">
+      <form method="post" action="user/switch_branch.php" class="branch-switch" title="Working branch"><?php echo perm_form_field(); ?>
         <select name="branch_id" aria-label="Working branch" onchange="this.form.submit()">
 <?php foreach ($branchNames as $id => $name): ?>
           <option value="<?php echo (int) $id; ?>"<?php echo (int) $id === $currentBranch ? ' selected' : ''; ?>><?php echo $h($name); ?></option>

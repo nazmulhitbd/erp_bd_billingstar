@@ -164,7 +164,7 @@ function rma_save_document(array $cfg)
             }
         } else {
             $docDate = (string) $header[$cfg['date']];
-            $docNo = rma_doc_no($cfg['code'], (int) substr($docDate, 0, 4));
+            $docNo = rma_doc_no($cfg['code'], $docDate);
             $cols = array_merge([$cfg['no'] => 's'], $headerCols, ['created_by' => 'i', 'created_by_name' => 's']);
             $values = array_merge([$docNo], array_map(function ($c) use ($header) { return $header[$c]; }, array_keys($headerCols)), [rma_user_id(), rma_user_name()]);
             $place = implode(', ', array_fill(0, count($cols), '?'));

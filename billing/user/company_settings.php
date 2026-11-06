@@ -165,7 +165,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unlink($root . $oldLogo);
         }
         // A new layout takes over the whole window, not just this frame (company_settings.js).
-        sales_flash_redirect($back . ($shellChanged ? '&relayout=1' : ''), 'success', $shellChanged ? 'Settings saved. Opening the ' . strtolower(PERM_SHELLS[$shell]) . ' layout…' : 'Settings saved.');
+        $taxId = trim((string) ($_POST['company_bin'] ?? ''));
+        $taxNote = $taxId !== '' && !bs_tax_id_valid(bs_country_code(), $taxId) ? ' Check the ' . bs_country()['company_tax_id'] . ': it does not match the usual ' . bs_country()['name'] . ' format (' . (BS_TAX_ID_HINT[bs_country_code()] ?? '') . ').' : '';
+        sales_flash_redirect($back . ($shellChanged ? '&relayout=1' : ''), 'success', ($shellChanged ? 'Settings saved. Opening the ' . strtolower(PERM_SHELLS[$shell]) . ' layout…' : 'Settings saved.') . $taxNote);
     } catch (RuntimeException $e) {
         try { $conn->rollback(); } catch (Throwable $ignored) {}
         sales_flash_redirect($back, 'error', $e->getMessage());
@@ -218,7 +220,7 @@ $today = date('Y-m-d');
   <p class="cs-note">Shown on the sign-in page, prints, reports and portals. Leave a box empty to hide it.</p>
   <div class="cs-grid">
     <div class="cs-field"><label for="company_name">Company name</label><input id="company_name" name="company_name" maxlength="120" value="<?= $v('company_name') ?>" data-preview="company"></div>
-    <div class="cs-field"><label for="company_bin">BIN (VAT registration)</label><input id="company_bin" name="company_bin" maxlength="60" placeholder="000108157-0101" value="<?= $v('company_bin') ?>"><small>Printed on POS receipts.</small></div>
+    <div class="cs-field"><label for="company_bin"><?= sales_h(bs_country()['company_tax_id'] . ' (' . bs_country()['tax'] . ' registration)') ?></label><input id="company_bin" name="company_bin" maxlength="60" placeholder="000108157-0101" value="<?= $v('company_bin') ?>"><small>Printed on POS receipts.</small></div>
     <div class="cs-field"><label for="company_email">Email</label><input type="email" id="company_email" name="company_email" maxlength="120" value="<?= $v('company_email') ?>" data-preview="email"></div>
     <div class="cs-field"><label for="company_phone">Phone</label><input id="company_phone" name="company_phone" maxlength="60" value="<?= $v('company_phone') ?>" data-preview="phone"></div>
     <div class="cs-field"><label for="company_mobile">Mobile</label><input id="company_mobile" name="company_mobile" maxlength="60" value="<?= $v('company_mobile') ?>" data-preview="mobile"></div>

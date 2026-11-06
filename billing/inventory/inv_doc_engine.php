@@ -649,7 +649,7 @@ function inv_doc_form(mysqli $db, array $cfg, $self, $doc, array $h, $readOnly, 
 
     // Summary column: the amount, payment, Save.
     echo '<aside class="si-side"><section class="si-sum" aria-label="Summary"><div class="si-sum-top"><span data-label="' . ($has('prev_price') ? 'New amount' : 'Net payable') . '">' . ($has('prev_price') ? 'New amount' : 'Net payable') . '</span>'
-        . '<b><small>&#2547;</small> <span id="si_net">0.00</span></b><p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p></div>'
+        . '<b><small>' . sales_h(bs_currency_symbol()) . '</small> <span id="si_net">0.00</span></b><p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p></div>'
         . '<table class="stotals" id="totals"></table></section>';
     if ($cfg['cash']) {
         echo '<section class="sd-card si-pay" data-step="4">' . $card(4, 'Payment', 'Enter the amount ' . ($meta['party'] === 'supplier' ? 'paid' : 'received') . ' now, if any.') . '<div class="hgrid si-paygrid">';

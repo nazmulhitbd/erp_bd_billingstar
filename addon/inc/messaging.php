@@ -55,7 +55,7 @@ function msg_mail($to, $subject, $body, $test = false)
     if (!filter_var($to, FILTER_VALIDATE_EMAIL) || preg_match('/[\r\n]/', $subject)) {
         return 'That email address is not valid.';
     }
-    $name = trim(preg_replace('/[\r\n"]/', '', msg_get('mail_name', 'Billing Star')));
+    $name = trim(preg_replace('/[\r\n"]/', '', msg_get('mail_name', 'PetaBill')));
     $headers = ['From: "' . $name . '" <' . $from . '>', "To: <$to>", 'Subject: =?UTF-8?B?' . base64_encode($subject) . '?=', 'Date: ' . date('r'), 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=utf-8', 'Content-Transfer-Encoding: base64'];
     try {
         msg_smtp_send($host, $from, $to, implode("\r\n", $headers) . "\r\n\r\n" . rtrim(chunk_split(base64_encode($body))));

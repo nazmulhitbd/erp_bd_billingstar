@@ -140,48 +140,15 @@ function sales_tables_ready(mysqli $db, array $tables)
  */
 function sales_next_number(mysqli $db, $prefix, $year, $sequenceTable = 'sales_doc_sequences')
 {
-    $year = (int) $year;
-    if ($sequenceTable === 'sales_doc_sequences') {
-        sales_exec(
-            $db,
-            'INSERT INTO sales_doc_sequences (doc_type, sequence_year, last_number) VALUES (?, ?, 1) '
-                . 'ON DUPLICATE KEY UPDATE last_number = last_number + 1',
-            'si',
-            [$prefix, $year]
-        )->close();
-        $row = sales_row($db, 'SELECT last_number FROM sales_doc_sequences WHERE doc_type=? AND sequence_year=? FOR UPDATE', 'si', [$prefix, $year]);
-    } elseif (in_array($sequenceTable, ['sales_invoice_sequences', 'sales_order_sequences'], true)) {
-        sales_exec(
-            $db,
-            'INSERT INTO ' . $sequenceTable . ' (sequence_year, last_number) VALUES (?, 1) '
-                . 'ON DUPLICATE KEY UPDATE last_number = last_number + 1',
-            'i',
-            [$year]
-        )->close();
-        $row = sales_row($db, 'SELECT last_number FROM ' . $sequenceTable . ' WHERE sequence_year=? FOR UPDATE', 'i', [$year]);
-    } else {
-        throw new InvalidArgumentException('Unknown sequence table.');
-    }
-    if (!$row) {
-        throw new RuntimeException('Unable to reserve a document number.');
-    }
-    return $prefix . $year . str_pad((string) $row['last_number'], 6, '0', STR_PAD_LEFT);
+    // Settings > Document Numbering (addon/inc/docno.php). $year may be the document date, which fiscal and monthly patterns need.
+    $date = is_string($year) && strlen($year) >= 10 ? substr($year, 0, 10) : (int) $year . date('-m-d');
+    return docno_next($db, $prefix, $date);
 }
 
 /** Preview of the next number (display only, not reserved). */
 function sales_peek_number(mysqli $db, $prefix, $sequenceTable = 'sales_doc_sequences')
 {
-    $year = (int) date('Y');
-    try {
-        if ($sequenceTable === 'sales_doc_sequences') {
-            $row = sales_row($db, 'SELECT last_number + 1 AS n FROM sales_doc_sequences WHERE doc_type=? AND sequence_year=?', 'si', [$prefix, $year]);
-        } else {
-            $row = sales_row($db, 'SELECT last_number + 1 AS n FROM ' . $sequenceTable . ' WHERE sequence_year=?', 'i', [$year]);
-        }
-    } catch (Throwable $e) {
-        $row = null;
-    }
-    return $prefix . $year . str_pad((string) ($row['n'] ?? 1), 6, '0', STR_PAD_LEFT);
+    return docno_peek($db, $prefix);
 }
 
 function sales_flash_redirect($url, $kind, $message)
@@ -238,7 +205,7 @@ function sales_stores(mysqli $db)
     }
 }
 
-/** Amount in words for voucher and invoice prints (Bangladeshi style: lakh, crore). */
+/** Amount in words for voucher and invoice prints: lakh and crore, or million and billion, as the country writes them. */
 function acc_words($amount)
 {
     $ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
@@ -248,17 +215,26 @@ function acc_words($amount)
     $taka = (int) floor($amount);
     $paisa = (int) round(($amount - $taka) * 100);
     $parts = [];
-    foreach ([[10000000, 'Crore'], [100000, 'Lakh'], [1000, 'Thousand']] as [$unit, $name]) {
+    $lakh = !function_exists('bs_country') || bs_country()['grouping'] === 'lakh';
+    $units = $lakh ? [[10000000, 'Crore'], [100000, 'Lakh'], [1000, 'Thousand']] : [[1000000000, 'Billion'], [1000000, 'Million'], [1000, 'Thousand']];
+    foreach ($units as [$unit, $name]) {
         if ($taka >= $unit) {
-            $parts[] = ($unit === 10000000 ? acc_words_int(intdiv($taka, $unit), $three, $two) : $two(intdiv($taka, $unit))) . ' ' . $name;
+            $parts[] = ($unit === $units[0][0] ? acc_words_int(intdiv($taka, $unit), $three, $two) : $three(intdiv($taka, $unit))) . ' ' . $name;
             $taka %= $unit;
         }
     }
     if ($taka > 0) {
         $parts[] = $three($taka);
     }
+    if (function_exists('bs_country') && bs_country()['cent_word'] === '') { // a currency with no smaller unit (the dong)
+        $paisa = 0;
+    } elseif (function_exists('bs_country') && bs_country()['decimals'] === 3) { // dinar, rial: 1,000 fils or baisa
+        $paisa = (int) round(($amount - floor($amount)) * 1000);
+        $two = fn($n) => $n < 20 ? $ones[$n] : trim($tens[intdiv($n, 10)] . ' ' . $ones[$n % 10]);
+        $twoSub = fn($n) => trim(($n >= 100 ? $ones[intdiv($n, 100)] . ' Hundred ' : '') . $two($n % 100));
+    }
     $text = ($parts ? implode(' ', $parts) : 'Zero') . ' Taka';
-    return $text . ($paisa > 0 ? ' and ' . $two($paisa) . ' Paisa' : '') . ' Only';
+    return $text . ($paisa > 0 ? ' and ' . (isset($twoSub) ? $twoSub($paisa) : $two($paisa)) . ' Paisa' : '') . ' Only';
 }
 
 function acc_words_int($n, $three, $two)

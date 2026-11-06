@@ -903,6 +903,28 @@ function perm_link($url)
     return 'go.php?k=' . substr(hash_hmac('sha256', $url, 'menu-link' . ($GLOBALS['dbpass'] ?? '')), 0, 40);
 }
 
+/**
+ * Form check for the older pages that have no PHP session: bound to this sign-in's session cookie (HttpOnly, so another
+ * site can neither read it nor work the value out), and it changes at every sign-in.
+ */
+function perm_form_token()
+{
+    $sesid = (string) ($_COOKIE['admin_sesid'] ?? '');
+    return $sesid === '' ? '' : hash_hmac('sha256', 'form|' . $sesid, 'form-check' . ($GLOBALS['dbpass'] ?? ''));
+}
+
+function perm_form_field()
+{
+    return '<input type="hidden" name="form_check" value="' . htmlspecialchars(perm_form_token(), ENT_QUOTES) . '">';
+}
+
+/** True when a POST carries this sign-in's form check. */
+function perm_form_ok()
+{
+    $token = perm_form_token();
+    return $token !== '' && hash_equals($token, (string) ($_POST['form_check'] ?? ''));
+}
+
 /** The page behind a token from perm_link(), or '' when it is not a menu page. */
 function perm_link_target($token)
 {
@@ -1206,3 +1228,7 @@ function perm_portal_bridge($sessionKey, $idleMinutes)
 
 require_once __DIR__ . '/notify.php'; // every page that can raise a notification has this file loaded
 require_once __DIR__ . '/licence.php';
+require_once __DIR__ . '/docno.php'; // automatic, unique numbers for every document (Settings > Document Numbering)
+require_once __DIR__ . '/country.php'; // the country edition: currency, tax names, financial year, invoice title
+require_once __DIR__ . '/compliance.php'; // tax rates, tax splits, tax-ID checks and the country's compliance checklist
+require_once __DIR__ . '/i18n.php'; // languages: the country's or the user's (Settings > Country, Language & Tax)

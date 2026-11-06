@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         )->close();
 
         $userId = (int) ($GLOBALS['user_id'] ?? 0);
-        $adjNo = sales_next_number($conn, 'SA', (int) substr($adjDate, 0, 4));
+        $adjNo = sales_next_number($conn, 'SA', $adjDate);
         $adjId = sales_insert(
             $conn,
             'INSERT INTO sales_order_adjustments (adjustment_no, order_id, adjustment_date, reason, old_subtotal, new_subtotal, old_net_amount, new_net_amount, old_advance, new_advance, old_delivery_date, new_delivery_date, created_by) '

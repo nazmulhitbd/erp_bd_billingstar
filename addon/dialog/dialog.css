@@ -1,4 +1,4 @@
-/* Billing Star popups (addon/dialog/dialog.js): questions, success, failure, warning, information and recommendation.
+/* PetaBill popups (addon/dialog/dialog.js): questions, success, failure, warning, information and recommendation.
    Every page gets this file from bs_dialog_start() in addon/inc/security.php. Class names start with bsd- so no page style
    reaches them, and the font and sizes are set here because the older pages use many different ones. */
 .bsd-backdrop {

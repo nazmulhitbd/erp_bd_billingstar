@@ -1,6 +1,6 @@
 <?php
 /**
- * Billing Star installer. Steps: server check, database, company, administrator, install, finish.
+ * PetaBill installer. Steps: server check, database, company (optionally with sample data), administrator, install, finish.
  * It only works while addon/display/dbconfig.php does not exist, and only on an empty database, so it can never touch a
  * running system. The billing database password stays in this PHP session until the install ends; a MySQL administrator
  * login is used once on the database step and never kept; the application administrator's password is hashed when entered.
@@ -19,7 +19,7 @@ $finished = $_SESSION['inst_finished'] ?? null;
 /** Stop every request once installed; the session that is finishing the install is the one exception. */
 if (is_file(INST_CONFIG) && !$finished && empty($_SESSION['inst']['built'])) {
     http_response_code(403);
-    inst_shell('Already installed', 0, '<h1>Billing Star is already installed</h1><p>The installer is switched off, so it cannot change this system.</p><p><a class="btn" href="../index.php">Go to sign in</a></p><p class="note">To install again, remove <code>addon/display/dbconfig.php</code> from the server. That disconnects this system from its database.</p>');
+    inst_shell('Already installed', 0, '<h1>PetaBill is already installed</h1><p>The installer is switched off, so it cannot change this system.</p><p><a class="btn" href="../index.php">Go to sign in</a></p><p class="note">To install again, remove <code>addon/display/dbconfig.php</code> from the server. That disconnects this system from its database.</p>');
     exit;
 }
 if (empty($_SESSION['inst_token'])) {
@@ -59,7 +59,9 @@ if (($_POST['action'] ?? '') === 'run') {
         $error === '' ? print(json_encode(['ok' => true, 'label' => $labels[$step]])) : $fail($error);
         exit;
     }
-    if ($step === count($labels)) {
+    $tail = array_merge(['setup'], !empty($inst['sample']) && inst_has_sample() ? ['sample'] : [], ['config']);
+    $what = $step >= count($labels) ? ($tail[$step - count($labels)] ?? '') : '';
+    if ($what === 'setup') {
         try {
             inst_exec($conn, 'DELETE FROM admin_user WHERE user_name=?', 's', [$inst['admin']['user']]); // a retry starts clean
             inst_save_setup($conn, $inst['company'], $inst['admin']);
@@ -70,13 +72,18 @@ if (($_POST['action'] ?? '') === 'run') {
         echo json_encode(['ok' => true, 'label' => 'Company and administrator']);
         exit;
     }
-    if ($step === count($labels) + 1) {
+    if ($what === 'sample') {
+        $error = inst_load_sample($conn, $inst['admin']['user']);
+        $error === '' ? print(json_encode(['ok' => true, 'label' => 'Sample data'])) : $fail($error);
+        exit;
+    }
+    if ($what === 'config') {
         $inst['built'] = 1;
         if (inst_write_config($inst['db']) !== '') {
             echo json_encode(['ok' => true, 'label' => 'Configuration', 'done' => true]); // the finish step shows it to save by hand
             exit;
         }
-        $_SESSION['inst_finished'] = ['user' => $inst['admin']['user'], 'brand' => $inst['company']['brand']];
+        $_SESSION['inst_finished'] = ['user' => $inst['admin']['user'], 'brand' => $inst['company']['brand'], 'sample' => !empty($inst['sample'])];
         unset($_SESSION['inst']); // the database password leaves the session here
         echo json_encode(['ok' => true, 'label' => 'Configuration', 'done' => true]);
         exit;
@@ -95,10 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finished) {
     $step = (int) ($_POST['step'] ?? 1);
     if (!hash_equals($token, (string) ($_POST['token'] ?? ''))) {
         $errors[] = 'This form has expired. Please try again.';
+    } elseif ($step < 1 || ($step > $reached && !($step === 6 && !empty($inst['built'])))) { // no step can be skipped: activation with PetaBill Cloud always comes first
+        $errors[] = 'Finish the earlier steps first.';
+        $step = $reached;
     } elseif ($step === 6 && !empty($inst['built'])) {
         $clean = fn($text) => rtrim(str_replace("\r", '', (string) $text)); // editors change line endings and the last line
         if ($clean(@file_get_contents(INST_CONFIG)) === $clean(inst_config_source($inst['db']))) {
-            $_SESSION['inst_finished'] = ['user' => $inst['admin']['user'], 'brand' => $inst['company']['brand']];
+            $_SESSION['inst_finished'] = ['user' => $inst['admin']['user'], 'brand' => $inst['company']['brand'], 'sample' => !empty($inst['sample'])];
             unset($_SESSION['inst']);
             header('Location: index.php?step=6');
             exit;
@@ -109,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finished) {
         if (array_filter(inst_requirements(), fn($c) => !$c[1] && $c[3])) {
             $errors[] = 'Fix the items marked below first.';
         } elseif ($code === '' && empty($inst['licence'])) {
-            $errors[] = 'Paste the Connection Code from Billing CRM.';
+            $errors[] = 'Paste the Connection Code from PetaBill Cloud.';
         } else {
             $error = '';
             if ($code !== '') {
@@ -148,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$finished) {
     } elseif ($step === 3) {
         $inst['company'] = ['name' => $field('name'), 'brand' => $field('brand', 50), 'slogan' => $field('slogan', 120), 'address' => $field('address', 255), 'phone' => $field('phone', 40), 'mobile' => $field('mobile', 40),
             'email' => $field('email'), 'website' => $field('website'), 'bin' => $field('bin', 60), 'branch' => $field('branch', 120), 'store' => $field('store', 140)];
+        $inst['sample'] = isset($_POST['sample']) && inst_has_sample() ? 1 : 0;
         $c = $inst['company'];
         if ($c['name'] === '' || $c['brand'] === '' || $c['branch'] === '' || $c['store'] === '') {
             $errors[] = 'Enter the company name, the short name, the first branch and the first store.';
@@ -197,7 +208,7 @@ $commandBox = fn($text, $id) => '<div class="code-box"><button type="button" cla
 if ($step === 1) {
     $checks = inst_requirements();
     $blocked = (bool) array_filter($checks, fn($c) => !$c[1] && $c[3]);
-    $body .= '<h1>Check this server</h1><p class="lead">We check this server, then activate it with Billing CRM.</p><ul class="checks">';
+    $body .= '<h1>Check this server</h1><p class="lead">We check this server, then activate it with PetaBill Cloud.</p><ul class="checks">';
     foreach ($checks as [$label, $good, $fix, $required]) {
         $body .= '<li class="' . ($good ? 'pass' : ($required ? 'fail' : 'warn')) . '"><b>' . ($good ? 'OK' : ($required ? 'Fix' : 'Note')) . '</b><span>' . $h($label) . ($good ? '' : '<small>' . $h($fix) . '</small>') . '</span></li>';
     }
@@ -206,8 +217,8 @@ if ($step === 1) {
         $body .= '<p class="note"><b>Run this in Terminal</b>, then press Check Again. It gives the web server write access. Uploads need it, and without it you save the configuration file by hand at the end.</p>' . $commandBox(inst_permission_commands($closed), 'fix-folders');
     }
     $done = $inst['licence']['data'] ?? null;
-    $body .= '<form method="post">' . $hidden . '<h2>Activate with Billing CRM</h2>'
-        . ($done ? '<p class="note"><b>Activated:</b> service ' . (int) $done['service_code'] . ', ' . $h($done['company']) . ', ' . $h($done['plan']) . ' plan, expires ' . $h($done['expiry_date']) . '. Paste another code only to change it.</p>' : '<p class="note">In Billing CRM, create the service for this install and copy its Connection Code. The install cannot continue without an active service.</p>')
+    $body .= '<form method="post">' . $hidden . '<h2>Activate with PetaBill Cloud</h2>'
+        . ($done ? '<p class="note"><b>Activated:</b> service ' . (int) $done['service_code'] . ', ' . $h($done['company']) . ', ' . $h($done['plan']) . ' plan, expires ' . $h($done['expiry_date']) . '. Paste another code only to change it.</p>' : '<p class="note">In PetaBill Cloud, create the service for this install and copy its Connection Code. The install cannot continue without an active service.</p>')
         . '<div class="field"><label for="connection">Connection Code</label><textarea id="connection" name="connection" rows="4"' . ($done ? '' : ' required') . ' autocomplete="off"></textarea></div>'
         . '<div class="actions"><a class="btn light" href="index.php?step=1">Check Again</a><button class="btn"' . ($blocked ? ' disabled' : '') . '>Activate And Continue</button></div></form>';
 }
@@ -229,7 +240,9 @@ if ($step === 3) {
     $body .= '<h1>Your company</h1><p class="lead">These appear on invoices and the sign-in page. You can change them later in Company &amp; Login Settings.</p><form method="post">' . $hidden . '<div class="grid">'
         . $input('name', 'Company Name', $c['name'], 'text', 'required maxlength="190"') . $input('brand', 'Short Name', $c['brand'], 'text', 'required maxlength="50"') . $input('slogan', 'Slogan', $c['slogan']) . $input('address', 'Address', $c['address'])
         . $input('phone', 'Phone', $c['phone']) . $input('mobile', 'Mobile', $c['mobile']) . $input('email', 'Email', $c['email'], 'email') . $input('website', 'Website', $c['website']) . $input('bin', 'BIN (VAT Registration)', $c['bin'], 'text', 'maxlength="60"')
-        . $input('branch', 'First Branch', $c['branch'], 'text', 'required') . $input('store', 'First Store', $c['store'], 'text', 'required') . '</div>' . $actions(2, 'Continue') . '</form>';
+        . $input('branch', 'First Branch', $c['branch'], 'text', 'required') . $input('store', 'First Store', $c['store'], 'text', 'required') . '</div>'
+        . (inst_has_sample() ? '<label class="check"><input type="checkbox" name="sample"' . (!empty($inst['sample']) ? ' checked' : '') . '> <span><b>Start with sample data</b><small>A demo electronics shop to try every module: 14 products, suppliers, customers, purchases, sales and POS, orders, returns, vouchers, staff, attendance, sales targets and a service complaint. All names and numbers are invented. Leave it off for a system you will use for real: sample records stay until you delete them.</small></span></label>' : '')
+        . $actions(2, 'Continue') . '</form>';
 }
 if ($step === 4) {
     $a = $inst['admin'] + ['name' => '', 'user' => '', 'email' => '', 'mobile' => '', 'hash' => ''];
@@ -242,17 +255,18 @@ if ($step === 5) {
     $d = $inst['db'];
     $c = $inst['company'];
     $a = $inst['admin'];
-    $rows = ['Service Code' => $inst['licence']['code'] ?? '', 'Database' => $d['name'] . ' on ' . $d['host'] . ':' . $d['port'], 'Billing User' => $d['user'], 'Company' => $c['name'], 'First Branch' => $c['branch'], 'First Store' => $c['store'], 'Administrator' => $a['name'] . ' (' . $a['user'] . ')'];
+    $rows = ['Service Code' => $inst['licence']['code'] ?? '', 'Database' => $d['name'] . ' on ' . $d['host'] . ':' . $d['port'], 'Billing User' => $d['user'], 'Company' => $c['name'], 'First Branch' => $c['branch'], 'First Store' => $c['store'], 'Administrator' => $a['name'] . ' (' . $a['user'] . ')', 'Sample Data' => !empty($inst['sample']) && inst_has_sample() ? 'Yes, load the demo shop' : 'No'];
     $body .= '<div id="review"><h1>Ready to install</h1><p class="lead">Check these details, then start. It takes about a minute.</p><dl class="review">';
     foreach ($rows as $k => $v) {
         $body .= '<dt>' . $k . '</dt><dd>' . $h($v) . '</dd>';
     }
     $sections = array_keys(inst_sections());
+    $withSample = !empty($inst['sample']) && inst_has_sample();
     $body .= '</dl><details class="sql"><summary>See the files that will be used (one SQL file and the configuration)</summary><ul class="files"><li><a target="_blank" rel="noopener" href="index.php?view=config">addon/display/dbconfig.php</a><small>Written last. Password hidden here.</small></li>'
         . '<li><a target="_blank" rel="noopener" href="index.php?view=sql">' . $h(INST_SQL) . '</a><small>' . count($sections) . ' parts, ' . number_format((int) @filesize(INST_ROOT . '/' . INST_SQL) / 1024) . ' KB</small></li>';
     $body .= '</ul></details><div class="actions"><a class="btn light" href="index.php?step=4">Back</a><button class="btn" id="start" type="button">Install Now</button></div></div>'
         . '<div id="progress" hidden><h1>Installing</h1><p class="lead" id="status">Starting...</p><div class="bar" role="progressbar" aria-label="Install progress"><span id="fill"></span></div><ol class="log" id="log"></ol><div class="alert" id="failed" role="alert" hidden></div><div class="actions" id="retry-row" hidden><span></span><button class="btn" id="retry" type="button">Try Again</button></div></div>'
-        . '<script id="install-data" type="application/json">' . json_encode(['token' => $token, 'steps' => array_merge($sections, ['Company and administrator', 'Configuration']), 'files' => array_merge($sections, ['Your company and administrator', 'addon/display/dbconfig.php'])]) . '</script>';
+        . '<script id="install-data" type="application/json">' . json_encode(['token' => $token, 'steps' => array_merge($sections, ['Company and administrator'], $withSample ? ['Sample data'] : [], ['Configuration']), 'files' => array_merge($sections, ['Your company and administrator'], $withSample ? [INST_SAMPLE_SQL] : [], ['addon/display/dbconfig.php'])]) . '</script>';
 }
 if ($step === 6 && !$finished) {
     $body .= '<h1>One last step: save the configuration</h1><p class="lead">The database is ready, but the server cannot write this file. Save it yourself and the install is done.</p>'
@@ -260,26 +274,27 @@ if ($step === 6 && !$finished) {
         . '<form method="post">' . $hidden . '<div class="actions"><span></span><button class="btn">I Saved It</button></div></form>';
 }
 if ($step === 6 && $finished) {
-    $body .= '<h1>Billing Star is installed</h1><p class="lead">Your system is ready, and the installer has switched itself off.</p><dl class="review"><dt>Company</dt><dd>' . $h($finished['brand'] ?? '') . '</dd><dt>Administrator</dt><dd>' . $h($finished['user'] ?? '') . '</dd></dl>';
+    $body .= '<h1>PetaBill is installed</h1><p class="lead">Your system is ready, and the installer has switched itself off.</p><dl class="review"><dt>Company</dt><dd>' . $h($finished['brand'] ?? '') . '</dd><dt>Administrator</dt><dd>' . $h($finished['user'] ?? '') . '</dd></dl>';
     if ($closed = inst_unwritable()) {
         $body .= '<p class="note"><b>Uploads need one more step.</b> Run this in Terminal so photos and documents can be saved:</p>' . $commandBox(inst_permission_commands($closed), 'fix-folders');
     }
     // The folder goes now, so this last page brings its own styles and script. Reloading it is a plain 404, and the session ends here.
     $inline = ['style' => (string) @file_get_contents(__DIR__ . '/install.css'), 'script' => (string) @file_get_contents(__DIR__ . '/install.js')];
     $removed = inst_remove_self();
-    $body .= '<p class="note"><b>Next:</b> sign in, then set up Users, Roles &amp; Permissions and the Salary Accounts.</p>'
+    $body .= (!empty($finished['sample']) ? '<p class="note"><b>Sample data is loaded:</b> a demo shop with invented products, customers and documents, so you can try every module. For your real business, install again on a new, empty database.</p>' : '')
+        . '<p class="note"><b>Next:</b> sign in, then set up Users, Roles &amp; Permissions and the Salary Accounts.</p>'
         . ($removed ? '<p class="note">The <code>install_script</code> folder has been removed from this server.</p>' : '<div class="alert">The <code>install_script</code> folder could not be removed: the web server cannot delete it. It stays locked, but delete it from the server yourself.</div>')
         . '<div class="actions"><span></span><a class="btn" href="../index.php">Go To Sign In</a></div>';
     $_SESSION = [];
     session_destroy();
 }
-inst_shell('Install Billing Star', $step, $body, $inline ?? null);
+inst_shell('Install PetaBill', $step, $body, $inline ?? null);
 
 /** The page around each step. The last one is given its files as text, as they are gone by the time a browser would ask. */
 function inst_shell($title, $step, $body, $inline = null)
 {
     $steps = ['Activate', 'Database', 'Company', 'Administrator', 'Install', 'Finish'];
-    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</title>' . ($inline ? '<style>' . $inline['style'] . '</style>' : '<link rel="stylesheet" href="install.css">') . '</head><body><main class="card"><aside class="side"><div class="logo">Billing Star</div><p>Setup</p>';
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</title>' . ($inline ? '<style>' . $inline['style'] . '</style>' : '<link rel="stylesheet" href="install.css">') . '</head><body><main class="card"><aside class="side"><div class="logo">PetaBill</div><p>Setup</p>';
     if ($step) {
         echo '<ol>';
         foreach ($steps as $i => $label) {

@@ -163,7 +163,7 @@ function sr_page_start($title, $active, $public = false)
 {
     $c = sr_company();
     $a = $public ? null : sr_account();
-    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . cp_h($title . ' · SR Portal') . '</title>'
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="copyright" content="&copy; Petacore Technology. PetaBill is a trademark of Petacore Technology."><title>' . cp_h($title . ' · SR Portal') . '</title>'
         . '<link rel="stylesheet" href="../addon/portal/portal.css"></head><body>';
     if (empty($_SESSION['shell_embedded'])) {
         echo '<header class="top"><div class="brand"><b>' . cp_h($c['name']) . '</b><span>SR / Staff Portal</span></div>';
@@ -190,7 +190,7 @@ function sr_page_end()
 {
     echo '</main>';
     if (empty($_SESSION['shell_embedded'])) {
-        echo '<footer class="foot">' . cp_h(sr_company()['name']) . ' · SR / Staff Portal</footer>';
+        echo '<footer class="foot">' . cp_h(sr_company()['name']) . ' · SR / Staff Portal<br><small class="powered">Powered by PetaBill &middot; &copy; ' . date('Y') . ' Petacore Technology</small></footer>';
     }
     echo '<script src="../addon/portal/portal.js"></script><script src="../addon/portal/list-pager.js"></script></body></html>';
 }
@@ -198,11 +198,7 @@ function sr_page_end()
 /** Next number like CL20261030001 / for a table and column. */
 function sr_next_no($prefix, $table, $col)
 {
-    $n = (int) cp_row("SELECT COUNT(*) AS n FROM $table WHERE $col LIKE ?", 's', [$prefix . date('Ymd') . '%'])['n'];
-    do {
-        $no = $prefix . date('Ymd') . str_pad((string) ++$n, 3, '0', STR_PAD_LEFT);
-    } while (cp_row("SELECT 1 AS x FROM $table WHERE $col=?", 's', [$no]));
-    return $no;
+    return docno_next(docno_db(), $prefix); // Settings > Document Numbering (CL: collections); never a duplicate
 }
 
 /* ---------------- Products for orders and the stock page (no cost prices) ---------------- */

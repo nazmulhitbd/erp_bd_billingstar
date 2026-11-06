@@ -253,6 +253,8 @@ function menu_catalog()
             ]],
             ['title' => 'System', 'items' => [
                 ['Company & Login Settings', 'user/company_settings.php'],
+                ['Country, Language & Tax', 'user/globalization.php'],
+                ['Document Numbering', 'user/doc_numbering.php'],
                 ['Service Licence', 'user/licence.php'],
                 ['User Config', 'user/create_config.php', 'uc:2'],
                 ['Email & SMS', 'user/email_sms.php', 'uc:2'],

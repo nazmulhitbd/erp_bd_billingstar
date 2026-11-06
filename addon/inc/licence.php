@@ -1,6 +1,6 @@
 <?php
 /**
- * Service licence from Billing CRM. The panel signs what this install may do (dates, plan, modules); this file checks the
+ * Service licence from PetaBill Cloud. The panel signs what this install may do (dates, plan, modules); this file checks the
  * signature with the panel's public key, keeps the answer in licence_state, and applies it. A site installed before
  * activation existed has no row there and stays open; one activated by the installer locks if its row is removed. If the panel cannot be reached the last answer keeps working
  * until its own expiry date, so a network fault never locks anyone out.
@@ -36,6 +36,66 @@ function licence_verify($payload, $signature, $publicKey)
     return json_decode($payload, true) ?: null;
 }
 
+/* ---------------- Country, language, currency and tax: managed in PetaBill Cloud ---------------- */
+
+function licence_locale_table()
+{
+    static $done = false;
+    if (!$done) {
+        perm_q('CREATE TABLE IF NOT EXISTS licence_locale (
+            id TINYINT NOT NULL PRIMARY KEY,
+            version VARCHAR(32) NOT NULL,
+            payload MEDIUMTEXT NOT NULL,
+            signature TEXT NOT NULL,
+            fetched_at INT NOT NULL DEFAULT 0
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4');
+        $done = true;
+    }
+}
+
+/**
+ * After a good licence check: when PetaBill Cloud reports a locale version this install does not have, fetch the whole
+ * package (country profile, tax rates, phrases, business setup) from api/locale.php, check its signature and keep it.
+ * A failed fetch keeps the package already here and is tried again at the next check.
+ */
+function licence_locale_sync(array $row, array $data)
+{
+    $want = (string) ($data['locale']['version'] ?? '');
+    if ($want === '') {
+        return;
+    }
+    licence_locale_table();
+    if ((perm_q('SELECT version FROM licence_locale WHERE id=1')[0]['version'] ?? '') === $want) {
+        return;
+    }
+    $nonce = bin2hex(random_bytes(16));
+    $body = licence_post(rtrim($row['crm_url'], '/') . '/api/locale.php', http_build_query(['service_code' => $row['service_code'], 'service_key' => $row['service_key'], 'nonce' => $nonce]));
+    $answer = $body === false ? null : json_decode($body, true);
+    $pack = !empty($answer['ok']) ? licence_verify($answer['payload'] ?? '', $answer['signature'] ?? '', $row['public_key']) : null;
+    if (!$pack || ($pack['nonce'] ?? '') !== $nonce || (int) ($pack['service_code'] ?? 0) !== (int) $row['service_code']) {
+        return;
+    }
+    perm_q('INSERT INTO licence_locale (id, version, payload, signature, fetched_at) VALUES (1, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE version=VALUES(version), payload=VALUES(payload), signature=VALUES(signature), fetched_at=VALUES(fetched_at)',
+        'sssi', [(string) $pack['version'], $answer['payload'], $answer['signature'], time()]);
+    licence_locale(true);
+}
+
+/** The package this install runs on, or null (not connected yet, or an older panel): then Bangladesh in English. */
+function licence_locale($fresh = false)
+{
+    static $pack = false;
+    if ($pack !== false && !$fresh) {
+        return $pack;
+    }
+    $pack = null;
+    $row = licence_row();
+    if ($row && function_exists('perm_q')) {
+        $l = perm_q('SELECT payload, signature FROM licence_locale WHERE id=1')[0] ?? null;
+        $pack = $l ? licence_verify($l['payload'], $l['signature'], $row['public_key']) : null; // a package edited by hand fails here
+    }
+    return $pack;
+}
+
 /** POST with curl where there is one, because many hosts turn off allow_url_fopen. Returns the body or false. */
 function licence_post($url, $fields)
 {
@@ -52,7 +112,11 @@ function licence_post($url, $fields)
 function licence_fetch($url, $code, $key, $publicKey)
 {
     $nonce = bin2hex(random_bytes(16));
-    $fields = http_build_query(['service_code' => $code, 'service_key' => $key, 'nonce' => $nonce, 'host' => licence_host(), 'version' => 'billing_star']);
+    $usage = [];
+    foreach (array_keys(LICENCE_LIMITS) as $name) { // what this install has now, so PetaBill Cloud can show it against the package
+        $usage[$name] = licence_used($name);
+    }
+    $fields = http_build_query(['service_code' => $code, 'service_key' => $key, 'nonce' => $nonce, 'host' => licence_host(), 'version' => 'billing_star', 'usage' => json_encode($usage)]);
     $body = licence_post(rtrim($url, '/') . '/api/provision.php', $fields);
     if ($body === false) {
         return ['', '', 'The licence panel could not be reached.'];
@@ -129,6 +193,7 @@ function licence_refresh($claimed = false)
     [$payload, $signature, $error] = licence_fetch($row['crm_url'], (int) $row['service_code'], $row['service_key'], $row['public_key']);
     if ($error === '') {
         perm_q("UPDATE licence_state SET payload=?, signature=?, checked_at=?, last_error='' WHERE id=1", 'ssi', [$payload, $signature, time()]);
+        licence_locale_sync($row, (array) licence_verify($payload, $signature, $row['public_key'])); // country and language, when PetaBill Cloud changed them
     } else {
         perm_q('UPDATE licence_state SET last_error=? WHERE id=1', 's', [mb_substr($error, 0, 255)]);
     }
@@ -216,6 +281,53 @@ function licence_module_on($code)
         return true;
     }
     return in_array($code, $data['modules'] ?? [], true);
+}
+
+/**
+ * Package limits from the panel (PetaBill Cloud): how many users, branches, warehouses and products this install may have.
+ * name => [what to count, label one, label many]. Companies are not counted: one install runs one company.
+ * A limit only stops adding more; nothing already there is ever removed or locked.
+ */
+const LICENCE_LIMITS = [
+    'users' => ["SELECT COUNT(*) AS n FROM admin_user WHERE user_type='staff' AND is_active=1", 'user', 'users'],
+    'branches' => ['SELECT COUNT(*) AS n FROM branches WHERE is_active=1', 'branch', 'branches'],
+    'warehouses' => ["SELECT COUNT(*) AS n FROM sales_stores WHERE store_name<>'RMA STORE'", 'warehouse', 'warehouses'],
+    'products' => ['SELECT COUNT(*) AS n FROM sales_products', 'product', 'products'],
+];
+
+/** How many of something the licence allows, or null for no limit (not connected, an older panel, or 0 = unlimited). */
+function licence_limit($name)
+{
+    $data = licence_status()['data'];
+    $max = (int) ($data['limits'][$name] ?? 0);
+    return $max > 0 ? $max : null;
+}
+
+/** How many exist now. */
+function licence_used($name)
+{
+    $row = isset(LICENCE_LIMITS[$name]) ? perm_q(LICENCE_LIMITS[$name][0]) : [];
+    return (int) ($row[0]['n'] ?? 0);
+}
+
+/**
+ * Before adding one more: '' when it is allowed, else the sentence to show. $adding is how many are being added.
+ * Callers throw it as their usual error, so the form keeps its usual look.
+ */
+function licence_limit_error($name, $adding = 1)
+{
+    $max = licence_limit($name);
+    if ($max === null) {
+        return '';
+    }
+    $used = licence_used($name);
+    if ($used + $adding <= $max) {
+        return '';
+    }
+    [, $one, $many] = LICENCE_LIMITS[$name];
+    $package = trim((string) (licence_status()['data']['package'] ?? ''));
+    return 'Your ' . ($package !== '' ? $package . ' ' : '') . 'package allows ' . number_format($max) . ' ' . ($max === 1 ? $one : $many) . ' (' . number_format($used) . ' in use). '
+        . 'Switch one off, or upgrade the package in your customer portal to add more.';
 }
 
 /** Module codes owning each page and, for helper scripts that are not in the menu, each folder. */

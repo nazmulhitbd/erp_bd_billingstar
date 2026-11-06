@@ -61,7 +61,7 @@ function chl_bill_save_invoice(mysqli $db, $docId, array $doc, array $lines)
         sales_exec($db, 'DELETE FROM sales_invoice_payments WHERE invoice_id=? AND reference=?', 'is', [$invoiceId, chl_bill_cash_ref($doc)])->close();
         sales_exec($db, "DELETE FROM sales_invoice_schedules WHERE invoice_id=? AND note='Payment Date'", 'i', [$invoiceId])->close();
     } else {
-        $head += ['invoice_no' => sales_next_number($db, 'SI', (int) substr($doc['doc_date'], 0, 4), 'sales_invoice_sequences'), 'created_by' => $userId];
+        $head += ['invoice_no' => sales_next_number($db, 'SI', $doc['doc_date'], 'sales_invoice_sequences'), 'created_by' => $userId];
         $invoiceId = sales_insert($db, 'INSERT INTO sales_invoices (' . implode(', ', array_keys($head)) . ') VALUES (' . implode(', ', array_fill(0, count($head), '?')) . ')', $bind($head), array_values($head));
     }
     $costs = $v2 ? sales_avg_costs($db, array_column($lines, 'product_id')) : [];

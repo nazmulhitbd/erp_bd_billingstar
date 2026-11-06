@@ -207,18 +207,12 @@ function acc_voucher_code($type, $interBranch = false)
 
 function acc_next_voucher_no(mysqli $db, $type, $date, $interBranch = false)
 {
-    $code = acc_voucher_code($type, $interBranch);
-    $year = (int) substr($date, 0, 4);
-    sales_exec($db, 'INSERT INTO acc_sequences (doc_code, seq_year, last_number) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE last_number = last_number + 1', 'si', [$code, $year])->close();
-    $row = sales_row($db, 'SELECT last_number FROM acc_sequences WHERE doc_code=? AND seq_year=? FOR UPDATE', 'si', [$code, $year]);
-    return acc_setting($db, 'voucher_prefix', 'DES') . $code . $year . str_pad((string) $row['last_number'], 6, '0', STR_PAD_LEFT);
+    return docno_next($db, 'ACC_' . acc_voucher_code($type, $interBranch), $date); // Settings > Document Numbering
 }
 
 function acc_peek_voucher_no(mysqli $db, $type, $interBranch = false)
 {
-    $code = acc_voucher_code($type, $interBranch);
-    $row = sales_row($db, 'SELECT last_number + 1 AS n FROM acc_sequences WHERE doc_code=? AND seq_year=?', 'si', [$code, (int) date('Y')]);
-    return acc_setting($db, 'voucher_prefix', 'DES') . $code . date('Y') . str_pad((string) ($row['n'] ?? 1), 6, '0', STR_PAD_LEFT);
+    return docno_peek($db, 'ACC_' . acc_voucher_code($type, $interBranch));
 }
 
 /** Read a posted date range: All Date, From, To, date basis. */

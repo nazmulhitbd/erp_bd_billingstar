@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Select a store for ' . $label . '.');
             }
             if (!in_array($store, $stores, true)) {
+                if (strtoupper($store) !== 'RMA STORE' && ($limit = licence_limit_error('warehouses')) !== '') { // a new store is one more warehouse
+                    throw new RuntimeException($limit);
+                }
                 rma_exec('INSERT IGNORE INTO sales_stores (store_name) VALUES (?)', 's', [$store])->close();
             }
             rma_exec(

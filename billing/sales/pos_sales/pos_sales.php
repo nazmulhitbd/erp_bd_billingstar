@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $narration = 'POS sale. Tendered ' . sales_money($tendered) . ', change ' . sales_money($tendered - $net) . '.';
 
         $conn->begin_transaction();
-        $invoiceNo = sales_next_number($conn, 'SI', (int) date('Y'), 'sales_invoice_sequences');
+        $invoiceNo = sales_next_number($conn, 'SI', date('Y-m-d'), 'sales_invoice_sequences');
         $invoiceId = sales_insert(
             $conn,
             "INSERT INTO sales_invoices (invoice_no, ref_no, sales_date, bill_type, customer_id, customer_name, mobile, address, sales_person, narration, subtotal, discount_amount, vat_amount, net_amount, cash_received, balance_amount, total_quantity, created_by) "
@@ -199,7 +199,7 @@ sales_page_start('POS Sales', 'pos');
 <header class="si-hero pos-hero">
   <div class="si-hero-main">
     <span class="si-hero-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v10H4zM8 18h8M12 14v4M7 8h3M7 11h6"/></svg></span>
-    <div><h2>POS Sales</h2><p class="si-meta"><b>Counter</b><span class="si-status si-new">Today <?= (int) $today['n'] ?> sale<?= (int) $today['n'] === 1 ? '' : 's' ?></span><span>&#2547; <?= sales_money($today['total']) ?></span></p></div>
+    <div><h2>POS Sales</h2><p class="si-meta"><b>Counter</b><span class="si-status si-new">Today <?= (int) $today['n'] ?> sale<?= (int) $today['n'] === 1 ? '' : 's' ?></span><span><?= sales_h(bs_currency_symbol()) ?> <?= sales_money($today['total']) ?></span></p></div>
   </div>
   <?php if ($receiptId > 0): ?><div class="si-hero-tools"><div class="sd-group" role="group" aria-label="Last sale"><a class="btn" target="_blank" href="<?= $self ?>?print=<?= $receiptId ?>">Print receipt</a><a class="btn" target="_blank" href="../sales_invoice/sales_invoice.php?print=<?= $receiptId ?>&auto=1">Print A4 invoice</a></div></div><?php endif; ?>
 </header>
@@ -228,7 +228,7 @@ sales_page_start('POS Sales', 'pos');
 
 <aside class="si-side">
   <section class="si-sum" aria-label="Total">
-    <div class="si-sum-top"><span>Total to pay</span><b><small>&#2547;</small> <span id="t_net">0.00</span></b><p><span id="t_lines">0</span> item(s) &middot; <span id="t_items">0</span> qty &middot; change <span id="t_change_top">0.00</span></p></div>
+    <div class="si-sum-top"><span>Total to pay</span><b><small><?= sales_h(bs_currency_symbol()) ?></small> <span id="t_net">0.00</span></b><p><span id="t_lines">0</span> item(s) &middot; <span id="t_items">0</span> qty &middot; change <span id="t_change_top">0.00</span></p></div>
     <table class="stotals pos-totals">
       <tr><th>Subtotal</th><td id="t_sub">0.00</td></tr>
       <tr><th><label for="discount_amount">Discount</label></th><td><input id="discount_amount" name="discount_amount" type="number" min="0" step="0.01" value="0" data-next="#payment_method"></td></tr>
@@ -237,7 +237,7 @@ sales_page_start('POS Sales', 'pos');
     </table>
   </section>
   <section class="sd-card si-pay">
-    <header class="sd-head"><span class="sd-num"><span>&#2547;</span></span><div><h3>Payment</h3><p>Enter moves down; Enter on Pay &amp; Save finishes the sale.</p></div></header>
+    <header class="sd-head"><span class="sd-num"><span><?= sales_h(bs_currency_symbol()) ?></span></span><div><h3>Payment</h3><p>Enter moves down; Enter on Pay &amp; Save finishes the sale.</p></div></header>
     <div class="sd-grid si-paygrid">
       <div class="sd-f"><label for="customer_name">Customer</label><div class="relative"><input id="customer_name" name="customer_name" value="Walk-in Customer" maxlength="190"><div class="suggestions" id="customer-suggestions" hidden></div></div><input type="hidden" id="customer_id" name="customer_id"></div>
       <div class="sd-f"><label for="mobile">Mobile</label><input id="mobile" name="mobile" maxlength="40" inputmode="tel" data-next="#discount_amount"></div>

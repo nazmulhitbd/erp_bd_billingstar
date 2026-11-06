@@ -228,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     sales_exec($conn, 'DELETE FROM sales_order_schedules WHERE order_id=?', 'i', [$orderId])->close();
                     $orderNo = $old['order_no'];
                 } else {
-                    $orderNo = sales_next_number($conn, 'SO', (int) substr($date, 0, 4), 'sales_order_sequences');
+                    $orderNo = sales_next_number($conn, 'SO', $date, 'sales_order_sequences');
                     $cols += ['order_no' => $orderNo, 'branch_id' => inv_current_branch($conn), 'created_by' => $userId];
                     $orderId = sales_insert($conn, 'INSERT INTO sales_orders (' . implode(', ', array_keys($cols)) . ') VALUES (' . implode(', ', array_fill(0, count($cols), '?')) . ')', so_bind($cols), array_values($cols));
                 }
@@ -402,7 +402,7 @@ $items = $repost ? (json_decode((string) ($repost['items_json'] ?? '[]'), true) 
 
 <aside class="si-side">
   <section class="si-sum" aria-label="Summary">
-    <div class="si-sum-top"><span>Net payable</span><b><small>&#2547;</small> <span id="si_net">0.00</span></b><p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p></div>
+    <div class="si-sum-top"><span>Net payable</span><b><small><?= sales_h(bs_currency_symbol()) ?></small> <span id="si_net">0.00</span></b><p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p></div>
     <table class="stotals" id="totals"></table>
   </section>
   <section class="sd-card si-pay" data-step="4">

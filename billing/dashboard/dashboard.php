@@ -219,7 +219,7 @@ if ($salesReady) {
         $activity[] = ['t' => $r['t'], 'kind' => 'invoice', 'title' => 'Invoice issued', 'text' => $r['invoice_no'] . ' to ' . $r['customer_name']];
     }
     foreach (sales_rows($conn, "SELECT p.paid_at t, p.amount, i.customer_name FROM sales_invoice_payments p JOIN sales_invoices i ON i.invoice_id=p.invoice_id WHERE 1=1{$scopeI} AND i.status='posted' ORDER BY p.payment_id DESC LIMIT 5") as $r) {
-        $activity[] = ['t' => $r['t'], 'kind' => 'payment', 'title' => 'Payment received', 'text' => '৳' . number_format((float) $r['amount']) . ' from ' . $r['customer_name']];
+        $activity[] = ['t' => $r['t'], 'kind' => 'payment', 'title' => 'Payment received', 'text' => bs_currency_symbol() . bs_number((float) $r['amount'], 0) . ' from ' . $r['customer_name']];
     }
 }
 if ($has(['sales_orders'])) {
@@ -248,14 +248,10 @@ function dash_compact($v)
     $s = $a >= 10000000 ? round($a / 10000000, 1) . ' Cr' : ($a >= 100000 ? round($a / 100000, 1) . ' L' : ($a >= 1000 ? round($a / 1000, 1) . 'K' : number_format($a, 0)));
     return ($v < 0 ? '-' : '') . $s;
 }
-/** Taka in full, without paisa, grouped the South Asian way (12,34,567). */
+/** An amount in full, without decimals, in the country's currency and grouping (Settings > Document Numbering). */
 function dash_tk($v)
 {
-    $n = (string) (int) round(abs((float) $v));
-    $last = substr($n, -3);
-    $rest = substr($n, 0, -3);
-    $grouped = $rest !== '' ? preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $rest) . ',' . $last : $last;
-    return ($v < 0 ? '-' : '') . '৳ ' . $grouped;
+    return bs_currency_symbol() . ' ' . bs_number(round((float) $v), 0);
 }
 /** Change against the previous period: arrow, percent and "vs previous period"; $upIsGood decides the colour. */
 function dash_delta($cur, $prev, $upIsGood = true)
@@ -514,7 +510,7 @@ $exportQuery = http_build_query(array_filter(['period' => $period, 'from' => $pe
       </tbody></table></section>
     <?php endif; ?>
   </div>
-  <p class="foot muted small">Amounts in Taka (৳). On charts K = thousand, L = lakh, Cr = crore. "Previous period" is the <?= $days ?> day<?= $days > 1 ? 's' : '' ?> before <?= sales_h(date('d M Y', strtotime($from))) ?>.</p>
+  <p class="foot muted small"><?php $lakh = bs_country()['grouping'] === 'lakh'; ?>Amounts in <?= sales_h(bs_country()['currency']) ?> (<?= sales_h(bs_currency_symbol()) ?>). On charts K = thousand, <?= $lakh ? 'L = lakh, Cr = crore' : 'M = million, B = billion' ?>. "Previous period" is the <?= $days ?> day<?= $days > 1 ? 's' : '' ?> before <?= sales_h(date('d M Y', strtotime($from))) ?>.</p>
 </div>
 <script>window.DASH = <?= sales_js([
     'daily' => $daily,
@@ -524,6 +520,7 @@ $exportQuery = http_build_query(array_filter(['period' => $period, 'from' => $pe
     'groups' => array_map(fn($r) => ['label' => $r['label'], 'value' => (float) $r['value']], $groups),
     'aging' => array_map(fn($r) => ['label' => $r['label'], 'value' => (float) $r['value'], 'n' => (int) $r['n']], $aging),
 ]) ?>;</script>
+<script>window.BS_MONEY = <?= json_encode(['symbol' => bs_currency_symbol(), 'lakh' => bs_country()['grouping'] === 'lakh'], JSON_UNESCAPED_UNICODE) ?>;</script>
 <script src="dashboard.js?v=<?= (int) @filemtime(__DIR__ . '/dashboard.js') ?>"></script>
 </body>
 </html>

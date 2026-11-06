@@ -20,7 +20,7 @@ function brand_info()
     $color = preg_match('/^#[0-9a-f]{6}$/i', $get('login_color')) ? $get('login_color') : BRAND_DEFAULT_COLOR;
     $logo = $get('company_logo');
     $b = [
-        'brand' => trim((string) ($theme['brand_name'] ?? '')) ?: 'Billing Star',
+        'brand' => in_array($n = trim((string) ($theme['brand_name'] ?? '')), ['', 'Billing Star'], true) ? 'PetaBill' : $n, // the old product name counts as unset
         'slogan' => trim((string) ($theme['slogan'] ?? '')),
         'company' => $get('company_name'),
         'address' => $get('company_address'),

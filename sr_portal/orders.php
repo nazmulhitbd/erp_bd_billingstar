@@ -14,9 +14,7 @@ const SR_ORDER_ROWS = 10;
 /** Reserve the next SO number the way the office Sales Order page does (sales_order_sequences, one row per year). */
 function sr_order_no($year)
 {
-    cp_exec('INSERT INTO sales_order_sequences (sequence_year, last_number) VALUES (?, 1) ON DUPLICATE KEY UPDATE last_number = last_number + 1', 'i', [$year])->close();
-    $n = (int) cp_row('SELECT last_number FROM sales_order_sequences WHERE sequence_year=? FOR UPDATE', 'i', [$year])['last_number'];
-    return 'SO' . $year . str_pad((string) $n, 6, '0', STR_PAD_LEFT);
+    return docno_next(docno_db(), 'SO', (int) $year . date('-m-d')); // the same series as the office Sales Order page
 }
 
 /** An order of this SR that may still be cancelled, or a reason why not. */

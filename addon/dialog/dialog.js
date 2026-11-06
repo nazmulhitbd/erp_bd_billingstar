@@ -1,5 +1,5 @@
 /*
- * Billing Star popups. One look for every question and message: a round icon, a title, the message and the buttons.
+ * PetaBill popups. One look for every question and message: a round icon, a title, the message and the buttons.
  *
  *   BSDialog.confirm('Delete this invoice?')            -> Promise<boolean>; "delete", "remove", "cancel"… turn it red
  *   BSDialog.success('Saved.')  .error(…)  .warning(…)  .info(…)  .tip(…)   -> Promise (resolves when closed)

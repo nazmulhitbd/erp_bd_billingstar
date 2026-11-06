@@ -1,4 +1,4 @@
-# Billing Star
+# PetaBill
 
 Billing and ERP for computer and mobile shops: sales, purchase, stock, accounts, HR and service, across branches and stores.
 
@@ -11,7 +11,7 @@ Besides the staff screens under `billing/` there are two portals:
 - `customer_portal/`: customers see their invoices, orders and warranty.
 - `sr_portal/`: sales representatives see their customers, sales, targets and commission, book orders and record collections.
 
-Which modules an install may use comes from its licence in Billing CRM (Settings > Service Licence).
+Which modules an install may use comes from its licence in PetaBill Cloud (Settings > Service Licence).
 
 ## Requirements
 

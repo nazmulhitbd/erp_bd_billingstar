@@ -300,8 +300,16 @@ function si_print(mysqli $db, array $d, array $opt, $title)
         }
         echo '<table class="totals">';
         if ($opt['price']) {
-            $rows = ['Total Amount' => $inv['subtotal'], 'Add Extra Charges' => $inv['extra_charges'], 'Less Discount' => $inv['discount_amount'], 'Add VAT & AIT' => (float) $inv['vat_amount'] + (float) $inv['ait_amount'],
-                'Product Exchange' => $inv['exchange_amount'], 'Point Adjust' => $inv['point_adjust'] ?? 0];
+            // Tax printed the country's way: one VAT line, or India's CGST + SGST / IGST by place of supply (addon/inc/compliance.php).
+            $taxRows = [];
+            foreach (bs_tax_split((float) $inv['vat_amount'], null, (string) ($inv['bin'] ?? '')) as [$taxName, , $taxAmount]) {
+                $taxRows['Add ' . $taxName] = $taxAmount;
+            }
+            if ((float) $inv['ait_amount'] != 0) {
+                $taxRows['Add AIT'] = $inv['ait_amount'];
+            }
+            $rows = ['Total Amount' => $inv['subtotal'], 'Add Extra Charges' => $inv['extra_charges'], 'Less Discount' => $inv['discount_amount']] + (count($taxRows) > 1 || bs_country_code() !== 'BD' ? $taxRows : ['Add VAT & AIT' => (float) $inv['vat_amount'] + (float) $inv['ait_amount']])
+                + ['Product Exchange' => $inv['exchange_amount'], 'Point Adjust' => $inv['point_adjust'] ?? 0];
             foreach ($rows as $label => $v) {
                 if ($label === 'Total Amount' || (float) $v != 0) {
                     echo '<tr><td>' . $label . '</td><td class="num">' . sales_money($v) . '</td></tr>';
@@ -562,7 +570,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     sales_exec($conn, 'DELETE FROM sales_invoice_payments WHERE invoice_id=? AND reference=?', 'is', [$invoiceId, SI_CASH_REF])->close();
                     $invoiceNo = $old['invoice_no'];
                 } else {
-                    $invoiceNo = sales_next_number($conn, 'SI', (int) substr($date, 0, 4), 'sales_invoice_sequences');
+                    $invoiceNo = sales_next_number($conn, 'SI', $date, 'sales_invoice_sequences');
                     $cols += ['invoice_no' => $invoiceNo, 'branch_id' => $branch, 'created_by' => $userId];
                     $invoiceId = sales_insert($conn, 'INSERT INTO sales_invoices (' . implode(', ', array_keys($cols)) . ') VALUES (' . implode(', ', array_fill(0, count($cols), '?')) . ')', si_bind($cols), array_values($cols));
                 }
@@ -791,7 +799,7 @@ $defaultStore = inv_setting($conn, 'default_store', '');
   <section class="si-sum" aria-label="Summary">
     <div class="si-sum-top">
       <span>Net payable</span>
-      <b><small>&#2547;</small> <span id="si_net">0.00</span></b>
+      <b><small><?= sales_h(bs_currency_symbol()) ?></small> <span id="si_net">0.00</span></b>
       <p><span id="si_count">0</span> item(s) &middot; <span id="si_qty">0</span> qty<span id="si_change_wrap" hidden> &middot; change <span id="si_change">0.00</span></span></p>
     </div>
     <table class="stotals" id="totals"></table>

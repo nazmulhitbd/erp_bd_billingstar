@@ -1,5 +1,5 @@
 /*
- * Form guide for Billing Star entry pages. Loaded on every page with dialog.js (bs_dialog_start in addon/inc/security.php).
+ * Form guide for PetaBill entry pages. Loaded on every page with dialog.js (bs_dialog_start in addon/inc/security.php).
  *  - A step bar above the form: what to fill first, then next. Steps turn green when done; the next one is marked.
  *  - "How to fill this" opens on every new record (until "Don't show this again"); the Guide button opens it any time.
  *  - Recommended order: pressing Add or Save before an earlier step is done asks "Fill it first" or "Continue anyway".

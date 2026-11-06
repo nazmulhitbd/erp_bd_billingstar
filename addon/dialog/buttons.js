@@ -1,5 +1,5 @@
 /*
- * One button design for every Billing Star page: a solid colour and an icon chosen from the button's own words.
+ * One button design for every PetaBill page: a solid colour and an icon chosen from the button's own words.
  * Loaded on every page with dialog.js (bs_dialog_start in addon/inc/security.php); pages need no changes.
  *   blue    Save, Search, Print, Add/New, Edit, Download/Export, Upload/Import, Email, Next…   (and anything else)
  *   green   OK, Approve, Verify, Activate, Pay/Receive

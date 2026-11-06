@@ -1,0 +1,23 @@
+PetaBill - Proprietary Software Licence
+Copyright (c) 2015-2026 Petacore Technology. All rights reserved.
+
+This folder contains PetaBill ERP (billing, stock, accounts, HR and service software).
+
+PetaBill and the PetaBill logo are trademarks of Petacore Technology.
+
+This software, its source code, database design, screens, documentation and images
+are the property of Petacore Technology and are protected by copyright law and
+international treaties. They are licensed, not sold.
+
+You may use this software only under a written licence or an active subscription
+from Petacore Technology, and only within the modules and limits that licence allows.
+Unless Petacore Technology agrees in writing, you may not:
+  - copy, sell, rent, lease, sublicense, publish or give the software to anyone else;
+  - modify it, merge it into other software, or remove or alter any copyright,
+    trademark or licence notice;
+  - reverse-engineer, decompile or disassemble it, or bypass its licence check;
+  - use the PetaBill name or logo for any other product or service.
+
+The full terms of use are at the PetaBill website (Terms of Service).
+
+Petacore Technology - https://www.petacoretech.com

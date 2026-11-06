@@ -262,7 +262,7 @@ form.pos .pos-scan input:not([type=checkbox]){height:54px!important;font-size:18
 form.pos .pos-scan input:focus{border-color:#2563eb!important;box-shadow:0 0 0 4px #2563eb26!important}
 form.pos .pos-qty input{text-align:center;font-weight:700}
 form.pos .pos-help{display:flex;flex-wrap:wrap;gap:4px 10px;margin:10px 0 0;color:#64748b;font-size:12px}
-form.pos .pos-help kbd,.pos-hero kbd{padding:1px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#334155;font:600 11px/1.5 inherit;box-shadow:0 1px 0 #cbd5e1}
+form.pos .pos-help kbd,.pos-hero kbd{padding:1px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#334155;font-weight: 600; font-size: 11px; line-height: 1.5; font-family: inherit;box-shadow:0 1px 0 #cbd5e1}
 form.pos #cart-body td input{width:96px;height:34px;border:1px solid #cbd5e1;border-radius:8px;text-align:right;padding:4px 8px;font:inherit}
 form.pos #cart-body td input:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px #2563eb26}
 form.pos .pos-totals td input{max-width:140px}

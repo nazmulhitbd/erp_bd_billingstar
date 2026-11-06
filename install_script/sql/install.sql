@@ -1,6 +1,6 @@
--- Billing Star: everything a new installation runs, in order. Made by build_sql.php: change the module schema, then rebuild.
+-- PetaBill: everything a new installation runs, in order. Made by build_sql.php: change the module schema, then rebuild.
 -- SECTION: Database structure
--- Billing Star: database structure for a new installation, with only the setup rows the application needs.
+-- PetaBill: database structure for a new installation, with only the setup rows the application needs.
 -- No customer, user, payment or other business data. Loaded by install_script/index.php before the module schemas.
 -- Built from a mysqldump: data rows, definers and auto-increment counters are removed.
 SET FOREIGN_KEY_CHECKS=0;
@@ -4270,7 +4270,7 @@ CREATE TABLE `transaction_categories` (
 
 -- Setup rows
 INSERT INTO `admin_role` (`user_role_id`, `user_config`, `user`, `role_name`, `description`, `addby`, `role`, `id_reseller`, `reseller_level`, `customer_mgmt`, `sales_person_mgmt`) VALUES (1,'1,1,1,1','1,0,1,1','Administrator','Administrator','Administrator','1,1,1,1',NULL,NULL,'1,1,1,1,1,1','1,1,1,1,1,1'),(3,'1,1,1,1','1,1,1,1','ERP User','Rights come from User Access Control','schema','1,1,1,1',NULL,NULL,'1,1,1,1,1,1','1,1,1,1,1,1');
-INSERT INTO `client_theme` (`client_theme_id`, `service_code`, `index_title`, `index_heading`, `main_title`, `session_idle_time`, `default_record_no`, `brand_name`, `slogan`, `menu_style`, `mobile_view_vsc`, `default_theme`, `index_bg_color`, `menu_bg_color`, `footer_left_bg_color`, `footer_right_bg_color`, `body_bgcolor_color`, `mailto`, `mailcc`, `mailbcc`, `mailreport`, `module`, `customize1`, `customize2`, `customize3`, `customize4`, `customize5`, `customize6`) VALUES (1,123,'Billing Star','Billing Star','Billing Star',10,25,'Billing Star','You shop in one roof','','treemain','treemain','','','','','','','','',0,'1,1,1,1,0,1,1,1,1,1','#FFFFFF',NULL,'Petacore Tech','www.petacoretech.com','www.petacoretech.com','Petacore Tech');
+INSERT INTO `client_theme` (`client_theme_id`, `service_code`, `index_title`, `index_heading`, `main_title`, `session_idle_time`, `default_record_no`, `brand_name`, `slogan`, `menu_style`, `mobile_view_vsc`, `default_theme`, `index_bg_color`, `menu_bg_color`, `footer_left_bg_color`, `footer_right_bg_color`, `body_bgcolor_color`, `mailto`, `mailcc`, `mailbcc`, `mailreport`, `module`, `customize1`, `customize2`, `customize3`, `customize4`, `customize5`, `customize6`) VALUES (1,123,'PetaBill','PetaBill','PetaBill',10,25,'PetaBill','You shop in one roof','','treemain','treemain','','','','','','','','',0,'1,1,1,1,0,1,1,1,1,1','#FFFFFF',NULL,'Petacore Tech','www.petacoretech.com','www.petacoretech.com','Petacore Tech');
 INSERT INTO `transaction_categories` VALUES (1,'sales','Cash Sales','',1,1,'2026-10-30 05:57:51'),(2,'sales','Credit Sales','',0,1,'2026-10-30 05:57:51'),(3,'sales','POS Sales','',0,1,'2026-10-30 05:57:51'),(4,'sales','Corporate Sales','',0,1,'2026-10-30 05:57:51'),(5,'purchase','Credit Purchase','',1,1,'2026-10-30 05:57:51'),(6,'purchase','Cash Purchase','',0,1,'2026-10-30 05:57:51'),(7,'purchase','Import Purchase','',0,1,'2026-10-30 05:57:51'),(8,'inventory','Stock Transfer','',1,1,'2026-10-30 05:57:51'),(9,'inventory','Stock Amendment','',0,1,'2026-10-30 05:57:51'),(10,'rma','Service','',1,1,'2026-10-30 05:57:51');
 SET FOREIGN_KEY_CHECKS=1;
 -- SECTION: Sales
@@ -7131,7 +7131,43 @@ INSERT INTO admin_role_permissions (user_role_id, form_key, can_view, can_add, c
         can_edit=GREATEST(admin_role_permissions.can_edit, old_right.can_edit), can_delete=GREATEST(admin_role_permissions.can_delete, old_right.can_delete);
 DELETE FROM admin_role_permissions WHERE form_key='user/view_users.php';
 
--- Service licence from Billing CRM, see addon/inc/licence.php. No row means this install is not connected.
+-- Service licence from PetaBill Cloud, see addon/inc/licence.php. No row means this install is not connected.
+-- Document numbering (addon/inc/docno.php): one series per document type and a counter per period.
+CREATE TABLE IF NOT EXISTS doc_series (
+  doc_type VARCHAR(30) NOT NULL PRIMARY KEY,
+  pattern VARCHAR(80) NOT NULL,
+  reset_rule ENUM('never','yearly','fiscal','monthly','daily') NOT NULL DEFAULT 'yearly',
+  start_no INT UNSIGNED NOT NULL DEFAULT 1,
+  updated_by INT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS doc_counters (
+  doc_type VARCHAR(30) NOT NULL,
+  period_key VARCHAR(12) NOT NULL,
+  last_number BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (doc_type, period_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Country, Language & Tax (billing/user/globalization.php): tax rates per country and Admin wording per language.
+CREATE TABLE IF NOT EXISTS bs_tax_rates (
+  rate_id INT AUTO_INCREMENT PRIMARY KEY,
+  country_code CHAR(2) NOT NULL,
+  rate_name VARCHAR(80) NOT NULL,
+  rate DECIMAL(6,3) NOT NULL DEFAULT 0,
+  kind ENUM('standard','reduced','zero','exempt','additional') NOT NULL DEFAULT 'standard',
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 100,
+  KEY idx_country (country_code, is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS bs_ui_text (
+  lang_code VARCHAR(5) NOT NULL,
+  msg_key VARCHAR(190) NOT NULL,
+  msg_text VARCHAR(500) NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (lang_code, msg_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS licence_state (
   id TINYINT NOT NULL PRIMARY KEY,
   crm_url VARCHAR(255) NOT NULL,

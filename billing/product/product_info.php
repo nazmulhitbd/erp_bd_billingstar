@@ -10,7 +10,7 @@ pm_master_page($conn, [
     'search' => ['product_code', 'model_caption', 'description', 'product_group', 'brand'],
     'list_fields' => ['product_code', 'product_group', 'brand', 'model_caption', 'description', 'unit_name', 'warranty', 'default_unit_price', 'purchase_price', 'serial_required', 'is_active'],
     'fields' => [
-        'product_code' => ['Product Code', 'text', ['max' => 60, 'placeholder' => 'Auto']],
+        'product_code' => ['Product Code', 'text', ['max' => 60, 'placeholder' => 'Auto: ' . docno_peek($conn, 'PRODUCT')]],
         'category_id' => ['Product Category', 'select', ['options' => fn($db) => pm_options($db, 'category')]],
         'product_group' => ['Product Group', 'select', ['options' => fn($db) => pm_options($db, 'group'), 'required' => true]],
         'brand' => ['Brand', 'select', ['options' => fn($db) => pm_options($db, 'brand')]],
@@ -34,8 +34,7 @@ pm_master_page($conn, [
         }
         if ($d['product_code'] === '') {
             // Next free code like P000123, from the highest number used so far.
-            $n = (int) (sales_row($db, "SELECT MAX(CAST(SUBSTRING(product_code, 2) AS UNSIGNED)) AS n FROM sales_products WHERE product_code REGEXP '^P[0-9]+$'")['n'] ?? 0);
-            $d['product_code'] = 'P' . str_pad((string) ($n + 1), 6, '0', STR_PAD_LEFT);
+            $d['product_code'] = docno_next($db, 'PRODUCT'); // Settings > Document Numbering; never a duplicate
         } elseif (sales_row($db, 'SELECT 1 FROM sales_products WHERE product_code=? AND product_id<>?', 'si', [$d['product_code'], (int) ($old['product_id'] ?? 0)])) {
             throw new RuntimeException('Product code "' . $d['product_code'] . '" is already used.');
         }

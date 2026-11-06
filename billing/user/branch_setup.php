@@ -23,6 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('That branch name is already used.');
         }
         $active = isset($_POST['is_active']) ? 1 : 0;
+        // Package limit: a new active branch, or one switched back on, counts as one more.
+        $was = $id ? sales_row($conn, 'SELECT is_active FROM branches WHERE branch_id=?', 'i', [$id]) : null;
+        if ($active && !($was && (int) $was['is_active'] === 1) && ($limit = licence_limit_error('branches')) !== '') {
+            throw new RuntimeException($limit);
+        }
         if ($id) {
             sales_exec($conn, 'UPDATE branches SET branch_name=?, parent_branch_id=?, address=?, is_active=? WHERE branch_id=?', 'sisii', [$name, $parent ?: null, sales_post_string('address', 255), $active, $id])->close();
         } else {

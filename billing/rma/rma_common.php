@@ -115,24 +115,13 @@ function rma_schema_ready()
 /** Reserve the next number for a document type, e.g. DESCOM2023000003. Call inside a transaction. */
 function rma_doc_no($docCode, $year)
 {
-    rma_exec(
-        'INSERT INTO rma_sequences (doc_type, seq_year, last_number) VALUES (?, ?, 1) '
-            . 'ON DUPLICATE KEY UPDATE last_number = LAST_INSERT_ID(last_number + 1)',
-        'si',
-        [$docCode, $year]
-    )->close();
-    $row = rma_row('SELECT last_number FROM rma_sequences WHERE doc_type=? AND seq_year=?', 'si', [$docCode, $year]);
-    if (!$row) {
-        throw new RuntimeException('Unable to reserve a document number.');
-    }
-    return RMA_DOC_PREFIX . $docCode . $year . str_pad((string) $row['last_number'], 6, '0', STR_PAD_LEFT);
+    $date = is_string($year) && strlen($year) >= 10 ? substr($year, 0, 10) : (int) $year . date('-m-d');
+    return docno_next(docno_db(), 'RMA_' . $docCode, $date); // Settings > Document Numbering
 }
 
 function rma_next_doc_preview($docCode)
 {
-    $year = (int) date('Y');
-    $row = rma_row('SELECT last_number + 1 AS n FROM rma_sequences WHERE doc_type=? AND seq_year=?', 'si', [$docCode, $year]);
-    return RMA_DOC_PREFIX . $docCode . $year . str_pad((string) ($row['n'] ?? 1), 6, '0', STR_PAD_LEFT);
+    return docno_peek(null, 'RMA_' . $docCode);
 }
 
 /** Write one stock movement. $line needs store_name, product_id, product_group, brand, model_no. */

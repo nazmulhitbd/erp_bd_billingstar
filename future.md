@@ -1,4 +1,4 @@
-# Billing Star: future work
+# PetaBill: future work
 
 Last updated: 5 November 2026. Install and security notes are in `doc/INSTALL.md`. This file lists only what is left to do.
 

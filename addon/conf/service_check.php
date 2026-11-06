@@ -9,12 +9,12 @@ $row_client_theme=mysql_fetch_row($res_client_theme);
 //Check CRM
 
 error_reporting(0);
-// Licence, dates and modules come from Billing CRM through addon/inc/licence.php. This only keeps the older code's defaults.
+// Licence, dates and modules come from PetaBill Cloud through addon/inc/licence.php. This only keeps the older code's defaults.
 $Content="127.0.0.1;192.168.2.213;192.168.2.239;0;Petacore Tech;Demo;2015-12-01;2016-02-01;1,1,1,1,0,1,1,1,1,1;Petacore Tech;www.petacoretech.com;Petacore Tech;www.petacoretech.com;";
 $a=explode(';',$Content);
 unset($Content);
 $serverAddr = $_SERVER['SERVER_ADDR'] ?? (PHP_SAPI === 'cli-server' ? '127.0.0.1' : '');
-$a[0]=$serverAddr; // runs on any server: Server IPs in Billing CRM lock an install to one
+$a[0]=$serverAddr; // runs on any server: Server IPs in PetaBill Cloud lock an install to one
 
 if((trim($a[0])==trim($serverAddr)) || (trim($a[1])==trim($serverAddr)) || (trim($a[2])==trim($serverAddr)))
 {

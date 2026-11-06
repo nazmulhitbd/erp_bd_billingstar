@@ -12,6 +12,8 @@ const INST_MIN_MARIADB = 100300;
 const INST_MARIADB_NAMES = ['utf8mb4_0900_ai_ci' => 'utf8mb4_unicode_ci', 'utf8mb3_unicode_ci' => 'utf8_unicode_ci', 'utf8mb3_general_ci' => 'utf8_general_ci', 'utf8mb3' => 'utf8'];
 /** The one SQL file: its sections run in order, are safe to run again, and add their own default rows. build_sql.php makes it. */
 const INST_SQL = 'install_script/sql/install.sql';
+/** Optional demo data, loaded after the administrator when the installer is asked to. */
+const INST_SAMPLE_SQL = 'install_script/sql/sample_data.sql';
 /** Folders the application writes to. */
 const INST_WRITABLE = ['addon/display', 'addon/uploads', 'billing/hr/uploads', 'billing/sales/uploads', 'billing/accounts_info/uploads'];
 
@@ -24,8 +26,8 @@ function inst_requirements()
     foreach (['mysqli' => 'MySQL', 'mbstring' => 'Multibyte text', 'fileinfo' => 'File type checks', 'json' => 'JSON', 'session' => 'Sessions'] as $ext => $label) {
         $checks[] = ['PHP ' . $ext . ' extension (' . $label . ')', extension_loaded($ext), 'Enable the ' . $ext . ' extension in PHP.', true];
     }
-    $checks[] = ['PHP openssl extension (Billing CRM activation)', extension_loaded('openssl'), 'Enable the openssl extension in PHP.', true];
-    $checks[] = ['PHP can call Billing CRM', function_exists('curl_init') || (bool) ini_get('allow_url_fopen'), 'Enable curl or allow_url_fopen in PHP.', true];
+    $checks[] = ['PHP openssl extension (PetaBill Cloud activation)', extension_loaded('openssl'), 'Enable the openssl extension in PHP.', true];
+    $checks[] = ['PHP can call PetaBill Cloud', function_exists('curl_init') || (bool) ini_get('allow_url_fopen'), 'Enable curl or allow_url_fopen in PHP.', true];
     $checks[] = ['PHP gd extension (images)', extension_loaded('gd'), 'Optional: enable gd in PHP.', false];
     if (!inst_sections()) {
         $checks[] = ['Schema file ' . INST_SQL, false, 'The project files are incomplete. Upload them again.', true];
@@ -73,7 +75,7 @@ function inst_connect(array $db, $useDatabase = true)
     return [$conn, ''];
 }
 
-/** POST to Billing CRM, with curl where the host has it. Returns the body or false. */
+/** POST to PetaBill Cloud, with curl where the host has it. Returns the body or false. */
 function inst_crm_post($url, array $fields)
 {
     $body = http_build_query($fields);
@@ -86,44 +88,44 @@ function inst_crm_post($url, array $fields)
 }
 
 /**
- * Activate this install from a Billing CRM Connection Code. Returns [licence, error]. The licence is kept in the session and
+ * Activate this install from a PetaBill Cloud Connection Code. Returns [licence, error]. The licence is kept in the session and
  * saved by inst_save_licence once the tables exist. A service the CRM has stopped cannot be installed.
  */
 function inst_activate($text)
 {
     $c = json_decode((string) base64_decode(preg_replace('/\s+/', '', (string) $text), true), true);
     if (!is_array($c) || empty($c['url']) || empty($c['code']) || empty($c['key']) || empty($c['public_key']) || !preg_match('~^https?://~', (string) $c['url'])) {
-        return [null, 'That is not a Connection Code. Copy it from the service page in Billing CRM.'];
+        return [null, 'That is not a Connection Code. Copy it from the service page in PetaBill Cloud.'];
     }
     $nonce = bin2hex(random_bytes(16));
     $body = inst_crm_post(rtrim($c['url'], '/') . '/api/provision.php', ['service_code' => (int) $c['code'], 'service_key' => $c['key'], 'nonce' => $nonce, 'host' => (string) ($_SERVER['HTTP_HOST'] ?? ''), 'version' => 'installer']);
     if ($body === false) {
-        return [null, 'Billing CRM could not be reached at ' . $c['url'] . '.'];
+        return [null, 'PetaBill Cloud could not be reached at ' . $c['url'] . '.'];
     }
     $answer = json_decode($body, true);
     if (empty($answer['ok'])) {
-        return [null, 'Billing CRM refused this code: ' . ($answer['error'] ?? 'unexpected answer') . ' Copy the current code from the service page.'];
+        return [null, 'PetaBill Cloud refused this code: ' . ($answer['error'] ?? 'unexpected answer') . ' Copy the current code from the service page.'];
     }
     $payload = (string) ($answer['payload'] ?? '');
     $data = @openssl_verify($payload, (string) base64_decode((string) ($answer['signature'] ?? '')), (string) $c['public_key'], OPENSSL_ALGO_SHA256) === 1 ? json_decode($payload, true) : null;
     if (!$data || ($data['nonce'] ?? '') !== $nonce || (int) ($data['service_code'] ?? 0) !== (int) $c['code']) {
-        return [null, 'The answer from Billing CRM failed its signature check.'];
+        return [null, 'The answer from PetaBill Cloud failed its signature check.'];
     }
     if ($data['status'] !== 'Active') {
-        return [null, 'Service ' . $data['service_code'] . ' is ' . strtolower($data['status']) . ' in Billing CRM. Resume it first.'];
+        return [null, 'Service ' . $data['service_code'] . ' is ' . strtolower($data['status']) . ' in PetaBill Cloud. Resume it first.'];
     }
     $today = max(date('Y-m-d'), (string) ($data['today'] ?? ''));
     if (date('Y-m-d', strtotime($data['expiry_date'] . ' +' . (int) $data['grace_days'] . ' days')) < $today) {
-        return [null, 'Service ' . $data['service_code'] . ' expired on ' . $data['expiry_date'] . '. Extend it in Billing CRM first.'];
+        return [null, 'Service ' . $data['service_code'] . ' expired on ' . $data['expiry_date'] . '. Extend it in PetaBill Cloud first.'];
     }
     $server = (string) ($_SERVER['SERVER_ADDR'] ?? (PHP_SAPI === 'cli-server' ? '127.0.0.1' : ''));
     if (!empty($data['ips']) && !in_array($server, $data['ips'], true)) {
-        return [null, 'Service ' . $data['service_code'] . ' is not licensed for this server (' . $server . '). Correct Server IP in Billing CRM.'];
+        return [null, 'Service ' . $data['service_code'] . ' is not licensed for this server (' . $server . '). Correct Server IP in PetaBill Cloud.'];
     }
     return [['url' => rtrim($c['url'], '/'), 'code' => (int) $c['code'], 'key' => (string) $c['key'], 'public_key' => (string) $c['public_key'], 'payload' => $payload, 'signature' => (string) $answer['signature'], 'data' => $data], ''];
 }
 
-/** Store the activation in the new database. From here the site is under Billing CRM, and cannot run without a licence. */
+/** Store the activation in the new database. From here the site is under PetaBill Cloud, and cannot run without a licence. */
 function inst_save_licence(mysqli $conn, array $licence)
 {
     inst_exec($conn, 'REPLACE INTO licence_state (id, crm_url, service_code, service_key, public_key, payload, signature, checked_at, attempted_at) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?)', 'sissssii', [$licence['url'], $licence['code'], $licence['key'], $licence['public_key'], $licence['payload'], $licence['signature'], time(), time()]);
@@ -269,6 +271,14 @@ function inst_run_sql(mysqli $conn, $label)
     if (inst_is_mariadb($conn)) {
         $sql = strtr($sql, INST_MARIADB_NAMES);
     }
+    return inst_multi($conn, $sql, $label);
+}
+
+/**
+ * Run a file of statements. Returns an error or ''.
+ */
+function inst_multi(mysqli $conn, $sql, $label)
+{
     if (!$conn->multi_query($sql)) {
         return $label . ': ' . $conn->error;
     }
@@ -281,6 +291,43 @@ function inst_run_sql(mysqli $conn, $label)
         }
     } while ($conn->more_results() && $conn->next_result());
     return $conn->errno ? $label . ': ' . $conn->error : '';
+}
+
+function inst_has_sample()
+{
+    return is_file(INST_ROOT . '/' . INST_SAMPLE_SQL);
+}
+
+/**
+ * The optional sample data: a demo shop's products, parties, documents, accounts, staff and service records, made through
+ * the application's own forms and exported to INST_SAMPLE_SQL. All of it or none of it: one transaction. Safe to run
+ * again on a retry (it is then already there). Rows made by "the administrator" point at this install's administrator.
+ */
+function inst_load_sample(mysqli $conn, $adminUser)
+{
+    if ((int) ($conn->query("SELECT COUNT(*) FROM sales_products WHERE product_code='P-1001'")->fetch_row()[0] ?? 0) > 0) {
+        return '';
+    }
+    $sql = (string) @file_get_contents(INST_ROOT . '/' . INST_SAMPLE_SQL);
+    if ($sql === '') {
+        return 'Could not read ' . INST_SAMPLE_SQL . '.';
+    }
+    $stmt = $conn->prepare('SELECT user_id FROM admin_user WHERE user_name=?');
+    $stmt->bind_param('s', $adminUser);
+    $stmt->execute();
+    $userId = (int) ($stmt->get_result()->fetch_row()[0] ?? 1);
+    $stmt->close();
+    if (inst_is_mariadb($conn)) {
+        $sql = strtr($sql, INST_MARIADB_NAMES);
+    }
+    $error = inst_multi($conn, 'SET @sample_user = ' . $userId . ";\nSTART TRANSACTION;\n" . $sql . "\nCOMMIT;", 'Sample data');
+    if ($error !== '') {
+        while ($conn->more_results() && $conn->next_result()) { // finish the batch before the rollback
+        }
+        $conn->query('ROLLBACK');
+        $conn->query('SET FOREIGN_KEY_CHECKS = 1');
+    }
+    return $error;
 }
 
 function inst_exec(mysqli $conn, $sql, $types = '', array $params = [])

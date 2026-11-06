@@ -69,7 +69,7 @@ function db_write_sql(mysqli $db, array $objects, array $names, array $opt, call
     $db->query("SET time_zone='+00:00'");
     $db->query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
     $db->query('START TRANSACTION WITH CONSISTENT SNAPSHOT'); // one moment in time, even while people keep working
-    $out("-- Billing Star database backup\n-- Database: " . $database . "\n-- Made: " . date('Y-m-d H:i:s') . "\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS=0;\nSET UNIQUE_CHECKS=0;\nSET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\nSET time_zone='+00:00';\n\n");
+    $out("-- PetaBill database backup\n-- Database: " . $database . "\n-- Made: " . date('Y-m-d H:i:s') . "\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS=0;\nSET UNIQUE_CHECKS=0;\nSET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';\nSET time_zone='+00:00';\n\n");
     $views = [];
     foreach ($names as $name) {
         if ($objects[$name]['kind'] === 'VIEW') {

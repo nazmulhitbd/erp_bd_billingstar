@@ -33,6 +33,7 @@ $contactList = function () use ($contacts, $h) {
 <head>
 <meta charset="utf-8">
 <title><?php echo $h($company . ' · Sign in'); ?></title>
+<link rel="icon" type="image/svg+xml" href="addon/images/petabill-favicon.svg"><meta name="copyright" content="&copy; Petacore Technology. PetaBill is a trademark of Petacore Technology.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -43,7 +44,7 @@ $contactList = function () use ($contacts, $h) {
 <main class="lg">
   <section class="lg-brand">
     <div class="lg-mark">
-      <?php if ($b['logo'] !== ''): ?><img src="<?php echo $h($b['logo']); ?>" alt="<?php echo $h($b['brand']); ?>"><?php else: ?><span class="lg-icon"><i class="bi bi-receipt-cutoff"></i></span><?php endif; ?>
+      <?php if ($b['logo'] !== ''): ?><img src="<?php echo $h($b['logo']); ?>" alt="<?php echo $h($b['brand']); ?>"><?php else: ?><img src="addon/images/petabill-mark.svg" alt="PetaBill"><?php endif; ?>
       <div><strong><?php echo $h($b['brand']); ?></strong><?php if ($b['slogan'] !== ''): ?><span><?php echo $h($b['slogan']); ?></span><?php endif; ?></div>
     </div>
     <div class="lg-intro">

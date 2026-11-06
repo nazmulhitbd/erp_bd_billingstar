@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $refNo = $order['order_no'];
         }
 
-        $invoiceNo = sales_next_number($conn, 'SI', (int) substr($salesDate, 0, 4), 'sales_invoice_sequences');
+        $invoiceNo = sales_next_number($conn, 'SI', $salesDate, 'sales_invoice_sequences');
         $invoiceId = sales_insert(
             $conn,
             'INSERT INTO sales_invoices (invoice_no, ref_no, sales_date, bill_type, customer_id, customer_group, customer_name, mobile, attention, address, delivery_point, create_installation, bin, nid, sales_person, narration, subtotal, extra_charges, discount_amount, vat_amount, ait_amount, exchange_amount, net_amount, cash_received, balance_amount, total_quantity, created_by) '

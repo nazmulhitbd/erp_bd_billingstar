@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $method = sales_payment_method('refund_method');
 
-        $returnNo = sales_next_number($conn, 'SR', (int) substr($returnDate, 0, 4));
+        $returnNo = sales_next_number($conn, 'SR', $returnDate);
         $returnId = sales_insert(
             $conn,
             'INSERT INTO sales_returns (return_no, invoice_id, return_date, customer_id, customer_name, mobile, reason, items_amount, deduction_amount, return_amount, due_adjusted, refund_amount, refund_method, refund_reference, total_quantity, created_by) '

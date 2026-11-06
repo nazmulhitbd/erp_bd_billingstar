@@ -60,9 +60,5 @@ function hr_options(array $rows, $id, $name, $selected, $blank = null)
 
 function hr_next_code(mysqli $db)
 {
-    $n = (int) (sales_row($db, 'SELECT COALESCE(MAX(employee_id), 0) AS n FROM hr_employees')['n'] ?? 0) + 1;
-    do {
-        $code = 'EMP' . str_pad((string) $n++, 5, '0', STR_PAD_LEFT);
-    } while (sales_row($db, 'SELECT 1 AS x FROM hr_employees WHERE employee_code=?', 's', [$code]));
-    return $code;
+    return docno_next($db, 'EMP'); // unique even when two people add employees at once
 }

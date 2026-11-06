@@ -1,7 +1,7 @@
 <?php
 /** Header branch selector: makes a permitted branch the working branch and reloads the shell. */
 require_once "../../addon/conf/connection.php";
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && perm_form_ok()) {
     perm_set_branch((int) ($_POST['branch_id'] ?? 0));
 }
 header('Location: ../' . perm_shell());

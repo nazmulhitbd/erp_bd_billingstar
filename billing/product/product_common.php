@@ -147,6 +147,9 @@ function pm_master_page(mysqli $db, array $cfg)
             if (isset($cfg['validate'])) {
                 ($cfg['validate'])($db, $data, $old);
             }
+            if (!$old && $cfg['table'] === 'sales_products' && ($limit = licence_limit_error('products')) !== '') { // package limit
+                throw new RuntimeException($limit);
+            }
             if (!empty($cfg['unique'])) {
                 $where = implode(' AND ', array_map(fn($c) => "$c=?", $cfg['unique']));
                 $vals = array_map(fn($c) => $data[$c], $cfg['unique']);
@@ -330,7 +333,7 @@ function pm_price_fixing_page(mysqli $db, $kind)
             if (!$changes) {
                 throw new RuntimeException('No price would change.');
             }
-            $no = 'PF' . ($kind === 'sales' ? 'S' : 'P') . date('Ymd') . str_pad((string) ((int) (sales_row($db, 'SELECT COUNT(*) AS n FROM product_price_fixings WHERE price_kind=? AND fixing_date=CURDATE()', 's', [$kind])['n'] ?? 0) + 1), 3, '0', STR_PAD_LEFT);
+            $no = docno_next($db, $kind === 'sales' ? 'PFS' : 'PFP'); // Settings > Document Numbering
             $fid = sales_insert($db, 'INSERT INTO product_price_fixings (fixing_no, fixing_date, price_kind, price_field, scope, scope_text, method, method_value, note, product_count, created_by, created_by_name) VALUES (?, CURDATE(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 'ssssssdsiis', [$no, $kind, $field, $s['scope'], $scopeText, $method, $value, sales_post_string('note', 255), count($changes), $user, $userName]);
             foreach ($changes as [$pid, $old, $new]) {

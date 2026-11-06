@@ -1,4 +1,4 @@
-# Installing Billing Star
+# Installing PetaBill
 
 ## What you need
 - PHP 8.0 or newer with the `mysqli`, `mbstring`, `fileinfo`, `json` and `session` extensions (`gd` is optional)
@@ -20,7 +20,7 @@ Open `http://YOUR-SERVER/billing_star/`. With no configuration file, it goes to 
 2. **Database**: the application gets its own MySQL user, `billinguser` by default, with rights on its database only.
    - *Create the database and user for me*: give a MySQL administrator login such as root. It is used once and not saved.
    - *Use a user I already made*: open "See the SQL", run it yourself as a MySQL administrator, then enter that user.
-3. **Company**: company details, the first branch and the first store.
+3. **Company**: company details, the first branch and the first store. Tick **Start with sample data** for a demo or training system. It adds an invented electronics shop so every module has something to show: products, suppliers, customers, purchases, sales, POS, orders, returns, vouchers, staff, attendance, sales targets and a service complaint. Your company name and administrator stay your own. Sample records stay until you delete them, so leave this off for a system you will use for real. The file is `install_script/sql/sample_data.sql`, and `tools/sample_data/README.md` explains how it is made.
 4. **Administrator**: the SuperAdmin login. At least 10 characters with letters and numbers.
 5. **Install**: "See the files" lists the one SQL file, `install_script/sql/install.sql`, and the configuration, and each opens to read. Progress shows the part running. If it stops, it says where, and Try Again starts over safely.
 6. **Finish**: sign in. If the server could not write the configuration, this step shows the file to save as `addon/display/dbconfig.php`, then press I Saved It.

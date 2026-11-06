@@ -101,7 +101,7 @@ function popup(url)
 <div class="panel panel-default">
   <div class="panel-body">
 
-  <form name="ctl01" method="post" action="user_management.php" id="ctl01">
+  <form name="ctl01" method="post" action="user_management.php" id="ctl01"><?php echo perm_form_field(); ?>
 
     <div style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 5px; MARGIN: 0px 0px 5px; PADDING-TOP: 0px">
 	
@@ -235,7 +235,7 @@ if($user_[3]==1)
 </html>
 
 <?php
-if (isset($_POST['ButtonRemove']))
+if (isset($_POST['ButtonRemove']) && perm_form_ok() && is_array($_POST['delete'] ?? null))
 {
     for ($j=0; $j<count($_POST['delete']); $j++)
     {
@@ -244,7 +244,7 @@ if (isset($_POST['ButtonRemove']))
     }
     echo  "<meta http-equiv=refresh content=0.01 >";
 }
-if (isset($_POST['RemoveAll']))
+if (isset($_POST['RemoveAll']) && perm_form_ok())
 {
     $delete = "delete from login_log ";
     if($finalversion==1)mysql_query_moon($delete);

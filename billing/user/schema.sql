@@ -205,7 +205,7 @@ INSERT INTO admin_role_permissions (user_role_id, form_key, can_view, can_add, c
         can_edit=GREATEST(admin_role_permissions.can_edit, old_right.can_edit), can_delete=GREATEST(admin_role_permissions.can_delete, old_right.can_delete);
 DELETE FROM admin_role_permissions WHERE form_key='user/view_users.php';
 
--- Service licence from Billing CRM, see addon/inc/licence.php. No row means this install is not connected.
+-- Service licence from PetaBill Cloud, see addon/inc/licence.php. No row means this install is not connected.
 CREATE TABLE IF NOT EXISTS licence_state (
   id TINYINT NOT NULL PRIMARY KEY,
   crm_url VARCHAR(255) NOT NULL,
@@ -217,4 +217,40 @@ CREATE TABLE IF NOT EXISTS licence_state (
   checked_at INT NOT NULL DEFAULT 0,
   attempted_at INT NOT NULL DEFAULT 0,
   last_error VARCHAR(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Document numbering (addon/inc/docno.php): one series per document type and a counter per period.
+CREATE TABLE IF NOT EXISTS doc_series (
+  doc_type VARCHAR(30) NOT NULL PRIMARY KEY,
+  pattern VARCHAR(80) NOT NULL,
+  reset_rule ENUM('never','yearly','fiscal','monthly','daily') NOT NULL DEFAULT 'yearly',
+  start_no INT UNSIGNED NOT NULL DEFAULT 1,
+  updated_by INT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS doc_counters (
+  doc_type VARCHAR(30) NOT NULL,
+  period_key VARCHAR(12) NOT NULL,
+  last_number BIGINT UNSIGNED NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (doc_type, period_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Country, Language & Tax (billing/user/globalization.php): tax rates per country and Admin wording per language.
+CREATE TABLE IF NOT EXISTS bs_tax_rates (
+  rate_id INT AUTO_INCREMENT PRIMARY KEY,
+  country_code CHAR(2) NOT NULL,
+  rate_name VARCHAR(80) NOT NULL,
+  rate DECIMAL(6,3) NOT NULL DEFAULT 0,
+  kind ENUM('standard','reduced','zero','exempt','additional') NOT NULL DEFAULT 'standard',
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 100,
+  KEY idx_country (country_code, is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS bs_ui_text (
+  lang_code VARCHAR(5) NOT NULL,
+  msg_key VARCHAR(190) NOT NULL,
+  msg_text VARCHAR(500) NOT NULL,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (lang_code, msg_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

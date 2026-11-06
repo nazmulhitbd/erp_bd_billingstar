@@ -114,6 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($type !== 'staff' && sales_row($conn, 'SELECT 1 AS x FROM admin_user WHERE user_type=? AND linked_id=? AND user_id<>?', 'sii', [$type, $linked, $id])) {
             throw new RuntimeException('This ' . $type . ' already has a user.');
         }
+        // Package limit: a new active staff user, or one switched back on or turned into staff, counts as one more.
+        $wasCounted = $old && $old['user_type'] === 'staff' && (int) $old['is_active'] === 1;
+        if ($type === 'staff' && $active && !$wasCounted && ($limit = licence_limit_error('users')) !== '') {
+            throw new RuntimeException($limit);
+        }
 
         $conn->begin_transaction();
         $stored = $type === 'staff' ? ($password !== '' ? password_hash($password, PASSWORD_DEFAULT) : (string) ($old['user_password'] ?? '')) : '!';

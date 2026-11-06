@@ -111,7 +111,7 @@ function cp_page_start($title, $active, $public = false)
 {
     $c = cp_company();
     $a = $public ? null : cp_account();
-    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . cp_h($title . ' · ' . $c['name']) . '</title>'
+    echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="copyright" content="&copy; Petacore Technology. PetaBill is a trademark of Petacore Technology."><title>' . cp_h($title . ' · ' . $c['name']) . '</title>'
         . '<link rel="stylesheet" href="../addon/portal/portal.css"></head><body>';
     if (empty($_SESSION['shell_embedded'])) {
         echo '<header class="top"><div class="brand"><b>' . cp_h($c['name']) . '</b><span>' . cp_h(cp_setting('portal_title', 'Customer Portal')) . '</span></div>';
@@ -136,7 +136,7 @@ function cp_page_end()
     $c = cp_company();
     echo '</main>';
     if (empty($_SESSION['shell_embedded'])) {
-        echo '<footer class="foot">' . cp_h($c['name']) . ($c['phone'] ? ' · ' . cp_h($c['phone']) : '') . ($c['email'] ? ' · ' . cp_h($c['email']) : '') . '</footer>';
+        echo '<footer class="foot">' . cp_h($c['name']) . ($c['phone'] ? ' · ' . cp_h($c['phone']) : '') . ($c['email'] ? ' · ' . cp_h($c['email']) : '') . '<br><small class="powered">Powered by PetaBill &middot; &copy; ' . date('Y') . ' Petacore Technology</small></footer>';
     }
     echo '<script src="../addon/portal/portal.js"></script><script src="../addon/portal/list-pager.js"></script></body></html>';
 }
@@ -159,11 +159,7 @@ function cp_print_end()
 /** Next request number like PR20261030001. */
 function cp_request_no()
 {
-    $n = (int) cp_row("SELECT COUNT(*) AS n FROM portal_requests WHERE request_no LIKE ?", 's', ['PR' . date('Ymd') . '%'])['n'];
-    do {
-        $no = 'PR' . date('Ymd') . str_pad((string) ++$n, 3, '0', STR_PAD_LEFT);
-    } while (cp_row('SELECT 1 AS x FROM portal_requests WHERE request_no=?', 's', [$no]));
-    return $no;
+    return docno_next(docno_db(), 'PR'); // Settings > Document Numbering; never a duplicate
 }
 
 const CP_REQUEST_TYPES = ['quotation' => 'Price quotation', 'support' => 'Product support', 'payment' => 'Payment / statement', 'account' => 'Account details', 'other' => 'Other'];

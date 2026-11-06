@@ -336,7 +336,7 @@
         if (/^(nr|sl|#|no\.?|serial no\.?|s\.?l\.?)$/i.test(h)) { cell.classList.add('ui-col-nr'); col.forEach(function (td) { td.classList.add('ui-col-nr'); }); return; }
         // Amounts and quantities line up on the right
         var texts = col.map(cellText).filter(function (t) { return t !== ''; });
-        var numbers = texts.filter(function (t) { return /^[-(]?[৳$]?\s?[\d,]+(\.\d+)?\)?%?$/.test(t); });
+        var numbers = texts.filter(function (t) { return /^[-(]?(?:[৳$₹₫฿]|RM|Rs|रु)?\s?[\d,]+(\.\d+)?\)?%?$/.test(t); });
         if (texts.length && numbers.length / texts.length >= 0.8 && !NOT_NUMERIC_HEAD.test(h) && (NUMERIC_HEAD.test(h) || numbers.some(function (t) { return /[.,]/.test(t); }))) {
           cell.classList.add('num'); col.forEach(function (td) { td.classList.add('num'); });
         }
